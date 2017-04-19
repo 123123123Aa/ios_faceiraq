@@ -88,7 +88,7 @@ class BrowserViewController: UIViewController {
         print("remoteOpenURL")
         self.webView?.stopLoading()
         let url = URL(string: stringURL)!
-        self.urlInputTextField.placeholder = url.host!
+        self.urlInputTextField.placeholder = url.host
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
         if UIApplication.shared.canOpenURL(url) {
             self.webView.load(request)
@@ -147,7 +147,7 @@ class BrowserViewController: UIViewController {
         let url = NSString(string: (webView.url?.absoluteString)!)
         if pageFromPagesController != nil {
             realm.beginWrite()
-            self.pageFromPagesController?.dateOfLastVisit = Date()
+            //self.pageFromPagesController?.dateOfLastVisit = Date()
             self.pageFromPagesController?.url = url
             self.pageFromPagesController?.screen = screen
             try! realm.commitWrite()
@@ -177,6 +177,8 @@ class BrowserViewController: UIViewController {
     }
     @IBAction func goToMore(_ sender: Any) {
         print("go to more")
+        let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
+        self.present(moreVC, animated: true, completion: {})
     }
     @IBAction func cancelTypingNewURL(_ sender: Any) {
         print("cancel typing new URL")
@@ -272,6 +274,5 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
 }
 
-extension BrowserViewController: OpenURLDelegate {
-}
+
 

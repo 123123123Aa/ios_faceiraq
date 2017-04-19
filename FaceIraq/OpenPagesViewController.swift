@@ -18,7 +18,7 @@ class OpenPagesViewController: UIViewController {
     var realm: Realm?
     var closePageDelegate: OpenPagesRemovalDelegate!
     var remoteOperURLDelegate: OpenURLDelegate?
-    
+    var pages: [OpenPage] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(goToCurrentPage))
@@ -34,13 +34,26 @@ class OpenPagesViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         realm = try! Realm()
+        orderPages()
+        countPages()
     }
+    
+    func orderPages() {
+        pages = (realm?.objects(OpenPage.self).toArray(ofType:OpenPage.self))!
+    }
+    
+    func countPages() {
+        pagesCounter.text = "\(pages.count)"
+    }
+    
     @IBAction func addNewPage(_ sender: Any) {
-        let newPage = OpenPage(url: NSString(string: "faceiraq.net"),
+        let newPage = OpenPage(url: NSString(string: "http://faceiraq.net"),
                                screen: nil)
         realm?.beginWrite()
         realm?.add(newPage)
         try! realm?.commitWrite()
+        orderPages()
+        countPages()
         collectionView.reloadData()
     }
     
@@ -52,9 +65,13 @@ class OpenPagesViewController: UIViewController {
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
     @IBAction func goToMore(_ sender: Any) {
         print("go to more")
+        let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
+        self.present(moreVC, animated: true, completion: {})
     }
+    
     func goToCurrentPage() {
         self.navigationController?.popToRootViewController(animated: true)
     }
@@ -64,17 +81,6 @@ class OpenPagesViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -83,12 +89,8 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         return 1
     }
     
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let realm = realm {
-            return realm.objects(OpenPage.self).count }
-        else { return 0}
+        return pages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -109,33 +111,28 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "openPage", for: indexPath) as! OpenPageCollectionViewCell
-        let page = realm?.objects(OpenPage.self)[indexPath.item]
-        cell.page = page
+        
         cell.closePageDelegate = self
-        if let image = UIImage(data: (page?.screen as! Data)) {
-            cell.pageScreen.image = image
+        let page = pages[indexPath.item]
+        cell.page = page
+        
+        if page.screen != nil {
+            if let image = UIImage(data: (page.screen as! Data)) {
+                cell.pageScreen.image = image
+            }
         }
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionElementKindSectionHeader:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "OpenPagesViewHeader", for: indexPath)
-            return header
-        
-        default:
-            print(kind)
-        assert(false, "unexpected supplementary element")
-        }
     }
 }
 
 extension OpenPagesViewController: OpenPagesRemovalDelegate {
     func closePage(page: OpenPage) {
+        print("closePage")
         realm?.beginWrite()
         realm?.delete(page)
         try! realm?.commitWrite()
+        orderPages()
+        countPages()
         collectionView.reloadData()
     }
 }
@@ -143,3 +140,6 @@ extension OpenPagesViewController: OpenPagesRemovalDelegate {
 protocol OpenURLDelegate {
     func remoteOpenURL(_ stringURL: String)
 }
+
+
+

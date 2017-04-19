@@ -1,0 +1,20 @@
+PODS:
+  - HFCardCollectionViewLayout (0.4.2)
+  - Realm (2.5.1):
+    - Realm/Headers (= 2.5.1)
+  - Realm/Headers (2.5.1)
+  - RealmSwift (2.5.1):
+    - Realm (= 2.5.1)
+
+DEPENDENCIES:
+  - HFCardCollectionViewLayout
+  - RealmSwift (~> 2.5.1)
+
+SPEC CHECKSUMS:
+  HFCardCollectionViewLayout: 88cc7deb86baae9396450d9db323081cce50da59
+  Realm: 32f86104d37c8521f864d4274050b38ba6190733
+  RealmSwift: f719e7511c902b8908593e8f143f59e47931bdb6
+
+PODFILE CHECKSUM: 054e0bbe6b9a76c10377709b6bd246002de4ea26
+
+COCOAPODS: 1.2.0
