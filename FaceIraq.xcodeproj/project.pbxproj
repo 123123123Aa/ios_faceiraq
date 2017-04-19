@@ -7,12 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31027F3C1EA5454C009C281F /* OpenPagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */; };
+		31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F3E1EA5538C009C281F /* UIKit extensions.swift */; };
+		31027F451EA5F8FA009C281F /* OpenPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */; };
+		311F77E31EA601D600176130 /* OpenPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311F77E21EA601D600176130 /* OpenPage.swift */; };
+		311F77E51EA60CD600176130 /* OpenPagesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311F77E41EA60CD600176130 /* OpenPagesList.swift */; };
 		312661BD1EA0D70D006408B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661BC1EA0D70D006408B6 /* AppDelegate.swift */; };
 		312661BF1EA0D70D006408B6 /* BrowserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661BE1EA0D70D006408B6 /* BrowserController.swift */; };
 		312661C21EA0D70D006408B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C01EA0D70D006408B6 /* Main.storyboard */; };
 		312661C41EA0D70D006408B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 312661C31EA0D70D006408B6 /* Assets.xcassets */; };
 		312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C51EA0D70D006408B6 /* LaunchScreen.storyboard */; };
 		312661D21EA0D70D006408B6 /* FaceIraqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661D11EA0D70D006408B6 /* FaceIraqTests.swift */; };
+		31C3EDD31EA66130009FB1B0 /* OpenPagesViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C3EDD21EA66130009FB1B0 /* OpenPagesViewHeader.swift */; };
+		83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +33,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPagesViewController.swift; sourceTree = "<group>"; };
+		31027F3E1EA5538C009C281F /* UIKit extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit extensions.swift"; sourceTree = "<group>"; };
+		31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPageCollectionViewCell.swift; sourceTree = "<group>"; };
+		311F77E21EA601D600176130 /* OpenPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPage.swift; sourceTree = "<group>"; };
+		311F77E41EA60CD600176130 /* OpenPagesList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPagesList.swift; sourceTree = "<group>"; };
 		312661B91EA0D70D006408B6 /* FaceIraq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceIraq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		312661BC1EA0D70D006408B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		312661BE1EA0D70D006408B6 /* BrowserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserController.swift; sourceTree = "<group>"; };
@@ -36,6 +48,10 @@
 		312661CD1EA0D70D006408B6 /* FaceIraqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceIraqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		312661D11EA0D70D006408B6 /* FaceIraqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIraqTests.swift; sourceTree = "<group>"; };
 		312661D31EA0D70D006408B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		31C3EDD21EA66130009FB1B0 /* OpenPagesViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPagesViewHeader.swift; sourceTree = "<group>"; };
+		5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceIraq.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.release.xcconfig"; sourceTree = "<group>"; };
+		9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,12 +73,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31027F3D1EA55366009C281F /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				31027F3E1EA5538C009C281F /* UIKit extensions.swift */,
+			);
+			name = extensions;
+			sourceTree = "<group>";
+		};
 		312661B01EA0D70D006408B6 = {
 			isa = PBXGroup;
 			children = (
 				312661BB1EA0D70D006408B6 /* FaceIraq */,
 				312661D01EA0D70D006408B6 /* FaceIraqTests */,
 				312661BA1EA0D70D006408B6 /* Products */,
+				7F0CE2F2DAD924E400CD7D4B /* Pods */,
+				9AC1850A0AC3179276CE63FA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +104,7 @@
 		312661BB1EA0D70D006408B6 /* FaceIraq */ = {
 			isa = PBXGroup;
 			children = (
+				31027F3D1EA55366009C281F /* extensions */,
 				312661DE1EA0E078006408B6 /* View */,
 				312661DC1EA0E066006408B6 /* ViewController */,
 				312661DD1EA0E072006408B6 /* Model */,
@@ -100,6 +128,9 @@
 			isa = PBXGroup;
 			children = (
 				312661BE1EA0D70D006408B6 /* BrowserController.swift */,
+				31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */,
+				31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */,
+				31C3EDD21EA66130009FB1B0 /* OpenPagesViewHeader.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -107,6 +138,8 @@
 		312661DD1EA0E072006408B6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				311F77E21EA601D600176130 /* OpenPage.swift */,
+				311F77E41EA60CD600176130 /* OpenPagesList.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -120,6 +153,23 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		7F0CE2F2DAD924E400CD7D4B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */,
+				63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9AC1850A0AC3179276CE63FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -127,9 +177,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 312661D61EA0D70D006408B6 /* Build configuration list for PBXNativeTarget "FaceIraq" */;
 			buildPhases = (
+				74CF801A840303944F6B96C3 /* [CP] Check Pods Manifest.lock */,
 				312661B51EA0D70D006408B6 /* Sources */,
 				312661B61EA0D70D006408B6 /* Frameworks */,
 				312661B71EA0D70D006408B6 /* Resources */,
+				C7F7674DFC3412932E057E7D /* [CP] Embed Pods Frameworks */,
+				526415C01DA752AE5A4D0EE6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -220,13 +273,67 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		526415C01DA752AE5A4D0EE6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		74CF801A840303944F6B96C3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C7F7674DFC3412932E057E7D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		312661B51EA0D70D006408B6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31027F3C1EA5454C009C281F /* OpenPagesViewController.swift in Sources */,
+				31C3EDD31EA66130009FB1B0 /* OpenPagesViewHeader.swift in Sources */,
 				312661BF1EA0D70D006408B6 /* BrowserController.swift in Sources */,
+				311F77E31EA601D600176130 /* OpenPage.swift in Sources */,
+				311F77E51EA60CD600176130 /* OpenPagesList.swift in Sources */,
 				312661BD1EA0D70D006408B6 /* AppDelegate.swift in Sources */,
+				31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */,
+				31027F451EA5F8FA009C281F /* OpenPageCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +468,7 @@
 		};
 		312661D71EA0D70D006408B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CG26HZ2K77;
@@ -375,6 +483,7 @@
 		};
 		312661D81EA0D70D006408B6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CG26HZ2K77;
@@ -436,6 +545,7 @@
 				312661D81EA0D70D006408B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		312661D91EA0D70D006408B6 /* Build configuration list for PBXNativeTarget "FaceIraqTests" */ = {
 			isa = XCConfigurationList;
@@ -444,6 +554,7 @@
 				312661DB1EA0D70D006408B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

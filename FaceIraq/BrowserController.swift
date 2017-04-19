@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import RealmSwift
 
 class BrowserViewController: UIViewController {
 
@@ -24,42 +25,78 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var cancelOutlet: UIButton!
     @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
     
+    var pageFromPagesController: OpenPage? = nil
+    
     override func loadView() {
         super.loadView()
+        print("loadView")
         
         urlInputTextField.delegate = self
         let configurator = WKWebViewConfiguration()
         webView = WKWebView(frame: webViewLayoutTemplate.frame, configuration: configurator)
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        //print(webViewLayoutTemplate.subviews.count)
+        if #available(iOS 9.0, *) {
+            webView.allowsLinkPreview = true
+        } else {
+            // Fallback on earlier versions
+        }
         webViewLayoutTemplate.insertSubview(webView, at: 0)
-        print(view.subviews.count)
-        //view.insertSubview(webView, at: 3)
-        
+        //self.navigationController?.go
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
         
-        openHomePage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        print("viewWillAppear")
         manageBackArrow()
+        openHomePage()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        addToOpenPagesCollection()
     }
     
     func openURL(_ stringURL: String) {
-        let url = URL(string: "http://\(stringURL)")!
+        var string = stringURL
+        if string.hasPrefix("http://") {
+            string = string.replacingOccurrences(of: "http://", with: "")
+        }
+        if string.hasPrefix("https://") {
+            string = string.replacingOccurrences(of: "https://", with: "")
+        }
+        let url = URL(string: "http://\(string)")!
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
         urlInputTextField.text = nil
-        urlInputTextField.placeholder = url.absoluteString
+        urlInputTextField.placeholder = url.host
         if UIApplication.shared.canOpenURL(url) {
             webView.load(request)
         } else {
             print("cannot open URL")
             activityIndicator.stopAnimating()
         }
+    }
+    
+    func remoteOpenURL(_ stringURL: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
+        print("remoteOpenURL")
+        self.webView?.stopLoading()
+        let url = URL(string: stringURL)!
+        self.urlInputTextField.placeholder = url.host!
+        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+        if UIApplication.shared.canOpenURL(url) {
+            self.webView.load(request)
+        } else {
+            print("cannot open URL")
+            self.activityIndicator.stopAnimating()
+        }
+        })
     }
     
     func manageBackArrow() {
@@ -87,18 +124,40 @@ class BrowserViewController: UIViewController {
             cancelOutlet.isHidden = true
         }
     }
+    func testFunc() {
+        print("testFunc")
+    }
     
     func openHomePage() {
         if urlInputTextField.isEditing {
             urlInputTextField.resignFirstResponder()
         }
-        let stringURL = "http://faceiraq.net"
-        let url = URL(string: stringURL)!
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+        let urlToOpen = URL(string: "http://faceiraq.net")!
+        let request = URLRequest(url: urlToOpen, cachePolicy: .returnCacheDataElseLoad)
         urlInputTextField.text = nil
-        urlInputTextField.placeholder = stringURL
         webView.load(request)
+        urlInputTextField.placeholder = "www.faceiraq.net"
         
+        
+    }
+    
+    func addToOpenPagesCollection() {
+        let realm = try! Realm()
+        let screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
+        let url = NSString(string: (webView.url?.absoluteString)!)
+        if pageFromPagesController != nil {
+            realm.beginWrite()
+            self.pageFromPagesController?.dateOfLastVisit = Date()
+            self.pageFromPagesController?.url = url
+            self.pageFromPagesController?.screen = screen
+            try! realm.commitWrite()
+            return
+        } else {
+            let openPage = OpenPage(url: url, screen: screen)
+            try! realm.write {
+            realm.add(openPage)
+            }
+        }
     }
     
     @IBAction func openUrl(_ sender: UITextField) {
@@ -113,7 +172,8 @@ class BrowserViewController: UIViewController {
         changeNavigationBarUI()
     }
     @IBAction func goToOpenedSites(_ sender: Any) {
-        print("go to open sited")
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "OpenPagesViewController") as! OpenPagesViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     @IBAction func goToMore(_ sender: Any) {
         print("go to more")
@@ -155,7 +215,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicator.stopAnimating()
         if webView.url != nil {
-        urlInputTextField.placeholder = webView.url?.absoluteString
+        urlInputTextField.placeholder = webView.url?.host
         } else {
             urlInputTextField.placeholder = "enter your website adress"
         }
@@ -164,16 +224,54 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         urlInputTextField.text = nil
-        urlInputTextField.placeholder = "provisional error occured"
+        urlInputTextField.placeholder = "loading"
         print("provisional error occured")
         activityIndicator.stopAnimating()
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         urlInputTextField.text = nil
-        urlInputTextField.placeholder = "error occured"
+        urlInputTextField.placeholder = "loading"
         print("error occured")
+        
         activityIndicator.stopAnimating()
     }
+    
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        print("runJavaScriptAlertPanelWithMessage")
+        let okAction = UIAlertAction(title: "ok", style: .default) { _ in
+            print("")
+        }
+    }
+
+    func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+        print("runJavaScriptConfirmPanelWithMessage")
+        let _ = UIAlertAction(title: "Okay", style: .default) { _ in
+            print("true")
+        }
+        
+        let _ = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            print("false")
+        }
+    }
+    
+    func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
+        print("runJavaScriptTextInputPanelWithPrompt")
+    }
+    
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        print("didReceiveServerRedirectForProvisionalNavigation")
+    }
+    
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        print("createWebViewWith")
+        if navigationAction.targetFrame == nil {
+            webView.load(navigationAction.request)
+        }
+        return nil
+    }
+}
+
+extension BrowserViewController: OpenURLDelegate {
 }
 
