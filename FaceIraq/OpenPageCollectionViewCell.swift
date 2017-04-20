@@ -15,19 +15,16 @@ protocol OpenPagesRemovalDelegate {
 
 class OpenPageCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var closePageButton: UIButton!
-    var closePageDelegate: OpenPagesRemovalDelegate?
+    @IBOutlet weak var buttonTemplate: UIButton!
+    @IBOutlet weak var view: UIView!
+    //var closePageDelegate: OpenPagesRemovalDelegate?
     var page: OpenPage? = nil
     @IBOutlet weak var pageScreen: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        closePageButton.isExclusiveTouch = true 
+        view.dropShadow()
+        view.backgroundColor = Style.currentThemeColor
+        buttonTemplate.backgroundColor = .clear
     }
-    
-    @IBAction func closePage(_ sender: Any) {
-        print("close page")
-        closePageDelegate?.closePage(page: page!)
-    }
-    
 }

@@ -10,6 +10,9 @@ import UIKit
 
 class MoreViewController: UIViewController {
 
+    @IBOutlet weak var cancelButton: UIButton!
+    var delegate: MoreDelegate!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
@@ -20,34 +23,40 @@ class MoreViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        cancelButton.backgroundColor = Style.currentThemeColor
+    }
     
     @IBAction func cancel(_ sender: Any) {
         self.dismiss(animated: true, completion: {})
     }
 
     @IBAction func contactUs(_ sender: Any) {
+        delegate.goToContactUs()
     }
     
     @IBAction func themeColor(_ sender: Any) {
+        print("themeColor triggered")
+        self.dismiss(animated: true)
+        delegate.goToThemeColor()
     }
     
     @IBAction func history(_ sender: Any) {
+        delegate.goToHistory()
     }
     
     @IBAction func myBookmarks(_ sender: Any) {
+        delegate.goToMyBookmarks()
     }
     
     @IBAction func bookmarkThisPage(_ sender: Any) {
+        delegate.addBookmark()
     }
     
     @IBAction func newPage(_ sender: Any) {
-        print("new Page")
-        self.presentingViewController?.dismiss(animated: false, completion: {})
-        DispatchQueue.main.async {
-            let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        self.dismiss(animated: true, completion: nil)
+        delegate.newPage()
+        self.dismiss(animated: true, completion: {})
     }
     
     
@@ -62,3 +71,23 @@ class MoreViewController: UIViewController {
     */
 
 }
+
+protocol MoreDelegate {
+    func newPage();
+    func goToThemeColor();
+    func goToMyBookmarks();
+    func addBookmark();
+    func goToHistory();
+    func goToContactUs()
+}
+
+
+
+
+
+
+
+
+
+
+

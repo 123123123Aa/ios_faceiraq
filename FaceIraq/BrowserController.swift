@@ -24,25 +24,22 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var goToHomeSite: UIButton!
     @IBOutlet weak var cancelOutlet: UIButton!
     @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var openPagesCount: UILabel!
     var pageFromPagesController: OpenPage? = nil
-    
+    var realm: Realm!
     override func loadView() {
         super.loadView()
         print("loadView")
         
+        realm = try! Realm()
         urlInputTextField.delegate = self
         let configurator = WKWebViewConfiguration()
         webView = WKWebView(frame: webViewLayoutTemplate.frame, configuration: configurator)
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        if #available(iOS 9.0, *) {
-            webView.allowsLinkPreview = true
-        } else {
-            // Fallback on earlier versions
-        }
+        webView.allowsLinkPreview = true
         webViewLayoutTemplate.insertSubview(webView, at: 0)
-        //self.navigationController?.go
+        webNavigationBar.backgroundColor = Style.currentThemeColor
     }
     
     override func viewDidLoad() {
@@ -54,10 +51,16 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         print("viewWillAppear")
+        self.navigationController?.isNavigationBarHidden = true 
         manageBackArrow()
         openHomePage()
+        countOpenPages()
+        guard isConnectedToNetwork() else {
+            webView.stopLoading()
+            return
+        }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         addToOpenPagesCollection()
@@ -101,10 +104,10 @@ class BrowserViewController: UIViewController {
     
     func manageBackArrow() {
         if !webView.canGoBack {
-            self.textFieldLeftConstraint.constant = 8
+            self.textFieldLeftConstraint.constant = 7
             self.goBack.isHidden = true
         } else {
-            self.textFieldLeftConstraint.constant = 25
+            self.textFieldLeftConstraint.constant = 35
             self.goBack.isHidden = false
         }
     }
@@ -117,7 +120,7 @@ class BrowserViewController: UIViewController {
             cancelOutlet.isHidden = false
             textFieldRightConstraint.constant = 65
         } else {
-            textFieldRightConstraint.constant = 107
+            textFieldRightConstraint.constant = 110
             goToMore.isHidden = false
             goToHomeSite.isHidden = false
             goToOpenedSites.isHidden = false
@@ -142,7 +145,7 @@ class BrowserViewController: UIViewController {
     }
     
     func addToOpenPagesCollection() {
-        let realm = try! Realm()
+        guard webView.url != nil else {return}
         let screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
         let url = NSString(string: (webView.url?.absoluteString)!)
         if pageFromPagesController != nil {
@@ -160,6 +163,21 @@ class BrowserViewController: UIViewController {
         }
     }
     
+    func countOpenPages() {
+        var count = 1
+        if let pages = realm?.objects(OpenPage).count {
+            if pages > 0 {
+                count = pages
+                if pageFromPagesController != nil {
+                    openPagesCount.text = "\(count)"
+                } else {
+                openPagesCount.text = "\(count + 1)"
+                }
+        } else { openPagesCount.text = "1"
+            }
+        }
+        
+    }
     @IBAction func openUrl(_ sender: UITextField) {
         openURL(urlInputTextField.text!)
     }
@@ -178,6 +196,7 @@ class BrowserViewController: UIViewController {
     @IBAction func goToMore(_ sender: Any) {
         print("go to more")
         let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
+        moreVC.delegate = self
         self.present(moreVC, animated: true, completion: {})
     }
     @IBAction func cancelTypingNewURL(_ sender: Any) {
@@ -274,5 +293,34 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
 }
 
-
+extension BrowserViewController: MoreDelegate {
+    func newPage() {
+        print("open new page")
+        let newBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+        self.navigationController?.pushViewController(newBrowser, animated: true)
+        self.dismiss(animated: false, completion: {})
+    }
+    
+    func goToThemeColor() {
+        print("goToThemeColor")
+        let themeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ThemeColorTableViewController") as! ThemeColorTableViewController
+        self.navigationController?.pushViewController(themeVC, animated: true)
+    }
+    
+    func goToMyBookmarks() {
+        print("goToMyBookmarks")
+    }
+    
+    func addBookmark() {
+        print("addBookmark")
+    }
+    
+    func goToHistory() {
+        print("goToHistory")
+    }
+    
+    func goToContactUs() {
+        print("go to contact us")
+    }
+}
 
