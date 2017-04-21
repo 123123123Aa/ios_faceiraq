@@ -15,24 +15,15 @@ protocol OpenPagesRemovalDelegate {
 
 class OpenPageCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var buttonTemplate: UIButton!
+    @IBOutlet weak var pageUrl: UILabel!
     @IBOutlet weak var view: UIView!
     //var closePageDelegate: OpenPagesRemovalDelegate?
     var page: OpenPage? = nil
-    @IBOutlet weak var pageScreen: UIImageView!
+    @IBOutlet weak var pageScreen: UIImageView?
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        print("awake from nib") 
         view.dropShadow()
-        view.backgroundColor = Style.currentThemeColor
-        //buttonTemplate.backgroundColor = .clear
-        buttonTemplate.addTarget(self, action: #selector(buttonTemplateAction), for: .touchDown)
-    }
-    
-    func buttonTemplateAction() {
-        print("button template action")
-    }
-    @IBAction func closeCellAction(_ sender: Any) {
-        print("closeCell action")
-    }
+        view.backgroundColor = .white    }
 }

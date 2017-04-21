@@ -12,19 +12,42 @@ class MyBookmarksTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        //navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
+        print("historyTVC loaded")
+        refreshNavBar()
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationItem.title = "HISTORY"
     }
-
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    func refreshNavBar() {
+        let bar = self.navigationController?.navigationBar
+        bar?.barTintColor = Style.currentThemeColor
+        bar?.tintColor = Style.currentTintColor
+        //bar?.backItem?.backBarButtonItem?.title = nil
+        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
+        tableView.backgroundColor = Style.currentThemeColor
+        bar?.backItem?.backBarButtonItem?.tintColor = Style.currentTintColor
+        self.navigationItem.backBarButtonItem?.title = ""
+        bar?.setNeedsLayout()
+        bar?.layoutIfNeeded()
+        bar?.setNeedsDisplay()
+    }
+    
+    
+    
+    
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

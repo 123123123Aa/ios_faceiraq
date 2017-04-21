@@ -9,4 +9,15 @@
 import Realm
 import RealmSwift
 
-//class History:
+class History: Object {
+
+    dynamic var dateOfLastVisit: Date!
+    dynamic var url: NSString!
+    dynamic var host: NSString!
+    dynamic var image: NSData?
+    convenience init(url: NSString, host: NSString) {
+        self.init()
+        self.dateOfLastVisit = Date()
+        self.url = url
+    }
+}

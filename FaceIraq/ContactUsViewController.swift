@@ -12,7 +12,8 @@ class ContactUsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
+        refreshNavBar()
         // Do any additional setup after loading the view.
     }
 
@@ -21,6 +22,18 @@ class ContactUsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func refreshNavBar() {
+        let bar = self.navigationController?.navigationBar
+        bar?.barTintColor = Style.currentThemeColor
+        bar?.tintColor = Style.currentTintColor
+        //bar?.backItem?.backBarButtonItem?.title = nil
+        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
+        bar?.backItem?.backBarButtonItem?.tintColor = Style.currentTintColor
+        self.navigationItem.backBarButtonItem?.title = ""
+        bar?.setNeedsLayout()
+        bar?.layoutIfNeeded()
+        bar?.setNeedsDisplay()
+    }
 
     /*
     // MARK: - Navigation

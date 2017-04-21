@@ -33,6 +33,7 @@ class OpenPagesViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(backGesture)
+        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
         
     }
     
@@ -42,9 +43,13 @@ class OpenPagesViewController: UIViewController {
         realm = try! Realm()
         orderPages()
         countPages()
+        collectionView.layoutIfNeeded()
+        collectionView.setNeedsLayout()
         collectionView.reloadData()
         collectionView.reloadInputViews()
     }
+    
+    
     
     func orderPages() {
         let newOrder = (realm?.objects(OpenPage.self).sorted(byKeyPath: "dateOfLastVisit", ascending: true).toArray(ofType:OpenPage.self))!
@@ -81,6 +86,7 @@ class OpenPagesViewController: UIViewController {
         print("go to more")
         let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
         moreVC.delegate = self
+        moreVC.openPagesVCIsParent = true
         self.present(moreVC, animated: true, completion: {})
     }
     
@@ -174,27 +180,31 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         
         let closeButton = CloseButton(page: page)
         closeButton.indexPath = indexPath
-        closeButton.frame = cell.buttonTemplate.frame
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        //let closeButtonHorizontalConst = NSLayoutConstraint.constraints(withVisualFormat: "H:[closeButton]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: [:], views: ["closeButton":closeButton])
-        //let closeButtonVerticalConst = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[closeButton]", options: NSLayoutFormatOptions(rawValue: 0), metrics: [:], views: ["closeButton":closeButton])
- 
+        closeButton.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
+        //closeButton.translatesAutoresizingMaskIntoConstraints = false
         
-        closeButton.backgroundColor = .blue
-        //closeButton.setImage(UIImage(named: "openPagesClose"), for: .normal)
+        closeButton.backgroundColor = .clear
+        closeButton.setImage(UIImage(named: "openPagesClose"), for: .normal)
+        closeButton.imageEdgeInsets = UIEdgeInsets(top: -2, left: -5, bottom: 5, right: 5)
         closeButton.addTarget(self, action: #selector(closePage(selector:)), for: .touchDown)
         closeButton.isUserInteractionEnabled = true
         closeButton.isExclusiveTouch = true
         cell.addSubview(closeButton)
-        //closeButton.addConstraints(closeButtonVerticalConst)
-        //closeButton.addConstraints(closeButtonHorizontalConst)
+        
+        //let closeButtonHorizontalConst = NSLayoutConstraint.init(item: closeButton, attribute: .trailing, relatedBy: .equal, toItem: cell.buttonTemplate, attribute: .trailing, multiplier: 1, constant: 0)
+        //let closeButtonVerticalConst = NSLayoutConstraint.init(item: closeButton, attribute: .top, relatedBy: .equal, toItem: cell.buttonTemplate, attribute: .top, multiplier: 1, constant: 0)
+
+        //closeButton.addConstraints([closeButtonVerticalConst, closeButtonHorizontalConst])
+        
         
  
         
         //cell.buttonTemplate.isExclusiveTouch = true
         if page.screen != nil {
             if let image = UIImage(data: (page.screen as! Data)) {
-                cell.pageScreen.image = image
+                cell.pageScreen?.image = image
+                cell.pageUrl.text = page.host as String?
+            } else { cell.pageScreen?.image = nil
             }
         }
         return cell
@@ -218,6 +228,8 @@ extension OpenPagesViewController: MoreDelegate {
     
     func goToMyBookmarks() {
         print("goToMyBookmarks")
+        let bookmarkVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyBookmarksTableViewController") as! MyBookmarksTableViewController
+        self.navigationController?.pushViewController(bookmarkVC, animated: true)
     }
     
     func addBookmark() {
@@ -226,10 +238,14 @@ extension OpenPagesViewController: MoreDelegate {
     
     func goToHistory() {
         print("goToHistory")
+        let historyVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HistoryTableViewController") as! HistoryTableViewController
+        self.navigationController?.pushViewController(historyVC, animated: true)
     }
     
     func goToContactUs() {
         print("go to contact us")
+        let contactVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
+        self.navigationController?.pushViewController(contactVC, animated: true)
     }
 }
 
@@ -245,4 +261,6 @@ class CloseButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+
 

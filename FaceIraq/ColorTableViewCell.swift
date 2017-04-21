@@ -7,20 +7,15 @@
 //
 
 import UIKit
+import MGSwipeTableCell
 
-class ColorTableViewCell: UITableViewCell {
+class ColorTableViewCell: MGSwipeTableCell {
 
     @IBOutlet weak var colorPreview: UILabel!
     @IBOutlet weak var colorName: UILabel!
+    var color: UIColor?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }

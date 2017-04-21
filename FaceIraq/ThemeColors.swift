@@ -12,15 +12,28 @@ import UIKit
 struct Style {
     
     static var currentThemeColor = UIColor.AppColors.appBeige
+    static var currentTintColor: UIColor {
+        if currentThemeColor == UIColor.AppColors.appBeige {
+            return UIColor.black
+        } else {
+            return UIColor.white
+        }
+    }
     
     static func loadTheme() {
-        // when app starts load choosed theme color from UserDefaults
-        print("loading theme color: \(currentThemeColor)")
+        print("loadTheme")
+        if let color = UserDefaults.standard.color(forKey: "themeColor") {
+            Style.currentThemeColor = color
+        } else {
+            
+        }
+        
+        print("loading theme color")
     }
     
     static func setThemeColor(to color: UIColor) {
-        
+        print("setThemeColor")
+        UserDefaults.standard.set(color, forKey: "themeColor")
         currentThemeColor = color
-        loadTheme()
     }
 }

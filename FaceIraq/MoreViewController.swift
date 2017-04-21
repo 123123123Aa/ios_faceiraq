@@ -10,11 +10,13 @@ import UIKit
 
 class MoreViewController: UIViewController {
 
+    @IBOutlet weak var addToBookmarkButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     var delegate: MoreDelegate!
-    
+    var openPagesVCIsParent: Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
         self.view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
         // Do any additional setup after loading the view.
     }
@@ -26,6 +28,9 @@ class MoreViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         cancelButton.backgroundColor = Style.currentThemeColor
+        if openPagesVCIsParent {
+            addToBookmarkButton.removeFromSuperview()
+        }
     }
     
     @IBAction func cancel(_ sender: Any) {
@@ -33,6 +38,7 @@ class MoreViewController: UIViewController {
     }
 
     @IBAction func contactUs(_ sender: Any) {
+        self.dismiss(animated: true)
         delegate.goToContactUs()
     }
     
@@ -43,14 +49,17 @@ class MoreViewController: UIViewController {
     }
     
     @IBAction func history(_ sender: Any) {
+        self.dismiss(animated: true)
         delegate.goToHistory()
     }
     
     @IBAction func myBookmarks(_ sender: Any) {
+        self.dismiss(animated: true)
         delegate.goToMyBookmarks()
     }
     
     @IBAction func bookmarkThisPage(_ sender: Any) {
+        self.dismiss(animated: true)
         delegate.addBookmark()
     }
     

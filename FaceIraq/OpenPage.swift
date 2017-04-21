@@ -14,6 +14,7 @@ class OpenPage: Object {
     dynamic var dateOfLastVisit: Date!
     dynamic var url: NSString?
     dynamic var screen: NSData?
+    dynamic var host: NSString?
     //var date
     
     convenience init(url: NSString, screen: NSData?) {

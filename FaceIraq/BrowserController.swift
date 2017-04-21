@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import RealmSwift
+import FavIcon
 
 class BrowserViewController: UIViewController {
 
@@ -26,12 +27,10 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
     @IBOutlet weak var openPagesCount: UILabel!
     var pageFromPagesController: OpenPage? = nil
-    var realm: Realm!
+    let realm = try! Realm()
     override func loadView() {
         super.loadView()
         print("loadView")
-        
-        realm = try! Realm()
         urlInputTextField.delegate = self
         let configurator = WKWebViewConfiguration()
         webView = WKWebView(frame: webViewLayoutTemplate.frame, configuration: configurator)
@@ -39,7 +38,7 @@ class BrowserViewController: UIViewController {
         webView.uiDelegate = self
         webView.allowsLinkPreview = true
         webViewLayoutTemplate.insertSubview(webView, at: 0)
-        webNavigationBar.backgroundColor = Style.currentThemeColor
+        
     }
     
     override func viewDidLoad() {
@@ -59,6 +58,9 @@ class BrowserViewController: UIViewController {
             webView.stopLoading()
             return
         }
+        webNavigationBar.backgroundColor = Style.currentThemeColor
+        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
+        webView.backgroundColor = Style.currentThemeColor
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -118,10 +120,12 @@ class BrowserViewController: UIViewController {
             goToHomeSite.isHidden = true
             goToOpenedSites.isHidden = true
             cancelOutlet.isHidden = false
+            openPagesCount.isHidden = true
             textFieldRightConstraint.constant = 65
         } else {
             textFieldRightConstraint.constant = 110
             goToMore.isHidden = false
+            openPagesCount.isHidden = false
             goToHomeSite.isHidden = false
             goToOpenedSites.isHidden = false
             cancelOutlet.isHidden = true
@@ -148,47 +152,82 @@ class BrowserViewController: UIViewController {
         guard webView.url != nil else {return}
         let screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
         let url = NSString(string: (webView.url?.absoluteString)!)
-        if pageFromPagesController != nil {
-            realm.beginWrite()
-            //self.pageFromPagesController?.dateOfLastVisit = Date()
-            self.pageFromPagesController?.url = url
-            self.pageFromPagesController?.screen = screen
-            try! realm.commitWrite()
-            return
-        } else {
-            let openPage = OpenPage(url: url, screen: screen)
-            try! realm.write {
-            realm.add(openPage)
+        let host = NSString(string: (webView.url!.host)!)
+        var pageIcon: NSData? = nil
+        try! FavIcon.downloadPreferred(webView.url!, width: 20, height: 20) { result in
+            if case let .success(returnedImage) = result {
+                pageIcon = NSData(data: UIImagePNGRepresentation(returnedImage)!)
             }
         }
+        
+        
+        
+        if realm.isInWriteTransaction == false {
+            realm.beginWrite()}
+        
+        //create or update OpenPage object
+        if pageFromPagesController != nil {
+            self.pageFromPagesController?.url = url
+            self.pageFromPagesController?.screen = screen
+            self.pageFromPagesController?.host = host
+            return
+        }
+            else {
+            let openPage = OpenPage(url: url, screen: screen)
+            openPage.host = host
+            realm.add(openPage)
+        }
+        
+        // create history object
+        var isInHistory = false
+        for object in realm.objects(History.self) {
+            if url != object.url {
+                isInHistory = true
+                object.dateOfLastVisit = Date()
+                
+                try! realm.commitWrite()
+                break
+            }
+        }
+        if isInHistory == false {
+            print("6")
+            realm.add(History(url: url, host: host))
+            print("7")
+        } else {
+        }
+        if realm.isInWriteTransaction {
+            print("9")
+            try! realm.commitWrite()}
     }
     
     func countOpenPages() {
         var count = 1
-        if let pages = realm?.objects(OpenPage).count {
-            if pages > 0 {
-                count = pages
-                if pageFromPagesController != nil {
-                    openPagesCount.text = "\(count)"
-                } else {
-                openPagesCount.text = "\(count + 1)"
-                }
-        } else { openPagesCount.text = "1"
+        let pages = realm.objects(OpenPage.self).count
+        if pages > 0 {
+            count = pages
+            if pageFromPagesController != nil {
+                openPagesCount.text = "\(count)"
+            } else {
+            openPagesCount.text = "\(count + 1)"
             }
+        } else { openPagesCount.text = "1"
         }
-        
     }
+    
     @IBAction func openUrl(_ sender: UITextField) {
         openURL(urlInputTextField.text!)
     }
+    
     @IBAction func openHomePage(_ sender: Any) {
         openHomePage()
     }
+    
     @IBAction func goBack(_ sender: Any) {
         webView.goBack()
         urlInputTextField.resignFirstResponder()
         changeNavigationBarUI()
     }
+    
     @IBAction func goToOpenedSites(_ sender: Any) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "OpenPagesViewController") as! OpenPagesViewController
         self.navigationController?.pushViewController(vc, animated: true)
@@ -260,9 +299,9 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         print("runJavaScriptAlertPanelWithMessage")
-        let okAction = UIAlertAction(title: "ok", style: .default) { _ in
+        //let okAction = UIAlertAction(title: "ok", style: .default) { _ in
             print("")
-        }
+        //}
     }
 
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
@@ -309,6 +348,8 @@ extension BrowserViewController: MoreDelegate {
     
     func goToMyBookmarks() {
         print("goToMyBookmarks")
+        let bookmarkVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyBookmarksTableViewController") as! MyBookmarksTableViewController
+        self.navigationController?.pushViewController(bookmarkVC, animated: true)
     }
     
     func addBookmark() {
@@ -317,10 +358,14 @@ extension BrowserViewController: MoreDelegate {
     
     func goToHistory() {
         print("goToHistory")
+        let historyVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HistoryTableViewController") as! HistoryTableViewController
+        self.navigationController?.pushViewController(historyVC, animated: true)
     }
     
     func goToContactUs() {
         print("go to contact us")
+        let contactVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
+        self.navigationController?.pushViewController(contactVC, animated: true)
     }
 }
 
