@@ -42,10 +42,13 @@ class OpenPagesViewController: UIViewController {
         realm = try! Realm()
         orderPages()
         countPages()
+        collectionView.reloadData()
+        collectionView.reloadInputViews()
     }
     
     func orderPages() {
-        pages = (realm?.objects(OpenPage.self).toArray(ofType:OpenPage.self))!
+        let newOrder = (realm?.objects(OpenPage.self).sorted(byKeyPath: "dateOfLastVisit", ascending: true).toArray(ofType:OpenPage.self))!
+        pages = newOrder
     }
     
     func countPages() {
@@ -60,7 +63,9 @@ class OpenPagesViewController: UIViewController {
         try! realm?.commitWrite()
         orderPages()
         countPages()
+        //collectionView.insertItems(at: collectionView.subviews)
         collectionView.reloadData()
+        
     }
     
     @IBAction func goToHomePage(_ sender: Any) {
@@ -92,23 +97,33 @@ class OpenPagesViewController: UIViewController {
         try! realm?.commitWrite()
         orderPages()
         countPages()
-        collectionView.reloadData()
+        //collectionView.reloadData()
+        //collectionView.
     }
     
     func closePage(selector: CloseButton) {
-        guard selector.page != nil else {
+        guard selector.page != nil && !selector.page.isInvalidated else {
             collectionView.reloadData()
+            collectionView.reloadInputViews()
+            collectionView.collectionViewLayout.finalizeCollectionViewUpdates()
+            print("closePage return")
             return
         }
+        print(pages.count)
         print("closePage")
         print(selector.page?.url as! String )
         realm?.beginWrite()
         realm?.delete(selector.page)
         try! realm?.commitWrite()
         realm?.refresh()
+        
+        //collectionView.deleteItems(at: [selector.indexPath!])
         orderPages()
         countPages()
+        print(pages.count)
         collectionView.reloadData()
+        collectionView.reloadInputViews()
+        collectionView.collectionViewLayout.finalizeCollectionViewUpdates()
     }
 }
 
@@ -156,15 +171,27 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.view.layer.cornerRadius).cgPath
         let page = pages[indexPath.item]
         cell.page = page
+        
         let closeButton = CloseButton(page: page)
+        closeButton.indexPath = indexPath
         closeButton.frame = cell.buttonTemplate.frame
-        //closeButton.imageView?.image = UIImage(named: "vectorSmartObject_4")
-        closeButton.setImage(UIImage(named: "openPagesClose"), for: .normal)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        //let closeButtonHorizontalConst = NSLayoutConstraint.constraints(withVisualFormat: "H:[closeButton]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: [:], views: ["closeButton":closeButton])
+        //let closeButtonVerticalConst = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[closeButton]", options: NSLayoutFormatOptions(rawValue: 0), metrics: [:], views: ["closeButton":closeButton])
+ 
+        
+        closeButton.backgroundColor = .blue
+        //closeButton.setImage(UIImage(named: "openPagesClose"), for: .normal)
         closeButton.addTarget(self, action: #selector(closePage(selector:)), for: .touchDown)
         closeButton.isUserInteractionEnabled = true
         closeButton.isExclusiveTouch = true
-        cell.insertSubview(closeButton, at: view.subviews.count)
+        cell.addSubview(closeButton)
+        //closeButton.addConstraints(closeButtonVerticalConst)
+        //closeButton.addConstraints(closeButtonHorizontalConst)
         
+ 
+        
+        //cell.buttonTemplate.isExclusiveTouch = true
         if page.screen != nil {
             if let image = UIImage(data: (page.screen as! Data)) {
                 cell.pageScreen.image = image
@@ -208,6 +235,7 @@ extension OpenPagesViewController: MoreDelegate {
 
 class CloseButton: UIButton {
     var page: OpenPage!
+    var indexPath: IndexPath?
     required init(page: OpenPage) {
         self.page = page
         super.init(frame: .zero)

@@ -25,6 +25,14 @@ class OpenPageCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         view.dropShadow()
         view.backgroundColor = Style.currentThemeColor
-        buttonTemplate.backgroundColor = .clear
+        //buttonTemplate.backgroundColor = .clear
+        buttonTemplate.addTarget(self, action: #selector(buttonTemplateAction), for: .touchDown)
+    }
+    
+    func buttonTemplateAction() {
+        print("button template action")
+    }
+    @IBAction func closeCellAction(_ sender: Any) {
+        print("closeCell action")
     }
 }

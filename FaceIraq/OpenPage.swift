@@ -14,11 +14,13 @@ class OpenPage: Object {
     dynamic var dateOfLastVisit: Date!
     dynamic var url: NSString?
     dynamic var screen: NSData?
+    //var date
     
     convenience init(url: NSString, screen: NSData?) {
         self.init()
         self.dateOfLastVisit = Date()
         self.url = url
         self.screen = screen
+        
     }
 }
