@@ -1,5 +1,6 @@
 PODS:
   - HFCardCollectionViewLayout (0.4.2)
+  - MGSwipeTableCell (1.5.6)
   - Realm (2.5.1):
     - Realm/Headers (= 2.5.1)
   - Realm/Headers (2.5.1)
@@ -8,13 +9,15 @@ PODS:
 
 DEPENDENCIES:
   - HFCardCollectionViewLayout
+  - MGSwipeTableCell
   - RealmSwift (~> 2.5.1)
 
 SPEC CHECKSUMS:
   HFCardCollectionViewLayout: 88cc7deb86baae9396450d9db323081cce50da59
+  MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   Realm: 32f86104d37c8521f864d4274050b38ba6190733
   RealmSwift: f719e7511c902b8908593e8f143f59e47931bdb6
 
-PODFILE CHECKSUM: 054e0bbe6b9a76c10377709b6bd246002de4ea26
+PODFILE CHECKSUM: fa99514dd3fa46844b65b0356222b814dc2f5ff5
 
 COCOAPODS: 1.2.0
