@@ -26,6 +26,9 @@
 		3193550D1EA785FA00CF0F20 /* history.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3193550C1EA785FA00CF0F20 /* history.swift */; };
 		3193550F1EA7866600CF0F20 /* more.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3193550E1EA7866600CF0F20 /* more.xib */; };
 		319355111EA7890500CF0F20 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319355101EA7890500CF0F20 /* MoreViewController.swift */; };
+		31AFB1B61EA9DE490033C01E /* MyBookmarksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */; };
+		31AFB1B81EA9DE5E0033C01E /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */; };
+		31AFB1BA1EA9DE770033C01E /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */; };
 		83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +66,9 @@
 		3193550C1EA785FA00CF0F20 /* history.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = history.swift; sourceTree = "<group>"; };
 		3193550E1EA7866600CF0F20 /* more.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = more.xib; sourceTree = "<group>"; };
 		319355101EA7890500CF0F20 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBookmarksTableViewController.swift; sourceTree = "<group>"; };
+		31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
+		31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceIraq.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.release.xcconfig"; sourceTree = "<group>"; };
 		9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.debug.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +155,9 @@
 				319355101EA7890500CF0F20 /* MoreViewController.swift */,
 				3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */,
 				3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */,
+				31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */,
+				31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */,
+				31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -351,10 +360,13 @@
 				3162F0441EA8D426006B0807 /* services.swift in Sources */,
 				3193550D1EA785FA00CF0F20 /* history.swift in Sources */,
 				31027F3C1EA5454C009C281F /* OpenPagesViewController.swift in Sources */,
+				31AFB1B61EA9DE490033C01E /* MyBookmarksTableViewController.swift in Sources */,
 				312661BF1EA0D70D006408B6 /* BrowserController.swift in Sources */,
 				3162F0401EA8A243006B0807 /* ColorTableViewCell.swift in Sources */,
 				3162F03C1EA897BC006B0807 /* ThemeColorTableViewController.swift in Sources */,
 				319355111EA7890500CF0F20 /* MoreViewController.swift in Sources */,
+				31AFB1BA1EA9DE770033C01E /* ContactUsViewController.swift in Sources */,
+				31AFB1B81EA9DE5E0033C01E /* HistoryTableViewController.swift in Sources */,
 				3162F03E1EA898BC006B0807 /* ThemeColors.swift in Sources */,
 				311F77E31EA601D600176130 /* OpenPage.swift in Sources */,
 				311F77E51EA60CD600176130 /* OpenPagesList.swift in Sources */,
