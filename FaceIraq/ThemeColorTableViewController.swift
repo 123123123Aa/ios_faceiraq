@@ -27,11 +27,12 @@ class ThemeColorTableViewController: UITableViewController {
         super.viewDidLoad()
         print("themeColorTableVC loaded")
         refreshNavBar()
-        self.navigationController?.isNavigationBarHidden = false
         self.navigationItem.title = "THEME COLOR"
+        tableView.alwaysBounceVertical = false
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        self.navigationController?.isNavigationBarHidden = false
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)

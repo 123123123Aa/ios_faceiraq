@@ -234,7 +234,7 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
                     }
                     }
                 cell.pageUrl.text = page.host as String?
-            } else { cell.pageScreen?.image = nil
+            } else { //cell.pageScreen?.image = nil
             }
         } else {
             // setup for newly created OpenPage object

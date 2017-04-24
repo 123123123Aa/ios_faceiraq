@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31008DBC1EAE08EA0086F416 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31008DBA1EAE08EA0086F416 /* Fabric.framework */; };
+		31008DBD1EAE08EA0086F416 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31008DBB1EAE08EA0086F416 /* Crashlytics.framework */; };
 		31027F3C1EA5454C009C281F /* OpenPagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */; };
 		31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F3E1EA5538C009C281F /* UIKit extensions.swift */; };
 		31027F451EA5F8FA009C281F /* OpenPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		31008DBA1EAE08EA0086F416 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		31008DBB1EAE08EA0086F416 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPagesViewController.swift; sourceTree = "<group>"; };
 		31027F3E1EA5538C009C281F /* UIKit extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit extensions.swift"; sourceTree = "<group>"; };
 		31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -89,6 +93,8 @@
 			files = (
 				83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */,
 				31D166E51EAA541F0059E9AB /* FavIcon.framework in Frameworks */,
+				31008DBD1EAE08EA0086F416 /* Crashlytics.framework in Frameworks */,
+				31008DBC1EAE08EA0086F416 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +213,8 @@
 		9AC1850A0AC3179276CE63FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				31008DBA1EAE08EA0086F416 /* Fabric.framework */,
+				31008DBB1EAE08EA0086F416 /* Crashlytics.framework */,
 				31D166E41EAA541F0059E9AB /* FavIcon.framework */,
 				5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */,
 			);
@@ -227,6 +235,7 @@
 				C7F7674DFC3412932E057E7D /* [CP] Embed Pods Frameworks */,
 				526415C01DA752AE5A4D0EE6 /* [CP] Copy Pods Resources */,
 				31D166E71EAA574B0059E9AB /* Run Script */,
+				31008DB91EAE05350086F416 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -268,7 +277,7 @@
 					312661B81EA0D70D006408B6 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = J5AJCLAX66;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					312661CC1EA0D70D006408B6 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -319,6 +328,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		31008DB91EAE05350086F416 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run f1f3b6b456a17e56a74481b46abb9dac9d7a2b38 eea661bbda17305ef3d79e78a8fde700a0a936521417ecae9bfadc23239f78d8";
+		};
 		31D166E71EAA574B0059E9AB /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -544,16 +566,20 @@
 			baseConfigurationReference = 9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = FaceIraq/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "b465abaa-d505-40cc-be47-ee133ea584ad";
+				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: *";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -564,16 +590,20 @@
 			baseConfigurationReference = 63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = FaceIraq/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "b465abaa-d505-40cc-be47-ee133ea584ad";
+				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: *";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

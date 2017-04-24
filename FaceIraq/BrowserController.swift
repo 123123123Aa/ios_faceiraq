@@ -31,6 +31,7 @@ class BrowserViewController: UIViewController {
     var pageFromPagesController: OpenPage? = nil
     let realm = try! Realm()
     var webView: WKWebView!
+    var screen: NSData? = nil
     
     override func loadView() {
         super.loadView()
@@ -74,11 +75,16 @@ class BrowserViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        updateScreenshot()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         addToOpenPagesCollection()
+    }
+    
+    func updateScreenshot() {
+        screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
     }
     
     // Mark: - UI methods
@@ -255,8 +261,9 @@ class BrowserViewController: UIViewController {
         print("addToOpenPagesCollection")
         guard webView.url != nil else {
             print("webView.url is nil. Returning.")
-            return}
-        let screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
+            return
+        }
+        screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
         let url = NSString(string: (webView.url?.absoluteString)!)
         let host = NSString(string: (webView.url!.host)!)
         
@@ -375,7 +382,10 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         } else {
             urlInputTextField.placeholder = "enter your website adress"
         }
-        manageBackArrow()
+        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+        self.manageBackArrow()
+        self.updateScreenshot()
+        })
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {

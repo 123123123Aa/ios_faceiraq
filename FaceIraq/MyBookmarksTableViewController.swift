@@ -17,6 +17,9 @@ class MyBookmarksTableViewController: UITableViewController {
     var remoteOpenURLDelegate: OpenURLDelegate!
     var bookmarks: [Bookmark] = []
     var filterString: String?
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("bookmarksVC loaded")
@@ -24,8 +27,11 @@ class MyBookmarksTableViewController: UITableViewController {
         computeBookmarks()
         searchTextField.delegate = self
         tableView.alwaysBounceVertical = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = false
-        
     }
     
     
@@ -47,6 +53,7 @@ class MyBookmarksTableViewController: UITableViewController {
     
     func refreshNavBar() {
         let bar = self.navigationController?.navigationBar
+        bar?.isHidden = false
         bar?.barTintColor = Style.currentThemeColor
         bar?.tintColor = Style.currentTintColor
         bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
