@@ -51,6 +51,9 @@ class OpenPagesViewController: UIViewController {
         realm = try! Realm()
         orderPages()
         countPages()
+        collectionView.reloadData()
+        collectionView.layoutIfNeeded()
+        //collectionView.set
     }
     
     
@@ -87,6 +90,14 @@ class OpenPagesViewController: UIViewController {
     }
     
     @IBAction func goToHomePage(_ sender: Any) {
+        if (self.navigationController?.viewControllers[0]) != nil {
+            print("root VC removed")
+            navigationController?.viewControllers.remove(at: 0)
+        }
+        let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    @IBAction func goToNewHomePage(_ sender: Any) {
         if (self.navigationController?.viewControllers[0]) != nil {
             print("root VC removed")
             navigationController?.viewControllers.remove(at: 0)
@@ -194,6 +205,8 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "openPage", for: indexPath) as! OpenPageCollectionViewCell
         
         cell.backgroundColor = .clear
+        cell.view.backgroundColor = Style.currentThemeColor
+        cell.pageUrl.textColor = Style.currentTintColor
         cell.view.layer.cornerRadius = 5.0
         cell.view.layer.borderWidth = 1.0
         cell.view.layer.borderColor = UIColor.clear.cgColor

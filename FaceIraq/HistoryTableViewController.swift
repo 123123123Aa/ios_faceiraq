@@ -13,6 +13,7 @@ import Realm
 
 class HistoryTableViewController: UITableViewController {
 
+    @IBOutlet weak var searchTextField: UITextField!
     var history: [History] = []
     let realm = try! Realm()
     var remoteOpenURLDelegate: OpenURLDelegate!
@@ -22,6 +23,7 @@ class HistoryTableViewController: UITableViewController {
         print("historyTVC loaded")
         computeHistory()
         refreshNavBar()
+        searchTextField.delegate = self
         tableView.alwaysBounceVertical = false
         self.navigationController?.isNavigationBarHidden = false
     }
@@ -125,6 +127,34 @@ class HistoryTableViewController: UITableViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 
+}
+
+extension HistoryTableViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("text field should return")
+        textField.endEditing(true)
+        return true
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("textFieldDidEndEditin")
+        computeHistory()
+        tableView.reloadData()
+        guard textField.text != nil && textField.text != "" && textField.text != " " else {
+            print("no relevant textField content")
+            return
+        }
+        print("relevant textField content")
+        let searchedText = self.searchTextField.text!
+        var newHistory: [History] = []
+        for object in history {
+            if object.url.contains(searchedText) {
+                newHistory.append(object)
+            }
+        }
+        history = newHistory
+        self.tableView.reloadData()
+    }
 }
 
 

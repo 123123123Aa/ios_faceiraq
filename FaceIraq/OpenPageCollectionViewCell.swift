@@ -25,5 +25,6 @@ class OpenPageCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         print("awake from nib") 
         view.dropShadow()
-        view.backgroundColor = .white    }
+    
+    }
 }
