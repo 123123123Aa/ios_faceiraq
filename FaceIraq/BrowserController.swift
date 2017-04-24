@@ -10,15 +10,17 @@ import UIKit
 import WebKit
 import RealmSwift
 import FavIcon
+import SystemConfiguration
 
 class BrowserViewController: UIViewController {
 
+    @IBOutlet weak var noInternetConnectionView: UIView!
+    @IBOutlet weak var bookmarkAdded: UILabel!
     @IBOutlet weak var goBack: UIButton!
     @IBOutlet weak var urlInputTextField: UITextField!
     @IBOutlet weak var webNavigationBar: UIView!
     @IBOutlet weak var webViewLayoutTemplate: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    var webView: WKWebView!
     @IBOutlet weak var textFieldLeftConstraint: NSLayoutConstraint!
     @IBOutlet weak var goToOpenedSites: UIButton!
     @IBOutlet weak var goToMore: UIButton!
@@ -28,39 +30,50 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var openPagesCount: UILabel!
     var pageFromPagesController: OpenPage? = nil
     let realm = try! Realm()
+    var webView: WKWebView!
+    
     override func loadView() {
         super.loadView()
-        print("loadView")
-        urlInputTextField.delegate = self
-        let configurator = WKWebViewConfiguration()
-        webView = WKWebView(frame: webViewLayoutTemplate.frame, configuration: configurator)
-        webView.navigationDelegate = self
-        webView.uiDelegate = self
-        webView.allowsLinkPreview = true
-        webViewLayoutTemplate.insertSubview(webView, at: 0)
-        
+        print("browserVC loadView")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
+        print("browserVC viewDidLoad")
         
+        self.navigationController?.viewControllers = [self]
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
+        urlInputTextField.delegate = self
+        webView.allowsBackForwardNavigationGestures = true
+        webView.scrollView.delegate = self
+        webView.scrollView.showsHorizontalScrollIndicator = true
+        webView.scrollView.showsVerticalScrollIndicator = true
+        
+        manageBackArrow()
+        countOpenPages()
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        
+        webView.layoutIfNeeded()
+        self.view.layoutSubviews()
+        self.view.layoutIfNeeded()
+        
+        self.openHomePage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        print("viewWillAppear")
-        self.navigationController?.isNavigationBarHidden = true 
-        manageBackArrow()
-        openHomePage()
-        countOpenPages()
-        guard isConnectedToNetwork() else {
-            webView.stopLoading()
-            return
-        }
-        webNavigationBar.backgroundColor = Style.currentThemeColor
-        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
-        webView.backgroundColor = Style.currentThemeColor
+        print("browserVC viewWillAppear")
+        
+        configureColors()
+        self.navigationController?.isNavigationBarHidden = true
+        webView.frame = webViewLayoutTemplate.frame
+        webViewLayoutTemplate.addSubview(webView)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,7 +81,98 @@ class BrowserViewController: UIViewController {
         addToOpenPagesCollection()
     }
     
+    // Mark: - UI methods
+    
+    func configureColors() {
+        webNavigationBar.backgroundColor = Style.currentThemeColor
+        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
+        openPagesCount.textColor = Style.currentTintColor
+        cancelOutlet.setTitleColor(Style.currentTintColor, for: .normal)
+        if Style.currentTintColor == .white {
+            goBack.setImage(UIImage.init(named: "browserBackArrowWhite"), for: .normal)
+            goToMore.setImage(UIImage.init(named: "openPagesMore"), for: .normal)
+            goToHomeSite.setImage(UIImage.init(named: "openPagesHome"), for: .normal)
+            goToOpenedSites.setImage(UIImage.init(named: "openPagesSquare"), for: .normal)
+        } else {
+            goBack.setImage(UIImage.init(named: "browserBackArrow"), for: .normal)
+            goToMore.setImage(UIImage.init(named: "browserMore"), for: .normal)
+            goToHomeSite.setImage(UIImage.init(named: "browserHome"), for: .normal)
+            goToOpenedSites.setImage(UIImage.init(named: "browserSquare"), for: .normal)
+        }
+    }
+    
+    func manageBackArrow() {
+        if !webView.canGoBack {
+            self.textFieldLeftConstraint.constant = 7
+            self.goBack.isHidden = true
+        } else {
+            self.textFieldLeftConstraint.constant = 35
+            self.goBack.isHidden = false
+        }
+    }
+    func showBookmarkAdded() {
+        bookmarkAdded.backgroundColor = Style.currentThemeColor
+        bookmarkAdded.textColor = Style.currentTintColor
+        bookmarkAdded.dropShadow()
+        bookmarkAdded.layer.cornerRadius = 3
+        bookmarkAdded.layer.masksToBounds = true
+        bookmarkAdded.layer.shadowOffset = CGSize(width: 0.0, height: 3.0)
+        bookmarkAdded.alpha = 0.0
+        bookmarkAdded.isHidden = true
+        UIView.animate(withDuration: 0.2, animations: {
+            self.bookmarkAdded.isHidden = false
+            self.bookmarkAdded.alpha = 1.0
+        }) { finished in
+            DispatchQueue.main.asyncAfter(deadline: .now()+4, execute: {
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.bookmarkAdded.alpha = 0.0
+                }) {finished in
+                    self.bookmarkAdded.isHidden = true
+                }
+            })
+        }
+    }
+    
+    func changeNavigationBarUI() {
+        if urlInputTextField.isEditing {
+            goToMore.isHidden = true
+            goToHomeSite.isHidden = true
+            goToOpenedSites.isHidden = true
+            cancelOutlet.isHidden = false
+            openPagesCount.isHidden = true
+            textFieldRightConstraint.constant = 65
+        } else {
+            textFieldRightConstraint.constant = 110
+            goToMore.isHidden = false
+            openPagesCount.isHidden = false
+            goToHomeSite.isHidden = false
+            goToOpenedSites.isHidden = false
+            cancelOutlet.isHidden = true
+        }
+    }
+    
+    func countOpenPages() {
+        var count = 1
+        let pages = realm.objects(OpenPage.self).count
+        if pages > 0 {
+            count = pages
+            if pageFromPagesController != nil {
+                print("pageFromPagesController found")
+                openPagesCount.text = "\(count)"
+            } else {
+                print("pageFromPagesController not found: count + 1")
+                openPagesCount.text = "\(count+1)"
+            }
+        } else {
+            print("no openPages object in database: count = 1")
+            openPagesCount.text = "1"
+        }
+    }
+
+    // MARK: - urlRequest methods
+    
     func openURL(_ stringURL: String) {
+        print("openURL")
         var string = stringURL
         if string.hasPrefix("http://") {
             string = string.replacingOccurrences(of: "http://", with: "")
@@ -88,54 +192,37 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func remoteOpenURL(_ stringURL: String) {
+    func remoteOpenURL(stringURL: String?) {
+        print("starts remoteURL open")
+        checkInternetConnection()
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
-        print("remoteOpenURL")
-        self.webView?.stopLoading()
-        let url = URL(string: stringURL)!
-        self.urlInputTextField.placeholder = url.host
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-        if UIApplication.shared.canOpenURL(url) {
-            self.webView.load(request)
-        } else {
-            print("cannot open URL")
-            self.activityIndicator.stopAnimating()
-        }
+            print("remoteOpenURL core started")
+            //print(stringURL ?? nil)
+            if stringURL != nil {
+                print("1")
+                //self.webView.stopLoading()
+                let url = URL(string: stringURL!)!
+                self.urlInputTextField?.placeholder = url.host
+                let request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData)
+                if UIApplication.shared.canOpenURL(url) {
+                    self.webView.load(request)
+                    DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+                        self.webView.isHidden = false
+                    })
+                } else {
+                    print("cannot open URL")
+                    self.urlInputTextField.placeholder = "unable to open URL"
+                    self.activityIndicator.stopAnimating()
+                    }
+            } else {
+                self.openHomePage()
+            }
         })
     }
     
-    func manageBackArrow() {
-        if !webView.canGoBack {
-            self.textFieldLeftConstraint.constant = 7
-            self.goBack.isHidden = true
-        } else {
-            self.textFieldLeftConstraint.constant = 35
-            self.goBack.isHidden = false
-        }
-    }
-
-    func changeNavigationBarUI() {
-        if urlInputTextField.isEditing {
-            goToMore.isHidden = true
-            goToHomeSite.isHidden = true
-            goToOpenedSites.isHidden = true
-            cancelOutlet.isHidden = false
-            openPagesCount.isHidden = true
-            textFieldRightConstraint.constant = 65
-        } else {
-            textFieldRightConstraint.constant = 110
-            goToMore.isHidden = false
-            openPagesCount.isHidden = false
-            goToHomeSite.isHidden = false
-            goToOpenedSites.isHidden = false
-            cancelOutlet.isHidden = true
-        }
-    }
-    func testFunc() {
-        print("testFunc")
-    }
-    
     func openHomePage() {
+        print("openHomePage")
+        checkInternetConnection()
         if urlInputTextField.isEditing {
             urlInputTextField.resignFirstResponder()
         }
@@ -144,76 +231,84 @@ class BrowserViewController: UIViewController {
         urlInputTextField.text = nil
         webView.load(request)
         urlInputTextField.placeholder = "www.faceiraq.net"
-        
-        
+        webView.isHidden = false
+    }
+    
+    
+    
+    ///////////////
+    // not working properly due to unable to localizate noInternetConnectionView (don't know why)
+    func checkInternetConnection() {
+        if isConnectedToNetwork() {
+            print("internet connected")
+            //webView.isHidden = false
+            //noInternetConnectionView.isHidden = true
+        } else {
+            print("no internet connection")
+            urlInputTextField.placeholder = "no internet connection"
+            //webView.isHidden = true
+            //noInternetConnectionView.isHidden = false
+        }
     }
     
     func addToOpenPagesCollection() {
-        guard webView.url != nil else {return}
+        print("addToOpenPagesCollection")
+        guard webView.url != nil else {
+            print("webView.url is nil. Returning.")
+            return}
         let screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
         let url = NSString(string: (webView.url?.absoluteString)!)
         let host = NSString(string: (webView.url!.host)!)
-        var pageIcon: NSData? = nil
-        try! FavIcon.downloadPreferred(webView.url!, width: 20, height: 20) { result in
-            if case let .success(returnedImage) = result {
-                pageIcon = NSData(data: UIImagePNGRepresentation(returnedImage)!)
-            }
-        }
-        
-        
         
         if realm.isInWriteTransaction == false {
             realm.beginWrite()}
         
+        print("reference page url: \(pageFromPagesController?.url)")
         //create or update OpenPage object
         if pageFromPagesController != nil {
             self.pageFromPagesController?.url = url
             self.pageFromPagesController?.screen = screen
             self.pageFromPagesController?.host = host
-            return
+            print("OpenPage object updated")
         }
             else {
-            let openPage = OpenPage(url: url, screen: screen)
-            openPage.host = host
+            let openPage = OpenPage(url: url, host: host, screen: screen)
             realm.add(openPage)
+            print("OpenPage object created")
         }
         
         // create history object
         var isInHistory = false
         for object in realm.objects(History.self) {
-            if url != object.url {
+            print("checking for relevant history objects")
+            if url == object.url {
+                print("history object found")
                 isInHistory = true
+                if realm.isInWriteTransaction == false {
+                    realm.beginWrite()
+                }
                 object.dateOfLastVisit = Date()
-                
+                print("history object updated")
                 try! realm.commitWrite()
-                break
             }
         }
         if isInHistory == false {
             print("6")
-            realm.add(History(url: url, host: host))
+            let obj = History(url: url, host: host)
+            realm.add(obj)
+            print("history object added")
             print("7")
         } else {
+            print("history object is in history")
         }
+        
         if realm.isInWriteTransaction {
             print("9")
             try! realm.commitWrite()}
     }
     
-    func countOpenPages() {
-        var count = 1
-        let pages = realm.objects(OpenPage.self).count
-        if pages > 0 {
-            count = pages
-            if pageFromPagesController != nil {
-                openPagesCount.text = "\(count)"
-            } else {
-            openPagesCount.text = "\(count + 1)"
-            }
-        } else { openPagesCount.text = "1"
-        }
-    }
     
+    // MARK: - Actions
     @IBAction func openUrl(_ sender: UITextField) {
         openURL(urlInputTextField.text!)
     }
@@ -230,21 +325,22 @@ class BrowserViewController: UIViewController {
     
     @IBAction func goToOpenedSites(_ sender: Any) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "OpenPagesViewController") as! OpenPagesViewController
+        vc.remoteOperURLDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
     @IBAction func goToMore(_ sender: Any) {
         print("go to more")
         let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
         moreVC.delegate = self
         self.present(moreVC, animated: true, completion: {})
     }
+    
     @IBAction func cancelTypingNewURL(_ sender: Any) {
         print("cancel typing new URL")
         urlInputTextField.resignFirstResponder()
         changeNavigationBarUI()
     }
-    
-    
 }
 
 extension BrowserViewController: UITextFieldDelegate {
@@ -327,6 +423,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         print("createWebViewWith")
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
+            urlInputTextField.placeholder = webView.url?.absoluteString
         }
         return nil
     }
@@ -349,16 +446,28 @@ extension BrowserViewController: MoreDelegate {
     func goToMyBookmarks() {
         print("goToMyBookmarks")
         let bookmarkVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyBookmarksTableViewController") as! MyBookmarksTableViewController
+        bookmarkVC.remoteOpenURLDelegate = self
         self.navigationController?.pushViewController(bookmarkVC, animated: true)
     }
     
     func addBookmark() {
         print("addBookmark")
+        let url = NSString(string: (webView.url?.absoluteString)!)
+        let host = NSString(string: (webView.url!.host)!)
+        let bookmark = Bookmark(url: url, host: host)
+        //let icon = webView.url
+        if realm.isInWriteTransaction == false {
+            realm.beginWrite()
+        }
+        realm.add(bookmark)
+        try! realm.commitWrite()
+        showBookmarkAdded()
     }
     
     func goToHistory() {
         print("goToHistory")
         let historyVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HistoryTableViewController") as! HistoryTableViewController
+        historyVC.remoteOpenURLDelegate = self
         self.navigationController?.pushViewController(historyVC, animated: true)
     }
     
@@ -367,5 +476,9 @@ extension BrowserViewController: MoreDelegate {
         let contactVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
         self.navigationController?.pushViewController(contactVC, animated: true)
     }
+}
+
+extension BrowserViewController: UIScrollViewDelegate, OpenURLDelegate {
+    
 }
 

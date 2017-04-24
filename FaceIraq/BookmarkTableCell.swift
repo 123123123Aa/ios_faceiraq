@@ -8,9 +8,13 @@
 
 import UIKit
 import MGSwipeTableCell
-
+import RealmSwift
 class BookmarkTableCell: MGSwipeTableCell {
 
+    @IBOutlet weak var icon: UIImageView!
+    @IBOutlet weak var urlLabel: UILabel!
+    var theBookmark: Bookmark?
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

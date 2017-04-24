@@ -17,10 +17,11 @@ class OpenPage: Object {
     dynamic var host: NSString?
     //var date
     
-    convenience init(url: NSString, screen: NSData?) {
+    convenience init(url: NSString?, host: NSString?, screen: NSData?) {
         self.init()
         self.dateOfLastVisit = Date()
         self.url = url
+        self.host = host
         self.screen = screen
         
     }

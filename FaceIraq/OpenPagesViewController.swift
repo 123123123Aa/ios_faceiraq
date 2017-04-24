@@ -12,7 +12,7 @@ import RealmSwift
 import HFCardCollectionViewLayout
 
 protocol OpenURLDelegate {
-    func remoteOpenURL(_ stringURL: String)
+    func remoteOpenURL(stringURL: String?)
 }
 
 class OpenPagesViewController: UIViewController {
@@ -22,31 +22,35 @@ class OpenPagesViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     var realm: Realm?
     var closePageDelegate: OpenPagesRemovalDelegate!
-    var remoteOperURLDelegate: OpenURLDelegate?
+    var collectionLayout: HFCardCollectionViewLayout!
+    var remoteOperURLDelegate: OpenURLDelegate!
     var pages: [OpenPage] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("Open Pages VC loaded")
         let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(goToCurrentPage))
         backGesture.edges = [.left]
         //closePageDelegate = self
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isUserInteractionEnabled = true
+        collectionView.alwaysBounceVertical = true
+        collectionLayout = collectionView.collectionViewLayout as! HFCardCollectionViewLayout
+        collectionView.bounces = true
+        //collectionLayout.
         self.view.addGestureRecognizer(backGesture)
         navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("OpenPagesVC will appear")
         super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = true
         realm = try! Realm()
         orderPages()
         countPages()
-        collectionView.layoutIfNeeded()
-        collectionView.setNeedsLayout()
-        collectionView.reloadData()
-        collectionView.reloadInputViews()
     }
     
     
@@ -54,6 +58,7 @@ class OpenPagesViewController: UIViewController {
     func orderPages() {
         let newOrder = (realm?.objects(OpenPage.self).sorted(byKeyPath: "dateOfLastVisit", ascending: true).toArray(ofType:OpenPage.self))!
         pages = newOrder
+        print("pages object = \(pages.count)")
     }
     
     func countPages() {
@@ -61,16 +66,24 @@ class OpenPagesViewController: UIViewController {
     }
     
     @IBAction func addNewPage(_ sender: Any) {
-        let newPage = OpenPage(url: NSString(string: "http://faceiraq.net"),
-                               screen: nil)
-        realm?.beginWrite()
-        realm?.add(newPage)
-        try! realm?.commitWrite()
-        orderPages()
-        countPages()
-        //collectionView.insertItems(at: collectionView.subviews)
-        collectionView.reloadData()
+        let newPage = OpenPage(url: nil, host: nil, screen: nil)
+        if self.realm?.isInWriteTransaction == false {
+            self.realm?.beginWrite()}
+        self.realm?.add(newPage)
+        try! self.realm?.commitWrite()
+        self.orderPages()
+        self.countPages()
         
+        
+        var desiredIndexPath: IndexPath?
+        for page in pages {
+            if page == newPage {
+                desiredIndexPath =  IndexPath(item: pages.index(of: newPage)!, section: 0)
+            }
+        }
+    
+        collectionView.insertItems(at: [desiredIndexPath!])
+        collectionView.scrollToItem(at: desiredIndexPath!, at: .bottom, animated: true)
     }
     
     @IBAction func goToHomePage(_ sender: Any) {
@@ -91,6 +104,7 @@ class OpenPagesViewController: UIViewController {
     }
     
     func goToCurrentPage() {
+        print("openPages.goToCurrentPage")
         self.navigationController?.popToRootViewController(animated: true)
     }
     
@@ -115,10 +129,18 @@ class OpenPagesViewController: UIViewController {
             print("closePage return")
             return
         }
+        var indexPathRow: Int?
+        for page in pages {
+            if page == selector.page {
+                indexPathRow = pages.index(of: page)
+            }
+        }
+        
         print(pages.count)
         print("closePage")
-        print(selector.page?.url as! String )
-        realm?.beginWrite()
+        //print(selector.page?.url as! String )
+        if realm?.isInWriteTransaction == false {
+            realm?.beginWrite()}
         realm?.delete(selector.page)
         try! realm?.commitWrite()
         realm?.refresh()
@@ -127,9 +149,11 @@ class OpenPagesViewController: UIViewController {
         orderPages()
         countPages()
         print(pages.count)
+        //collectionView.reloadInputViews()
+        
+        collectionView.deleteItems(at: [IndexPath.init(row: indexPathRow!, section: 0)])
+        
         collectionView.reloadData()
-        collectionView.reloadInputViews()
-        collectionView.collectionViewLayout.finalizeCollectionViewUpdates()
     }
 }
 
@@ -145,18 +169,24 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("item selected")
-        if (self.navigationController?.viewControllers[0]) != nil {
-            print("root VC removed")
-            navigationController?.viewControllers.remove(at: 0)
-        }
         
         let cell = collectionView.cellForItem(at: indexPath) as! OpenPageCollectionViewCell
-        let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+        print("cell created")
         if let page = cell.page {
-            let urlToOpen = page.url! as String
-            vc.pageFromPagesController = page
-            vc.remoteOpenURL(urlToOpen)
-            self.navigationController?.pushViewController(vc, animated: true)
+            print("page object present")
+            
+            // if page.host is empty that means object is New Page and we need to open it in new BrowserVC.openHomePage way.
+            let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+            
+            if page.host != nil {
+                print("url present")
+                print(page.url! as String)
+                browserVC.remoteOpenURL(stringURL: page.url! as String)
+            }
+            browserVC.pageFromPagesController = page
+            print("push new browserVC")
+            
+            self.navigationController?.pushViewController(browserVC, animated: true)
         }
     }
     
@@ -175,38 +205,41 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.layer.shadowOpacity = 0.6
         cell.layer.masksToBounds = false
         cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.view.layer.cornerRadius).cgPath
+        
+        // configure page properties
         let page = pages[indexPath.item]
         cell.page = page
+        if page.screen != nil {
+            print(page.host as! String)
+            print(page.url as! String)
+            if let image = UIImage(data: (page.screen as! Data)) {
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.1, animations: {
+                        cell.pageScreen?.image = image
+                    }) {finished in
+                        //self.collectionView.reloadItems(at: [indexPath])
+                    }
+                    }
+                cell.pageUrl.text = page.host as String?
+            } else { cell.pageScreen?.image = nil
+            }
+        } else {
+            // setup for newly created OpenPage object
+            // host is nil
+            cell.pageScreen?.isHidden = true
+            cell.pageUrl.text = "New Page"
+        }
         
         let closeButton = CloseButton(page: page)
-        closeButton.indexPath = indexPath
         closeButton.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
-        //closeButton.translatesAutoresizingMaskIntoConstraints = false
-        
         closeButton.backgroundColor = .clear
         closeButton.setImage(UIImage(named: "openPagesClose"), for: .normal)
-        closeButton.imageEdgeInsets = UIEdgeInsets(top: -2, left: -5, bottom: 5, right: 5)
+        closeButton.imageEdgeInsets = UIEdgeInsets(top: -3, left: -10, bottom: 5, right: 7)
         closeButton.addTarget(self, action: #selector(closePage(selector:)), for: .touchDown)
         closeButton.isUserInteractionEnabled = true
         closeButton.isExclusiveTouch = true
         cell.addSubview(closeButton)
         
-        //let closeButtonHorizontalConst = NSLayoutConstraint.init(item: closeButton, attribute: .trailing, relatedBy: .equal, toItem: cell.buttonTemplate, attribute: .trailing, multiplier: 1, constant: 0)
-        //let closeButtonVerticalConst = NSLayoutConstraint.init(item: closeButton, attribute: .top, relatedBy: .equal, toItem: cell.buttonTemplate, attribute: .top, multiplier: 1, constant: 0)
-
-        //closeButton.addConstraints([closeButtonVerticalConst, closeButtonHorizontalConst])
-        
-        
- 
-        
-        //cell.buttonTemplate.isExclusiveTouch = true
-        if page.screen != nil {
-            if let image = UIImage(data: (page.screen as! Data)) {
-                cell.pageScreen?.image = image
-                cell.pageUrl.text = page.host as String?
-            } else { cell.pageScreen?.image = nil
-            }
-        }
         return cell
     }
 }
@@ -215,9 +248,10 @@ extension OpenPagesViewController: MoreDelegate {
     func newPage() {
         print("open new page")
         let newBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
-        self.dismiss(animated: true, completion: {})
+        //remoteOperURLDelegate.remoteOpenURL(stringURL: nil)
+        //self.navigationController?.popToRootViewController(animated: true)
+        //self.dismiss(animated: true, completion: nil)
         self.navigationController?.pushViewController(newBrowser, animated: true)
-        
     }
     
     func goToThemeColor() {
@@ -251,8 +285,7 @@ extension OpenPagesViewController: MoreDelegate {
 
 class CloseButton: UIButton {
     var page: OpenPage!
-    var indexPath: IndexPath?
-    required init(page: OpenPage) {
+   required init(page: OpenPage) {
         self.page = page
         super.init(frame: .zero)
     }

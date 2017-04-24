@@ -10,13 +10,17 @@ import UIKit
 
 class MoreViewController: UIViewController {
 
-    @IBOutlet weak var addToBookmarkButton: UIButton!
+    @IBOutlet weak var optionsStackView: UIStackView!
+    @IBOutlet weak var notificationsOutlet: UISwitch!
+    @IBOutlet weak var currentThemeColorOutlet: UILabel!
+    @IBOutlet weak var notificationButtonView: UIView!
+    @IBOutlet weak var addToBookmarkButtonView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
     var delegate: MoreDelegate!
     var openPagesVCIsParent: Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
+        optionsStackView.spacing = 0.5
         self.view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
         // Do any additional setup after loading the view.
     }
@@ -28,8 +32,10 @@ class MoreViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         cancelButton.backgroundColor = Style.currentThemeColor
+        cancelButton.setTitleColor(Style.currentTintColor, for: .normal)
+        currentThemeColorOutlet.backgroundColor = Style.currentThemeColor
         if openPagesVCIsParent {
-            addToBookmarkButton.removeFromSuperview()
+            addToBookmarkButtonView.removeFromSuperview()
         }
     }
     

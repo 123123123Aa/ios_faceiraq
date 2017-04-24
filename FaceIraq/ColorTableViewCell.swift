@@ -11,6 +11,7 @@ import MGSwipeTableCell
 
 class ColorTableViewCell: MGSwipeTableCell {
 
+    @IBOutlet weak var checked: UIImageView!
     @IBOutlet weak var colorPreview: UILabel!
     @IBOutlet weak var colorName: UILabel!
     var color: UIColor?

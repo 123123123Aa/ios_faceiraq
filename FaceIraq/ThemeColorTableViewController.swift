@@ -37,6 +37,10 @@ class ThemeColorTableViewController: UITableViewController {
         super.viewDidDisappear(true)
         self.navigationController?.isNavigationBarHidden = true
     }
+    
+    func navigateBack() {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -49,7 +53,6 @@ class ThemeColorTableViewController: UITableViewController {
         bar?.tintColor = Style.currentTintColor
         //bar?.backItem?.backBarButtonItem?.title = nil
         bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
-        tableView.backgroundColor = Style.currentThemeColor
         bar?.backItem?.backBarButtonItem?.tintColor = Style.currentTintColor
         self.navigationItem.backBarButtonItem?.title = ""
         bar?.setNeedsLayout()
@@ -99,6 +102,11 @@ class ThemeColorTableViewController: UITableViewController {
         default:
             break
         }
+        if cell.colorPreview.backgroundColor == Style.currentThemeColor {
+            cell.checked.isHidden = false
+        } else {
+            cell.checked.isHidden = true
+        }
 
         return cell
     }
@@ -106,7 +114,7 @@ class ThemeColorTableViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath) as! ColorTableViewCell
         print("tableCell selected")
         Style.setThemeColor(to: cell.color!)
-        cell.backgroundColor = cell.color!
+        tableView.reloadData()
         refreshNavBar()
     }
 }

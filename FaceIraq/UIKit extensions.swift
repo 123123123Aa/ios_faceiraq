@@ -53,7 +53,7 @@ extension UIColor {
     }
     
     static var appOrange: UIColor {
-        return UIColor(red:1.00, green:0.85, blue:0.06, alpha:1.0)
+        return UIColor(red:1.00, green:117/255, blue:15/255, alpha:1.0)
     }
     }
 }

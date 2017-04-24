@@ -8,6 +8,7 @@
 
 import Realm
 import RealmSwift
+import FavIcon
 
 class History: Object {
 
@@ -19,5 +20,18 @@ class History: Object {
         self.init()
         self.dateOfLastVisit = Date()
         self.url = url
+        self.host = host
+        
+        DispatchQueue.main.async {
+            try! FavIcon.downloadPreferred(URL(string: host as String)!) { result in
+                if case let .success(returnedImage) = result {
+                    print("icon downloaded")
+                    self.image = NSData(data: UIImagePNGRepresentation(returnedImage)!)
+                } else {
+                    print("FavIcon was unable to download image")
+                }
+                print("\(result)")
+            }
+        }
     }
 }
