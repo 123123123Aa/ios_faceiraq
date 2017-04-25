@@ -97,6 +97,7 @@ class OpenPagesViewController: UIViewController {
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
     @IBAction func goToNewHomePage(_ sender: Any) {
         if (self.navigationController?.viewControllers[0]) != nil {
             print("root VC removed")

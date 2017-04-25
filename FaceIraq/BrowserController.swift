@@ -15,6 +15,7 @@ import SystemConfiguration
 class BrowserViewController: UIViewController {
 
     @IBOutlet weak var noInternetConnectionView: UIView!
+    @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var bookmarkAdded: UILabel!
     @IBOutlet weak var goBack: UIButton!
     @IBOutlet weak var urlInputTextField: UITextField!
@@ -27,6 +28,8 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var goToHomeSite: UIButton!
     @IBOutlet weak var cancelOutlet: UIButton!
     @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var buttonsTrailingConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var openPagesCount: UILabel!
     var pageFromPagesController: OpenPage? = nil
     let realm = try! Realm()
@@ -68,6 +71,7 @@ class BrowserViewController: UIViewController {
         print("browserVC viewWillAppear")
         
         configureColors()
+        countOpenPages()
         self.navigationController?.isNavigationBarHidden = true
         webView.frame = webViewLayoutTemplate.frame
         webViewLayoutTemplate.addSubview(webView)
@@ -75,7 +79,6 @@ class BrowserViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        updateScreenshot()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,7 +87,8 @@ class BrowserViewController: UIViewController {
     }
     
     func updateScreenshot() {
-        screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
+        print("updateScreenshot")
+        //screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
     }
     
     // Mark: - UI methods
@@ -141,19 +145,22 @@ class BrowserViewController: UIViewController {
     
     func changeNavigationBarUI() {
         if urlInputTextField.isEditing {
-            goToMore.isHidden = true
-            goToHomeSite.isHidden = true
-            goToOpenedSites.isHidden = true
-            cancelOutlet.isHidden = false
-            openPagesCount.isHidden = true
-            textFieldRightConstraint.constant = 65
+            
+            //when urlTextField is editing
+            buttonsView.animateFade(.out, withDuration: 0.2, withDelay: 0, minAlpha: 0.0, completion:  {finished in
+                self.textFieldRightConstraint.constant = 65
+                self.urlInputTextField.layoutIfNeeded()
+            })
+            cancelOutlet.animateFade(.into, withDuration: 0.2, withDelay: 0.2,minAlpha: 0.0, completion: nil)
+            
+            
+            // when urlTextField is not editing
         } else {
-            textFieldRightConstraint.constant = 110
-            goToMore.isHidden = false
-            openPagesCount.isHidden = false
-            goToHomeSite.isHidden = false
-            goToOpenedSites.isHidden = false
-            cancelOutlet.isHidden = true
+            cancelOutlet.animateFade(.out, withDuration: 0.2, withDelay: 0.0,minAlpha: 0.0, completion: {finished in
+                self.textFieldRightConstraint.constant = 110
+                self.urlInputTextField.layoutIfNeeded()
+            })
+            buttonsView.animateFade(.into, withDuration: 0.2, withDelay: 0.2,minAlpha: 0.0, completion: nil)
         }
     }
     
@@ -207,8 +214,10 @@ class BrowserViewController: UIViewController {
             if stringURL != nil {
                 print("1")
                 //self.webView.stopLoading()
+                self.webView.stopLoading()
                 let url = URL(string: stringURL!)!
                 self.urlInputTextField?.placeholder = url.host
+                print("ulr created")
                 let request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData)
                 if UIApplication.shared.canOpenURL(url) {
                     self.webView.load(request)
@@ -251,7 +260,6 @@ class BrowserViewController: UIViewController {
             //noInternetConnectionView.isHidden = true
         } else {
             print("no internet connection")
-            urlInputTextField.placeholder = "no internet connection"
             //webView.isHidden = true
             //noInternetConnectionView.isHidden = false
         }
@@ -263,7 +271,7 @@ class BrowserViewController: UIViewController {
             print("webView.url is nil. Returning.")
             return
         }
-        screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
+        //screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
         let url = NSString(string: (webView.url?.absoluteString)!)
         let host = NSString(string: (webView.url!.host)!)
         
@@ -388,10 +396,22 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         })
     }
     
+    func webViewDidClose(_ webView: WKWebView) {
+        print("webViewDidClose")
+    }
+    
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        print("webViewWebContentProcessDidTerminate")
+    }
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        print("webView did commit")
+    }
+    
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         urlInputTextField.text = nil
         urlInputTextField.placeholder = "loading"
         print("provisional error occured")
+        print(error)
         activityIndicator.stopAnimating()
     }
     
@@ -399,7 +419,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         urlInputTextField.text = nil
         urlInputTextField.placeholder = "loading"
         print("error occured")
-        
+        print(error)
         activityIndicator.stopAnimating()
     }
     
@@ -444,7 +464,8 @@ extension BrowserViewController: MoreDelegate {
         print("open new page")
         let newBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         self.navigationController?.pushViewController(newBrowser, animated: true)
-        self.dismiss(animated: false, completion: {})
+        self.dismiss(animated: false, completion: {
+            print("browserVC dismissed  by itself")})
     }
     
     func goToThemeColor() {

@@ -83,7 +83,73 @@ extension UIView {
         self.layer.shadowOffset = CGSize(width: 0.0, height: -3.0)
         self.layer.shadowRadius = 1
     }
+    
+    // MARK: - Animations
+    enum Direction {
+        case top
+        case bottom
+        case left
+        case right
+    }
+    func animateInFrom(_ direction: Direction, distanceOfMovement: CGFloat, withDuration: CGFloat, withDelay: Double, completion: (_ finished: Bool) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+withDelay) {
+        self.isHidden = false
+        UIView.animate(withDuration: TimeInterval(withDuration), animations: {
+            switch direction {
+            case .top:
+                self.center.y += distanceOfMovement
+            case .bottom:
+                self.center.y -= distanceOfMovement
+            case .left:
+                self.center.x += (self.superview?.bounds.width)!
+            case .right:
+                self.center.x -= (self.superview?.bounds.width)!
+            }
+        })
+    }
+    }
+    
+    func animateOutTo(_ direction: Direction, distanceOfMovement: CGFloat, withDuration: CGFloat, withDelay: Double, completion: (_ finished: Bool) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+withDelay){
+        self.isHidden = false
+        UIView.animate(withDuration: TimeInterval(withDuration), animations: {
+            switch direction {
+            case .top:
+                self.center.y -= distanceOfMovement
+            case .bottom:
+                self.center.y += distanceOfMovement
+            case .left:
+                self.center.x -= distanceOfMovement
+            case .right:
+                self.center.x += distanceOfMovement
+            }
+        })
+    }
+    }
+    enum Fade {
+        case into
+        case out
+    }
+    
+    func animateFade(_ fade: UIView.Fade, withDuration: Double, withDelay: Double, minAlpha: CGFloat?, completion: ((_ finished: Bool) -> Void)?) {
+            switch fade {
+            case .into:
+                self.alpha = minAlpha ?? 0.0
+                self.isHidden = false
+                UIView.animate(withDuration: TimeInterval(withDuration), delay: withDelay, options: [], animations: {
+                    self.alpha = 1.0
+                }, completion: completion)
+                
+            case .out:
+                self.alpha = 1.0
+                UIView.animate(withDuration: TimeInterval(withDuration), delay: withDelay, options: [], animations: {
+                    self.alpha = minAlpha ?? 0.0
+                    self.isHidden = true
+                }, completion: completion)
+            }
+    }
 }
+
 
 extension UserDefaults {
     
