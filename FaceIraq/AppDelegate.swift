@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Style.loadTheme()
         //Fabric.with([Crashlytics.self])
         
-        // Override point for customization after application launch.
         
         return true
     }
