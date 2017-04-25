@@ -102,8 +102,9 @@ class ContactUsViewController: UIViewController {
     }
     
     func cancelSendingMessage() {
-        navigationController?.popViewController(animated: true)
+        //navigationController?.popViewController(animated: true)
         self.dismiss(animated: false, completion: nil)
+        navigationController?.popToRootViewController(animated: true)
     }
     
     func refreshNavBar() {

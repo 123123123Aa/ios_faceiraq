@@ -88,10 +88,10 @@ class BrowserViewController: UIViewController {
     
     func updateScreenshot() {
         print("updateScreenshot")
-        //screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
+        screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
     }
     
-    // Mark: - UI methods
+    // MARK: - UI methods
     
     func configureColors() {
         webNavigationBar.backgroundColor = Style.currentThemeColor
@@ -109,6 +109,10 @@ class BrowserViewController: UIViewController {
             goToHomeSite.setImage(UIImage.init(named: "browserHome"), for: .normal)
             goToOpenedSites.setImage(UIImage.init(named: "browserSquare"), for: .normal)
         }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("screen orientaion changes")
     }
     
     func manageBackArrow() {
@@ -253,15 +257,17 @@ class BrowserViewController: UIViewController {
     
     ///////////////
     // not working properly due to unable to localizate noInternetConnectionView (don't know why)
-    func checkInternetConnection() {
+    func checkInternetConnection() -> Bool {
         if isConnectedToNetwork() {
             print("internet connected")
             //webView.isHidden = false
             //noInternetConnectionView.isHidden = true
+            return true
         } else {
             print("no internet connection")
             //webView.isHidden = true
             //noInternetConnectionView.isHidden = false
+            return false
         }
     }
     
@@ -403,24 +409,96 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         print("webViewWebContentProcessDidTerminate")
     }
+    
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         print("webView did commit")
     }
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
+        if checkInternetConnection() == false {
+            webView.stopLoading()
+            urlInputTextField.placeholder = "no internet connection"
+        }
+        switch navigationAction.navigationType {
+        case .linkActivated:
+            if navigationAction.targetFrame == nil {
+                webView.load(navigationAction.request)
+            }
+        default:
+            break
+        }
+        
+        decisionHandler(.allow)
+    }
     
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
+        if checkInternetConnection() == false {
+            webView.stopLoading()
+            urlInputTextField.placeholder = "no internet connection"
+        }
+        decisionHandler(.allow)
+    }
+    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
+        if checkInternetConnection() == false {
+            webView.stopLoading()
+            urlInputTextField.placeholder = "no internet connection"
+        }
+        switch (challenge.protectionSpace.authenticationMethod) {
+        case NSURLAuthenticationMethodHTTPBasic:
+            let alertController = UIAlertController(title: "Authentication Required", message: webView.url?.host, preferredStyle: .alert)
+            weak var usernameTextField: UITextField!
+            alertController.addTextField { textField in
+                textField.placeholder = "Username"
+                usernameTextField = textField
+            }
+            weak var passwordTextField: UITextField!
+            alertController.addTextField { textField in
+                textField.placeholder = "Password"
+                textField.isSecureTextEntry = true
+                passwordTextField = textField
+            }
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+                completionHandler(.cancelAuthenticationChallenge, nil)
+            }))
+            alertController.addAction(UIAlertAction(title: "Log In", style: .default, handler: { action in
+                guard let username = usernameTextField.text, let password = passwordTextField.text else {
+                    completionHandler(.rejectProtectionSpace, nil)
+                    return
+                }
+                let credential = URLCredential(user: username, password: password, persistence: URLCredential.Persistence.forSession)
+                completionHandler(.useCredential, credential)
+            }))
+            present(alertController, animated: true, completion: nil)
+        default:
+            completionHandler(.rejectProtectionSpace, nil);
+        }
+    }
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("webView:\(webView) didFailProvisionalNavigation:\(navigation) withError:\(error)")
         urlInputTextField.text = nil
         urlInputTextField.placeholder = "loading"
         print("provisional error occured")
         print(error)
         activityIndicator.stopAnimating()
+        if checkInternetConnection() == false {
+            webView.stopLoading()
+            urlInputTextField.placeholder = "no internet connection"
+        }
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
         urlInputTextField.text = nil
         urlInputTextField.placeholder = "loading"
         print("error occured")
         print(error)
         activityIndicator.stopAnimating()
+        if checkInternetConnection() == false {
+            webView.stopLoading()
+            urlInputTextField.placeholder = "no internet connection"
+        }
     }
     
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -446,7 +524,11 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        print("didReceiveServerRedirectForProvisionalNavigation")
+        print("webView:\(webView) didReceiveServerRedirectForProvisionalNavigation:\(navigation)")
+        if checkInternetConnection() == false {
+            webView.stopLoading()
+            urlInputTextField.placeholder = "no internet connection"
+        }
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {

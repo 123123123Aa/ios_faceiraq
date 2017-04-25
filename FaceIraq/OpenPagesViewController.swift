@@ -24,7 +24,14 @@ class OpenPagesViewController: UIViewController {
     var closePageDelegate: OpenPagesRemovalDelegate!
     var collectionLayout: HFCardCollectionViewLayout!
     var remoteOperURLDelegate: OpenURLDelegate!
-    var pages: [OpenPage] = []
+    var pages: [OpenPage] = [] {
+        didSet {
+            for page in pages {
+                print(page.host)
+                print(page.url)
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
