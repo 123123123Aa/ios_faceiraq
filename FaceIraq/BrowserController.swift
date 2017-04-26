@@ -138,7 +138,6 @@ class BrowserViewController: UIViewController {
             print("webView.url is nil. Returning.")
             return
         }
-        //screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
         let url = NSString(string: (webView.url?.absoluteString)!)
         let host = NSString(string: (webView.url!.host)!)
         
@@ -307,20 +306,12 @@ class BrowserViewController: UIViewController {
         webView.isHidden = false
     }
     
-    
-    
-    ///////////////
-    // not working properly due to unable to localizate noInternetConnectionView (don't know why)
     func checkInternetConnection() -> Bool {
         if isConnectedToNetwork() {
             print("internet connected")
-            //webView.isHidden = false
-            //noInternetConnectionView.isHidden = true
             return true
         } else {
             print("no internet connection")
-            //webView.isHidden = true
-            //noInternetConnectionView.isHidden = false
             return false
         }
     }
@@ -332,7 +323,6 @@ class BrowserViewController: UIViewController {
             print("webView.url is nil. Returning.")
             return
         }
-        //screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
         let url = { () -> NSString? in
             if let url = String((self.webView.url?.absoluteString)!) {
                 return url as NSString
@@ -367,7 +357,7 @@ class BrowserViewController: UIViewController {
         }
         
         if realm.isInWriteTransaction {
-            print("9")
+            print("Ending realm transaction")
             try! realm.commitWrite()}
     }
     
@@ -643,6 +633,5 @@ extension BrowserViewController: MoreDelegate {
 }
 
 extension BrowserViewController: UIScrollViewDelegate, OpenURLDelegate {
-    
 }
 
