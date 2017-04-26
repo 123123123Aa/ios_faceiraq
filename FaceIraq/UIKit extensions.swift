@@ -141,6 +141,7 @@ extension UIView {
                 }, completion: completion)
                 
             case .out:
+                self.isHidden = false
                 self.alpha = 1.0
                 UIView.animate(withDuration: TimeInterval(withDuration), delay: withDelay, options: [], animations: {
                     self.alpha = minAlpha ?? 0.0

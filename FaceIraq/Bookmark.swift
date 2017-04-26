@@ -29,9 +29,11 @@ class Bookmark: Object {
                     self.icon = NSData(data: UIImagePNGRepresentation(returnedImage)!)
                 } else {
                     print("FavIcon was unable to download image")
+                    
                 }
                 print("\(result)")
             }
+            
         }
     }
 }

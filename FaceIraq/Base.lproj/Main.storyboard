@@ -115,18 +115,19 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstItem="MiA-5m-5mg" firstAttribute="leading" secondItem="hch-gx-ojl" secondAttribute="leading" id="9wD-uC-CQc"/>
                                                     <constraint firstAttribute="width" secondItem="MiA-5m-5mg" secondAttribute="width" id="A18-JR-ddC"/>
                                                     <constraint firstItem="MiA-5m-5mg" firstAttribute="top" secondItem="hch-gx-ojl" secondAttribute="top" id="Sfn-YV-lD9"/>
                                                     <constraint firstAttribute="height" secondItem="MiA-5m-5mg" secondAttribute="height" id="ZXv-2a-0Yt"/>
+                                                    <constraint firstItem="MiA-5m-5mg" firstAttribute="top" secondItem="hch-gx-ojl" secondAttribute="top" id="qC4-EX-yVV"/>
                                                     <constraint firstItem="MiA-5m-5mg" firstAttribute="leading" secondItem="hch-gx-ojl" secondAttribute="leading" id="tlf-kN-98V"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="in8-eg-Ca7" userLabel="openPages">
                                                 <rect key="frame" x="36" y="0.0" width="36" height="36"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvD-Ba-4eV">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvD-Ba-4eV">
                                                         <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <state key="normal" image="browserSquare">
                                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         </state>
@@ -134,22 +135,30 @@
                                                             <action selector="goToOpenedSites:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4vJ-ZM-qAs"/>
                                                         </connections>
                                                     </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lEM-Ty-Eti">
-                                                        <rect key="frame" x="13" y="9" width="9.5" height="18"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lEM-Ty-Eti">
+                                                        <rect key="frame" x="8" y="9" width="20" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                         <color key="textColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="lEM-Ty-Eti" firstAttribute="leading" secondItem="in8-eg-Ca7" secondAttribute="leading" constant="8" id="Aa8-hr-SHh"/>
+                                                    <constraint firstItem="EvD-Ba-4eV" firstAttribute="leading" secondItem="in8-eg-Ca7" secondAttribute="leading" id="C2D-E4-4o4"/>
+                                                    <constraint firstAttribute="bottom" secondItem="EvD-Ba-4eV" secondAttribute="bottom" id="VO0-hH-nHe"/>
+                                                    <constraint firstAttribute="trailing" secondItem="EvD-Ba-4eV" secondAttribute="trailing" id="be3-96-EF0"/>
+                                                    <constraint firstAttribute="bottom" secondItem="lEM-Ty-Eti" secondAttribute="bottom" constant="9" id="cMH-1A-3qi"/>
+                                                    <constraint firstAttribute="trailing" secondItem="lEM-Ty-Eti" secondAttribute="trailing" constant="8" id="n0Z-sX-5gm"/>
+                                                    <constraint firstItem="lEM-Ty-Eti" firstAttribute="top" secondItem="in8-eg-Ca7" secondAttribute="top" constant="9" id="r9f-X8-Jys"/>
+                                                    <constraint firstItem="EvD-Ba-4eV" firstAttribute="top" secondItem="in8-eg-Ca7" secondAttribute="top" id="sl5-hz-aoe"/>
+                                                </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bu8-cJ-895" userLabel="more">
                                                 <rect key="frame" x="72" y="0.0" width="36" height="36"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AFz-Mh-AJv">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AFz-Mh-AJv">
                                                         <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <inset key="contentEdgeInsets" minX="-2" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <state key="normal" image="browserMore">
                                                             <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -160,6 +169,12 @@
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="AFz-Mh-AJv" firstAttribute="leading" secondItem="Bu8-cJ-895" secondAttribute="leading" id="4fG-u0-ccf"/>
+                                                    <constraint firstAttribute="trailing" secondItem="AFz-Mh-AJv" secondAttribute="trailing" id="6xL-5W-W5r"/>
+                                                    <constraint firstItem="AFz-Mh-AJv" firstAttribute="top" secondItem="Bu8-cJ-895" secondAttribute="top" id="Uh7-vX-7z3"/>
+                                                    <constraint firstAttribute="bottom" secondItem="AFz-Mh-AJv" secondAttribute="bottom" id="nU9-KF-mNh"/>
+                                                </constraints>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

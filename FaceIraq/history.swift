@@ -8,7 +8,8 @@
 
 import Realm
 import RealmSwift
-import FavIcon
+import Alamofire
+import AlamofireImage
 
 class History: Object {
 
@@ -21,17 +22,43 @@ class History: Object {
         self.dateOfLastVisit = Date()
         self.url = url
         self.host = host
+        //self.image = {
         
-        DispatchQueue.main.async {
-            try! FavIcon.downloadPreferred(URL(string: host as String)!) { result in
-                if case let .success(returnedImage) = result {
-                    print("icon downloaded")
-                    self.image = NSData(data: UIImagePNGRepresentation(returnedImage)!)
-                } else {
-                    print("FavIcon was unable to download image")
+        print("attempt to download icon")
+        
+        
+        let headers = ["X-Mashape-Key":"Ep1HhOXXt8mshfxdx2WY5XoiwzdDp1fVjBYjsn8JH6wGTaUKsW"]
+        let url = URL(string: "https://realfavicongenerator.p.mashape.com/favicon/icon?platform=iOS&site=https%3A%2F%2Fwww.rp.pl")
+        
+        print("starting icon fetching process")
+        if let imageURL = url {
+            print("sending request")
+            Alamofire.request(imageURL, headers: headers).responseImage(completionHandler: { response in
+                print("attempt to fetch request")
+                print(response.response?.statusCode)
+                if let image = response.result.value {
+                    let imageData = NSData(data: UIImagePNGRepresentation(image)!)
+                    self.image = imageData
+                    print("image fetched")
+                    }
+                if response.result.value == nil {
+                    print("resonse result is nil")
                 }
-                print("\(result)")
+                }
+                
+            )
+            
+            Alamofire.request(imageURL, headers: headers).response { response in
+                print("status code: \(response.response?.statusCode)")
+                }
             }
-        }
+        
+        
+            /*
+            let interactor = IconInteracor()
+            if let image = interactor.favconRequest(stringURL: "") {
+                self.image = NSData(data: UIImagePNGRepresentation(image)!)
+            }*/
+        
     }
 }

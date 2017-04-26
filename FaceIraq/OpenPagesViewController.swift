@@ -27,8 +27,9 @@ class OpenPagesViewController: UIViewController {
     var pages: [OpenPage] = [] {
         didSet {
             for page in pages {
-                print(page.host)
-                print(page.url)
+                
+                print((page.host as? String) ?? "no page.host")
+                print(page.url as? String ?? "no page.url")
             }
         }
     }
@@ -36,17 +37,16 @@ class OpenPagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Open Pages VC loaded")
-        let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(goToCurrentPage))
-        backGesture.edges = [.left]
-        //closePageDelegate = self
+        //let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(goToCurrentPage))
+        //backGesture.edges = [.left]
+        //self.view.addGestureRecognizer(backGesture)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isUserInteractionEnabled = true
         collectionView.alwaysBounceVertical = true
         collectionLayout = collectionView.collectionViewLayout as! HFCardCollectionViewLayout
         collectionView.bounces = true
-        //collectionLayout.
-        self.view.addGestureRecognizer(backGesture)
+        
         navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
         
     }
@@ -60,10 +60,7 @@ class OpenPagesViewController: UIViewController {
         countPages()
         collectionView.reloadData()
         collectionView.layoutIfNeeded()
-        //collectionView.set
     }
-    
-    
     
     func orderPages() {
         let newOrder = (realm?.objects(OpenPage.self).sorted(byKeyPath: "dateOfLastVisit", ascending: true).toArray(ofType:OpenPage.self))!
@@ -91,25 +88,16 @@ class OpenPagesViewController: UIViewController {
                 desiredIndexPath =  IndexPath(item: pages.index(of: newPage)!, section: 0)
             }
         }
-    
         collectionView.insertItems(at: [desiredIndexPath!])
         collectionView.scrollToItem(at: desiredIndexPath!, at: .bottom, animated: true)
     }
     
     @IBAction func goToHomePage(_ sender: Any) {
-        if (self.navigationController?.viewControllers[0]) != nil {
-            print("root VC removed")
-            navigationController?.viewControllers.remove(at: 0)
-        }
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func goToNewHomePage(_ sender: Any) {
-        if (self.navigationController?.viewControllers[0]) != nil {
-            print("root VC removed")
-            navigationController?.viewControllers.remove(at: 0)
-        }
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -125,19 +113,6 @@ class OpenPagesViewController: UIViewController {
     func goToCurrentPage() {
         print("openPages.goToCurrentPage")
         self.navigationController?.popToRootViewController(animated: true)
-    }
-    
-    @IBAction func closeAllPages(_ sender: Any) {
-        print("closeAllPages")
-        realm?.beginWrite()
-        for page in pages {
-            realm?.delete(page)
-        }
-        try! realm?.commitWrite()
-        orderPages()
-        countPages()
-        //collectionView.reloadData()
-        //collectionView.
     }
     
     func closePage(selector: CloseButton) {
@@ -164,14 +139,11 @@ class OpenPagesViewController: UIViewController {
         try! realm?.commitWrite()
         realm?.refresh()
         
-        //collectionView.deleteItems(at: [selector.indexPath!])
         orderPages()
         countPages()
         print(pages.count)
-        //collectionView.reloadInputViews()
         
         collectionView.deleteItems(at: [IndexPath.init(row: indexPathRow!, section: 0)])
-        
         collectionView.reloadData()
     }
 }
@@ -254,7 +226,10 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         let closeButton = CloseButton(page: page)
         closeButton.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
         closeButton.backgroundColor = .clear
-        closeButton.setImage(UIImage(named: "openPagesClose"), for: .normal)
+        closeButton.setImage({() -> UIImage in
+                        if Style.currentTintColor != .white { return UIImage(named: "openPagesClose")!
+                        } else { return UIImage(named: "openPagesCloseWhite")!
+                        }}(), for: .normal)
         closeButton.imageEdgeInsets = UIEdgeInsets(top: -3, left: -10, bottom: 5, right: 7)
         closeButton.addTarget(self, action: #selector(closePage(selector:)), for: .touchDown)
         closeButton.isUserInteractionEnabled = true

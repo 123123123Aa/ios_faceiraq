@@ -41,6 +41,9 @@ class ContactUsViewController: UIViewController {
     
     func sendMessage() {
         showMessageSent(success: false)
+        for view in self.view.subviews {
+            view.resignFirstResponder()
+        }
     }
     
     func configureNavBarButtons() {
@@ -101,10 +104,33 @@ class ContactUsViewController: UIViewController {
         }
     }
     
+    func showMessage(_ text: String) {
+        DispatchQueue.main.async {
+        let currentText = self.messageSentLabel.text
+        self.messageSentLabel.text = text
+        self.messageSentLabel.layoutIfNeeded()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.messageSentLabel.isHidden = false
+            self.messageSentLabel.alpha = 1.0
+        }) { finished in
+            DispatchQueue.main.asyncAfter(deadline: .now()+4, execute: {
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.messageSentLabel.alpha = 0.0
+                }) {finished in
+                    self.messageSentLabel.isHidden = true
+                    self.messageSentLabel.text = currentText
+                    self.messageSentLabel.layoutIfNeeded()
+                }
+            })
+            }
+        }
+    }
+    
     func cancelSendingMessage() {
         //navigationController?.popViewController(animated: true)
         self.dismiss(animated: false, completion: nil)
-        navigationController?.popToRootViewController(animated: true)
+        //navigationController?.popToRootViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func refreshNavBar() {
@@ -177,20 +203,30 @@ extension ContactUsViewController: UITextViewDelegate {
 extension ContactUsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        if imageFirst.image == nil {
-            imageFirst.contentMode = .scaleAspectFit
-            imageFirst.image = image
-        } else {
-            if imageSecond.image == nil {
-                imageSecond.contentMode = .scaleAspectFit
-                imageSecond.image = image
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            if imageFirst.image == nil {
+                imageFirst.contentMode = .scaleAspectFit
+                imageFirst.image = image
             } else {
-                if imageThird.image == nil {
-                    imageThird.contentMode = .scaleAspectFit
-                    imageThird.image = image
+                if imageSecond.image == nil {
+                    imageSecond.contentMode = .scaleAspectFit
+                    imageSecond.image = image
+                } else {
+                    if imageThird.image == nil {
+                        imageThird.contentMode = .scaleAspectFit
+                        imageThird.image = image
+                    } else {
+                        DispatchQueue.main.async {
+                            self.showMessage("Only three images are allowed")
+                        }
+                    }
                 }
             }
+        } else {
+            DispatchQueue.main.async {
+                self.showMessage("Only images are allowed")
+            }
+            
         }
         dismiss(animated: true, completion: nil)
     }

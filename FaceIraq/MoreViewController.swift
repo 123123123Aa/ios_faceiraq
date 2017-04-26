@@ -22,6 +22,8 @@ class MoreViewController: UIViewController {
         super.viewDidLoad()
         optionsStackView.spacing = 0.5
         self.view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
+        let cancelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cancel(_:)))
+        self.view.addGestureRecognizer(cancelGestureRecognizer)
         // Do any additional setup after loading the view.
     }
 

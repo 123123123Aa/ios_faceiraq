@@ -1,4 +1,7 @@
 PODS:
+  - Alamofire (4.4.0)
+  - AlamofireImage (3.2.0):
+    - Alamofire (~> 4.1)
   - HFCardCollectionViewLayout (0.4.2)
   - MGSwipeTableCell (1.5.6)
   - Realm (2.5.1):
@@ -6,18 +9,25 @@ PODS:
   - Realm/Headers (2.5.1)
   - RealmSwift (2.5.1):
     - Realm (= 2.5.1)
+  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - Alamofire (~> 4.4)
+  - AlamofireImage (~> 3.1)
   - HFCardCollectionViewLayout
   - MGSwipeTableCell
   - RealmSwift (~> 2.5.1)
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   HFCardCollectionViewLayout: 88cc7deb86baae9396450d9db323081cce50da59
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   Realm: 32f86104d37c8521f864d4274050b38ba6190733
   RealmSwift: f719e7511c902b8908593e8f143f59e47931bdb6
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: fa99514dd3fa46844b65b0356222b814dc2f5ff5
+PODFILE CHECKSUM: d6110f9809b805ee9db65f06a9618892a24f1458
 
 COCOAPODS: 1.2.0

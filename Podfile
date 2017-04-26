@@ -5,4 +5,7 @@ target 'FaceIraq' do
 pod 'RealmSwift', '~> 2.5.1'
 pod 'HFCardCollectionViewLayout'
 pod 'MGSwipeTableCell'
+pod 'Alamofire', '~> 4.4'
+pod 'AlamofireImage', '~> 3.1'
+pod 'SwiftyJSON'
 end
