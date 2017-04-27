@@ -97,7 +97,8 @@ class BrowserViewController: UIViewController {
     
     func updateScreenshot() {
         print("updateScreenshot")
-        screen = NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
+        screen = NSData(data: UIImagePNGRepresentation(webView.snapshot!)!)
+            //NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
     }
     
     // MARK: - UI methods
@@ -256,6 +257,7 @@ class BrowserViewController: UIViewController {
         } else {
             print("cannot open URL")
             activityIndicator.stopAnimating()
+            urlInputTextField.placeholder = "please enter valid website adress"
         }
     }
     

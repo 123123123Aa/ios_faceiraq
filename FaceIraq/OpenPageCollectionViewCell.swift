@@ -17,7 +17,6 @@ class OpenPageCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var pageUrl: UILabel!
     @IBOutlet weak var view: UIView!
-    //var closePageDelegate: OpenPagesRemovalDelegate?
     var page: OpenPage? = nil
     @IBOutlet weak var pageScreen: UIImageView?
     

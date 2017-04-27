@@ -25,6 +25,11 @@ class HistoryTableViewController: UITableViewController {
         refreshNavBar()
         searchTextField.delegate = self
         tableView.alwaysBounceVertical = false
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = false
     }
     
@@ -74,8 +79,6 @@ class HistoryTableViewController: UITableViewController {
         return history.count
         
     }
-
-    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCell", for: indexPath) as! HistoryTableViwCell
@@ -83,12 +86,6 @@ class HistoryTableViewController: UITableViewController {
         
         if let host = historyObject.host { cell.host.text = host as String }
         if let url = historyObject.url { cell.url.text = url as String }
-        if let imageData = historyObject.image {
-            cell.pageImage.image = UIImage(data: Data.init(referencing: imageData))}
-        
-        /*let deleteButton = MGSwipeButton(title: "delete", icon: nil, backgroundColor: .red)
-        deleteButton.addTarget(self, action: #selector(deleteHistoryObject(sender:)), for: .touchDown)
-        */
 
         let deleteButton = MGSwipeButton(title: "Delete", backgroundColor: .red) {
             (sender: MGSwipeTableCell!) -> Bool in
@@ -103,8 +100,6 @@ class HistoryTableViewController: UITableViewController {
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
-            //tableView.reloadInputViews()
-            //tableView.reloadData()
             
             return true
         }

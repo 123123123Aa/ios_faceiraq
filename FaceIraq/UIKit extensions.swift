@@ -68,11 +68,13 @@ extension UIView {
     var snapshot: UIImage? {
         UIGraphicsBeginImageContext(self.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else {
+            print("snapshot returns nil")
             return nil
         }
         layer.render(in: context)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+        print("snapshot returns image")
         return image
     }
 
