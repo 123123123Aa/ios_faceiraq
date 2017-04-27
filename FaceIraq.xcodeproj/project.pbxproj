@@ -13,7 +13,6 @@
 		31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F3E1EA5538C009C281F /* UIKit extensions.swift */; };
 		31027F451EA5F8FA009C281F /* OpenPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */; };
 		311F77E31EA601D600176130 /* OpenPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311F77E21EA601D600176130 /* OpenPage.swift */; };
-		311F77E51EA60CD600176130 /* OpenPagesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311F77E41EA60CD600176130 /* OpenPagesList.swift */; };
 		312661BD1EA0D70D006408B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661BC1EA0D70D006408B6 /* AppDelegate.swift */; };
 		312661BF1EA0D70D006408B6 /* BrowserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661BE1EA0D70D006408B6 /* BrowserController.swift */; };
 		312661C21EA0D70D006408B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C01EA0D70D006408B6 /* Main.storyboard */; };
@@ -26,9 +25,7 @@
 		3162F0441EA8D426006B0807 /* services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F0431EA8D426006B0807 /* services.swift */; };
 		319355091EA76B1500CF0F20 /* Realm extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319355081EA76B1500CF0F20 /* Realm extensions.swift */; };
 		3193550D1EA785FA00CF0F20 /* history.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3193550C1EA785FA00CF0F20 /* history.swift */; };
-		3193550F1EA7866600CF0F20 /* more.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3193550E1EA7866600CF0F20 /* more.xib */; };
 		319355111EA7890500CF0F20 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319355101EA7890500CF0F20 /* MoreViewController.swift */; };
-		31A9E2561EAF8637001E6A58 /* IconInteracor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A9E2551EAF8637001E6A58 /* IconInteracor.swift */; };
 		31AFB1B61EA9DE490033C01E /* MyBookmarksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */; };
 		31AFB1B81EA9DE5E0033C01E /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */; };
 		31AFB1BA1EA9DE770033C01E /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */; };
@@ -56,7 +53,6 @@
 		31027F3E1EA5538C009C281F /* UIKit extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit extensions.swift"; sourceTree = "<group>"; };
 		31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPageCollectionViewCell.swift; sourceTree = "<group>"; };
 		311F77E21EA601D600176130 /* OpenPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPage.swift; sourceTree = "<group>"; };
-		311F77E41EA60CD600176130 /* OpenPagesList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPagesList.swift; sourceTree = "<group>"; };
 		312661B91EA0D70D006408B6 /* FaceIraq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceIraq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		312661BC1EA0D70D006408B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		312661BE1EA0D70D006408B6 /* BrowserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserController.swift; sourceTree = "<group>"; };
@@ -73,9 +69,7 @@
 		3162F0431EA8D426006B0807 /* services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = services.swift; sourceTree = "<group>"; };
 		319355081EA76B1500CF0F20 /* Realm extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Realm extensions.swift"; sourceTree = "<group>"; };
 		3193550C1EA785FA00CF0F20 /* history.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = history.swift; sourceTree = "<group>"; };
-		3193550E1EA7866600CF0F20 /* more.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = more.xib; sourceTree = "<group>"; };
 		319355101EA7890500CF0F20 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
-		31A9E2551EAF8637001E6A58 /* IconInteracor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconInteracor.swift; sourceTree = "<group>"; };
 		31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBookmarksTableViewController.swift; sourceTree = "<group>"; };
 		31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
 		31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
@@ -143,7 +137,6 @@
 		312661BB1EA0D70D006408B6 /* FaceIraq */ = {
 			isa = PBXGroup;
 			children = (
-				31A9E2541EAF861A001E6A58 /* Interactors */,
 				31027F3D1EA55366009C281F /* extensions */,
 				312661DE1EA0E078006408B6 /* View */,
 				312661DC1EA0E066006408B6 /* ViewController */,
@@ -186,7 +179,6 @@
 			isa = PBXGroup;
 			children = (
 				311F77E21EA601D600176130 /* OpenPage.swift */,
-				311F77E41EA60CD600176130 /* OpenPagesList.swift */,
 				3193550C1EA785FA00CF0F20 /* history.swift */,
 				3162F03D1EA898BC006B0807 /* ThemeColors.swift */,
 				31D166E01EAA318F0059E9AB /* Bookmark.swift */,
@@ -199,17 +191,8 @@
 			children = (
 				312661C01EA0D70D006408B6 /* Main.storyboard */,
 				312661C51EA0D70D006408B6 /* LaunchScreen.storyboard */,
-				3193550E1EA7866600CF0F20 /* more.xib */,
 			);
 			name = View;
-			sourceTree = "<group>";
-		};
-		31A9E2541EAF861A001E6A58 /* Interactors */ = {
-			isa = PBXGroup;
-			children = (
-				31A9E2551EAF8637001E6A58 /* IconInteracor.swift */,
-			);
-			name = Interactors;
 			sourceTree = "<group>";
 		};
 		7F0CE2F2DAD924E400CD7D4B /* Pods */ = {
@@ -322,7 +305,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3193550F1EA7866600CF0F20 /* more.xib in Resources */,
 				312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */,
 				312661C41EA0D70D006408B6 /* Assets.xcassets in Resources */,
 				312661C21EA0D70D006408B6 /* Main.storyboard in Resources */,
@@ -435,8 +417,6 @@
 				31AFB1B81EA9DE5E0033C01E /* HistoryTableViewController.swift in Sources */,
 				3162F03E1EA898BC006B0807 /* ThemeColors.swift in Sources */,
 				311F77E31EA601D600176130 /* OpenPage.swift in Sources */,
-				311F77E51EA60CD600176130 /* OpenPagesList.swift in Sources */,
-				31A9E2561EAF8637001E6A58 /* IconInteracor.swift in Sources */,
 				312661BD1EA0D70D006408B6 /* AppDelegate.swift in Sources */,
 				31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */,
 				319355091EA76B1500CF0F20 /* Realm extensions.swift in Sources */,
@@ -614,8 +594,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b465abaa-d505-40cc-be47-ee133ea584ad";
-				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: *";
+				PROVISIONING_PROFILE = "81bddef3-d036-4204-a94e-89c7de43b2b6";
+				PROVISIONING_PROFILE_SPECIFIER = "XC Wildcard AppStore";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

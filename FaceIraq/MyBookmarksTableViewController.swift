@@ -2,7 +2,7 @@
 //  MyBookmarksTableViewController.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 21/04/2017.
+//  Created by Aleksander Wędrychowski on 21/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -85,10 +85,12 @@ class MyBookmarksTableViewController: UITableViewController {
 
         let theBookmark = bookmarks[indexPath.row]
         cell.theBookmark = theBookmark
-        cell.textLabel?.text = theBookmark.url as String
-        if let iconData = theBookmark.icon {
-            cell.icon.image = UIImage(data: Data.init(referencing: iconData))
+        if theBookmark.title != nil {
+            cell.textLabel?.text = theBookmark.title as String
+        } else {
+            cell.textLabel?.text = theBookmark.host as String
         }
+        if let url = theBookmark.url { cell.smallerLabel.text = url as String }
         
         let deleteButton = MGSwipeButton(title: "Delete", backgroundColor: .red) {
             (sender: MGSwipeTableCell!) -> Bool in
@@ -122,12 +124,6 @@ class MyBookmarksTableViewController: UITableViewController {
         vc.remoteOpenURL(stringURL: cell.theBookmark!.url as String)
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    /*func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        /*guard section == 0 else {return}
-            let view = 
-        }*/
-    }*/
 }
 
 extension MyBookmarksTableViewController: UITextFieldDelegate {

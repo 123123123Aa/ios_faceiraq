@@ -2,7 +2,7 @@
 //  OpenPagesViewController.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 17/04/2017.
+//  Created by Aleksander Wędrychowski on 17/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -27,7 +27,6 @@ class OpenPagesViewController: UIViewController {
     var pages: [OpenPage] = [] {
         didSet {
             for page in pages {
-                
                 print((page.host as? String) ?? "no page.host")
                 print(page.url as? String ?? "no page.url")
             }
@@ -37,9 +36,6 @@ class OpenPagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Open Pages VC loaded")
-        //let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(goToCurrentPage))
-        //backGesture.edges = [.left]
-        //self.view.addGestureRecognizer(backGesture)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isUserInteractionEnabled = true
@@ -85,7 +81,6 @@ class OpenPagesViewController: UIViewController {
         try! self.realm?.commitWrite()
         self.orderPages()
         self.countPages()
-        
         
         var desiredIndexPath: IndexPath?
         for page in pages {
@@ -135,9 +130,6 @@ class OpenPagesViewController: UIViewController {
             }
         }
         
-        print(pages.count)
-        print("closePage")
-        //print(selector.page?.url as! String )
         if realm?.isInWriteTransaction == false {
             realm?.beginWrite()}
         realm?.delete(selector.page)
@@ -214,12 +206,9 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.1, animations: {
                         cell.pageScreen?.image = image
-                    }) {finished in
-                        //self.collectionView.reloadItems(at: [indexPath])
-                    }
-                    }
+                    })
+                }
                 cell.pageUrl.text = page.host as String?
-            } else { //cell.pageScreen?.image = nil
             }
         } else {
             // setup for newly created OpenPage object
@@ -249,9 +238,6 @@ extension OpenPagesViewController: MoreDelegate {
     func newPage() {
         print("open new page")
         let newBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
-        //remoteOperURLDelegate.remoteOpenURL(stringURL: nil)
-        //self.navigationController?.popToRootViewController(animated: true)
-        //self.dismiss(animated: true, completion: nil)
         self.navigationController?.pushViewController(newBrowser, animated: true)
     }
     

@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 14/04/2017.
+//  Created by Aleksander Wędrychowski on 14/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Style.loadTheme()
         Fabric.with([Crashlytics.self])
-        
         
         return true
     }

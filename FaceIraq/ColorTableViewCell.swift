@@ -2,7 +2,7 @@
 //  ColorTableViewCell.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 20/04/2017.
+//  Created by Aleksander Wędrychowski on 20/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -17,6 +17,5 @@ class ColorTableViewCell: MGSwipeTableCell {
     var color: UIColor?
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 }

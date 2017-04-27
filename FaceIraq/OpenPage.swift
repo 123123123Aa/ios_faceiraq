@@ -2,20 +2,17 @@
 //  OpenPage.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 18/04/2017.
+//  Created by Aleksander Wędrychowski on 18/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
 import RealmSwift
-import Realm
-import Foundation
 
 class OpenPage: Object {
     dynamic var dateOfLastVisit: Date!
     dynamic var url: NSString?
     dynamic var screen: NSData?
     dynamic var host: NSString?
-    //var date
     
     convenience init(url: NSString?, host: NSString?, screen: NSData?) {
         self.init()

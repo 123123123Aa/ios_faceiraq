@@ -2,7 +2,7 @@
 //  HistoryTableViewController.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 21/04/2017.
+//  Created by Aleksander Wędrychowski on 21/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -19,7 +19,6 @@ class HistoryTableViewController: UITableViewController {
     var remoteOpenURLDelegate: OpenURLDelegate!
     override func viewDidLoad() {
         super.viewDidLoad()
-        //navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
         print("historyTVC loaded")
         computeHistory()
         refreshNavBar()
@@ -84,8 +83,10 @@ class HistoryTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCell", for: indexPath) as! HistoryTableViwCell
         let historyObject = history[indexPath.row]
         
-        if let host = historyObject.host { cell.host.text = host as String }
+        if let title = historyObject.title { cell.host.text = title as String }
+            else { cell.host.text = historyObject.host as String }
         if let url = historyObject.url { cell.url.text = url as String }
+        
 
         let deleteButton = MGSwipeButton(title: "Delete", backgroundColor: .red) {
             (sender: MGSwipeTableCell!) -> Bool in

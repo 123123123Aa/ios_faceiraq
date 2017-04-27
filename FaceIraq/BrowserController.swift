@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 14/04/2017.
+//  Created by Aleksander Wędrychowski on 14/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -13,7 +13,6 @@ import SystemConfiguration
 
 class BrowserViewController: UIViewController {
 
-    @IBOutlet weak var noInternetConnectionView: UIView!
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var bookmarkAdded: UILabel!
     @IBOutlet weak var goBack: UIButton!
@@ -28,7 +27,6 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var cancelOutlet: UIButton!
     @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonsTrailingConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var openPagesCount: UILabel!
     var pageFromPagesController: OpenPage? = nil
     let realm = try! Realm()
@@ -46,9 +44,6 @@ class BrowserViewController: UIViewController {
         super.viewDidLoad()
         print("browserVC viewDidLoad")
         print("UIDevice.current.systemVersion: \(UIDevice.current.systemVersion)")
-        //if
-        //public let webView = WKWebView()
-        //self.navigationController?.viewControllers = [self]
         webView = WKWebView()
         webView.navigationDelegate = self
         webView.uiDelegate = self
@@ -78,7 +73,6 @@ class BrowserViewController: UIViewController {
             pageURL = page.url
             pageHost = page.host
         }
-        
         configureColors()
         countOpenPages()
         self.navigationController?.isNavigationBarHidden = true
@@ -97,14 +91,6 @@ class BrowserViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         addToOpenPagesCollection()
-    }
-    
-    func updateScreenshot() {
-        print("updateScreenshot")
-        screen = NSData(data: UIImagePNGRepresentation(webView.snapshot!)!)
-        
-        print("UIDevice.current.model: \(UIDevice.current.model)")
-            //NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
     }
     
     // MARK: - UI methods
@@ -140,46 +126,6 @@ class BrowserViewController: UIViewController {
             self.goBack.isHidden = false
         }
     }
-    func manageHistory() {
-        guard webView.url != nil else {
-            print("webView.url is nil. Returning.")
-            return
-        }
-        let url = NSString(string: (webView.url?.absoluteString)!)
-        let host = NSString(string: (webView.url!.host)!)
-        
-        if realm.isInWriteTransaction == false {
-            realm.beginWrite()}
-        
-        // create history object
-        var isInHistory = false
-        for object in realm.objects(History.self) {
-            print("checking for relevant history objects")
-            if url == object.url {
-                print("history object found")
-                isInHistory = true
-                if realm.isInWriteTransaction == false {
-                    realm.beginWrite()
-                }
-                object.dateOfLastVisit = Date()
-                print("history object updated")
-                try! realm.commitWrite()
-            }
-        }
-        if isInHistory == false {
-            print("6")
-            let obj = History(url: url, host: host)
-            realm.add(obj)
-            print("history object added")
-            print("7")
-        } else {
-            print("history object is in history")
-        }
-        
-        if realm.isInWriteTransaction {
-            print("9")
-            try! realm.commitWrite()}
-    }
     
     func showBookmarkAdded() {
         bookmarkAdded.backgroundColor = Style.currentThemeColor
@@ -208,20 +154,20 @@ class BrowserViewController: UIViewController {
         if urlInputTextField.isEditing {
             
             //when urlTextField is editing
-            buttonsView.animateFade(.out, withDuration: 0.2, withDelay: 0, minAlpha: 0.0, completion:  {finished in
+            buttonsView.animateFade(.out, withDuration: 0.05, withDelay: 0, minAlpha: 0.0, completion:  {finished in
                 self.textFieldRightConstraint.constant = 65
                 self.urlInputTextField.layoutIfNeeded()
             })
-            cancelOutlet.animateFade(.into, withDuration: 0.2, withDelay: 0.2,minAlpha: 0.0, completion: nil)
+            cancelOutlet.animateFade(.into, withDuration: 0.05, withDelay: 0.05,minAlpha: 0.0, completion: nil)
             
             
             // when urlTextField is not editing
         } else {
-            cancelOutlet.animateFade(.out, withDuration: 0.2, withDelay: 0.0,minAlpha: 0.0, completion: {finished in
+            cancelOutlet.animateFade(.out, withDuration: 0.05, withDelay: 0.0,minAlpha: 0.0, completion: {finished in
                 self.textFieldRightConstraint.constant = 110
                 self.urlInputTextField.layoutIfNeeded()
             })
-            buttonsView.animateFade(.into, withDuration: 0.2, withDelay: 0.2,minAlpha: 0.0, completion: nil)
+            buttonsView.animateFade(.into, withDuration: 0.05, withDelay: 0.05,minAlpha: 0.0, completion: nil)
         }
     }
     
@@ -242,6 +188,26 @@ class BrowserViewController: UIViewController {
             openPagesCount.text = "1"
         }
     }
+    
+    func updateScreenshot() {
+        print("updateScreenshot")
+        var screenShot: UIImage?  {
+            if (UIApplication.shared.keyWindow?.rootViewController) != nil {
+                //let scale = UIScreen.main.scale
+                let bounds = webView.bounds
+                UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale);
+                if let _ = UIGraphicsGetCurrentContext() {
+                    webView.drawHierarchy(in: bounds, afterScreenUpdates: true)
+                    //rootViewController.view.drawHierarchy(in: bounds, afterScreenUpdates: true)
+                    let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+                    return screenshot
+                }
+            }
+            return nil
+        }
+        screen = NSData(data: UIImagePNGRepresentation(screenShot!)!)
+    }
 
     // MARK: - urlRequest methods
     
@@ -254,16 +220,21 @@ class BrowserViewController: UIViewController {
         if string.hasPrefix("https://") {
             string = string.replacingOccurrences(of: "https://", with: "")
         }
-        let url = URL(string: "http://\(string)")!
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-        urlInputTextField.text = nil
-        urlInputTextField.placeholder = url.host
-        if UIApplication.shared.canOpenURL(url) {
-            webView.load(request)
-        } else {
+        if let url = URL(string: "http://\(string)") {
+            let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+            urlInputTextField.text = nil
+            urlInputTextField.placeholder = url.host
+            if UIApplication.shared.canOpenURL(url) {
+                webView.load(request)
+                return
+        }
+        else {
             print("cannot open URL")
             activityIndicator.stopAnimating()
+            webView.stopLoading()
             urlInputTextField.placeholder = "please enter valid website adress"
+            return
+        }
         }
     }
     
@@ -272,7 +243,6 @@ class BrowserViewController: UIViewController {
         checkInternetConnection()
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
             print("remoteOpenURL core started")
-            //print(stringURL ?? nil)
             if stringURL != nil {
                 self.pageHost = self.pageFromPagesController?.host
                 self.pageURL = self.pageFromPagesController?.url
@@ -324,6 +294,8 @@ class BrowserViewController: UIViewController {
         }
     }
     
+    //MARK: - Database override methods
+    
     func addToOpenPagesCollection() {
         print("addToOpenPagesCollection")
         updateScreenshot()
@@ -337,7 +309,6 @@ class BrowserViewController: UIViewController {
             } else {
                 return self.pageHost
             }
-        
         }
         let host = { () -> NSString? in
             if let host = String((self.webView.url?.host)!) {
@@ -347,8 +318,7 @@ class BrowserViewController: UIViewController {
             }
         }
         
-        if realm.isInWriteTransaction == false {
-            realm.beginWrite()}
+        if realm.isInWriteTransaction == false {realm.beginWrite()}
         
         print("reference page url: \(pageFromPagesController?.url)")
         //create or update OpenPage object
@@ -366,6 +336,43 @@ class BrowserViewController: UIViewController {
         
         if realm.isInWriteTransaction {
             print("Ending realm transaction")
+            try! realm.commitWrite()}
+    }
+    
+    func manageHistory() {
+        guard webView.url != nil else {
+            print("webView.url is nil. Returning.")
+            return
+        }
+        let url = NSString(string: (webView.url?.absoluteString)!)
+        let host = NSString(string: (webView.url!.host)!)
+        let title = NSString(string: (webView.title!))
+        if realm.isInWriteTransaction == false {realm.beginWrite()}
+        
+        // create history object
+        var isInHistory = false
+        print("checking for relevant history objects")
+        for object in realm.objects(History.self) {
+            if url == object.url {
+                print("history object found")
+                isInHistory = true
+                object.dateOfLastVisit = Date()
+                print("history object updated")
+                try! realm.commitWrite()
+                break
+            }
+        }
+        if isInHistory == false {
+            print("6")
+            let obj = History(url: url, host: host, title: title)
+            realm.add(obj)
+            print("history object added")
+        } else {
+            print("history object is in history")
+        }
+        
+        if realm.isInWriteTransaction {
+            print("end manage history")
             try! realm.commitWrite()}
     }
     
@@ -456,13 +463,14 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         print("webView did commit")
-        //updateScreenshot()
         if (webView.url) != nil {
+            urlInputTextField.placeholder = "loading \((webView.url!.host)!)"
             pageURL = webView.url?.absoluteString as NSString?
             pageHost = webView.url?.host as NSString?
         }
     }
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        print("WEBVIEW: decide polocy for")
         //print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
         if checkInternetConnection() == false {
             webView.stopLoading()
@@ -490,6 +498,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         //print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
+        print("WEBVIEW: did recive challange")
         if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
@@ -526,11 +535,11 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         //print("webView:\(webView) didFailProvisionalNavigation:\(navigation) withError:\(error)")
-        urlInputTextField.text = nil
-        urlInputTextField.placeholder = "loading"
+        //urlInputTextField.text = nil
+        //urlInputTextField.placeholder = "loading \"
         print("provisional error occured")
         print(error)
-        activityIndicator.stopAnimating()
+        //activityIndicator.stopAnimating()
         if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
@@ -539,6 +548,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         //print("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
+        print("WEBVIEW: did fail navigation")
         urlInputTextField.text = nil
         urlInputTextField.placeholder = "loading"
         print("error occured")
@@ -551,29 +561,51 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
-        print("runJavaScriptAlertPanelWithMessage")
-        //let okAction = UIAlertAction(title: "ok", style: .default) { _ in
-            print("")
-        //}
+        print("WEBVIEW: runJavaScriptAlertPanelWithMessage")
+        let alertController = UIAlertController(title: "Information", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "ok", style: .default) {_ in
+            completionHandler()
+        }
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
-        print("runJavaScriptConfirmPanelWithMessage")
-        let _ = UIAlertAction(title: "Okay", style: .default) { _ in
-            print("true")
+        print("WEBVIEW: runJavaScriptConfirmPanelWithMessage")
+        let alertController = UIAlertController(title: "Information", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Okay", style: .default) { _ in
+            completionHandler(true)
         }
-        
-        let _ = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            print("false")
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            completionHandler(false)
         }
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
-        print("runJavaScriptTextInputPanelWithPrompt")
+        print("WEBVIEW: runJavaScriptTextInputPanelWithPrompt")
+        let alertController = UIAlertController(title: frame.request.url?.host, message: prompt, preferredStyle: .alert)
+        weak var alertTextField: UITextField!
+        alertController.addTextField { textField in
+            textField.text = defaultText
+            alertTextField = textField
+        }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) {action->Void in
+            // cancel handler
+            completionHandler(nil)
+        })
+        alertController.addAction(UIAlertAction(title: "OK", style: .default) {action->Void in
+             // ok handler
+            completionHandler(alertTextField.text)
+        })
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         //print("webView:\(webView) didReceiveServerRedirectForProvisionalNavigation:\(navigation)")
+        print("WEBVIEW: did recive server refirect for provisional navigation")
         if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
@@ -581,7 +613,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        print("createWebViewWith")
+        print("WEBVIEW: createWebViewWith")
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
             urlInputTextField.placeholder = webView.url?.absoluteString
@@ -595,8 +627,6 @@ extension BrowserViewController: MoreDelegate {
         print("open new page")
         let newBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         self.navigationController?.pushViewController(newBrowser, animated: true)
-        //self.dismiss(animated: false, completion: {
-        //    print("browserVC dismissed  by itself")})
     }
     
     func goToThemeColor() {
@@ -616,8 +646,8 @@ extension BrowserViewController: MoreDelegate {
         print("addBookmark")
         let url = NSString(string: (webView.url?.absoluteString)!)
         let host = NSString(string: (webView.url!.host)!)
-        let bookmark = Bookmark(url: url, host: host)
-        //let icon = webView.url
+        let title = NSString(string: (webView.title)!)
+        let bookmark = Bookmark(url: url, host: host, title: title)
         if realm.isInWriteTransaction == false {
             realm.beginWrite()
         }

@@ -2,12 +2,11 @@
 //  ThemeColors.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 20/04/2017.
+//  Created by Aleksander Wędrychowski on 20/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
 import UIKit
-
 
 struct Style {
     
@@ -24,10 +23,7 @@ struct Style {
         print("loadTheme")
         if let color = UserDefaults.standard.color(forKey: "themeColor") {
             Style.currentThemeColor = color
-        } else {
-            
         }
-        
         print("loading theme color")
     }
     

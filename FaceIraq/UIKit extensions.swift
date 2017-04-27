@@ -2,7 +2,7 @@
 //  UIKit extensions.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 17/04/2017.
+//  Created by Aleksander Wędrychowski on 17/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -58,26 +58,8 @@ extension UIColor {
     }
 }
 
-extension UIFont {
-    func appFont() -> UIFont {
-        return UIFont(name: "Futura-medium", size: 12)!
-    }
-}
-
 extension UIView {
-    var snapshot: UIImage? {
-        UIGraphicsBeginImageContext(self.frame.size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            print("snapshot returns nil")
-            return nil
-        }
-        layer.render(in: context)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        print("snapshot returns image")
-        return image
-    }
-
+    
     func dropShadow() {
         self.layer.masksToBounds = false
         self.layer.shadowColor = UIColor.black.cgColor
@@ -87,47 +69,7 @@ extension UIView {
     }
     
     // MARK: - Animations
-    enum Direction {
-        case top
-        case bottom
-        case left
-        case right
-    }
-    func animateInFrom(_ direction: Direction, distanceOfMovement: CGFloat, withDuration: CGFloat, withDelay: Double, completion: (_ finished: Bool) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now()+withDelay) {
-        self.isHidden = false
-        UIView.animate(withDuration: TimeInterval(withDuration), animations: {
-            switch direction {
-            case .top:
-                self.center.y += distanceOfMovement
-            case .bottom:
-                self.center.y -= distanceOfMovement
-            case .left:
-                self.center.x += (self.superview?.bounds.width)!
-            case .right:
-                self.center.x -= (self.superview?.bounds.width)!
-            }
-        })
-    }
-    }
     
-    func animateOutTo(_ direction: Direction, distanceOfMovement: CGFloat, withDuration: CGFloat, withDelay: Double, completion: (_ finished: Bool) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now()+withDelay){
-        self.isHidden = false
-        UIView.animate(withDuration: TimeInterval(withDuration), animations: {
-            switch direction {
-            case .top:
-                self.center.y -= distanceOfMovement
-            case .bottom:
-                self.center.y += distanceOfMovement
-            case .left:
-                self.center.x -= distanceOfMovement
-            case .right:
-                self.center.x += distanceOfMovement
-            }
-        })
-    }
-    }
     enum Fade {
         case into
         case out

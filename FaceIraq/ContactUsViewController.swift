@@ -2,7 +2,7 @@
 //  ContactUsViewController.swift
 //  FaceIraq
 //
-//  Created by HEMIkr on 21/04/2017.
+//  Created by Aleksander Wędrychowski on 21/04/2017.
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
@@ -10,6 +10,7 @@ import UIKit
 
 class ContactUsViewController: UIViewController {
 
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var messageSentLabel: UILabel!
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var subjectTextField: UITextField!
@@ -46,7 +47,7 @@ class ContactUsViewController: UIViewController {
     
     func sendMessage() {
         showMessageSent(success: false)
-        for view in self.view.subviews {
+        for view in containerView.subviews {
             view.resignFirstResponder()
         }
     }
@@ -132,9 +133,7 @@ class ContactUsViewController: UIViewController {
     }
     
     func cancelSendingMessage() {
-        //navigationController?.popViewController(animated: true)
         self.dismiss(animated: false, completion: nil)
-        //navigationController?.popToRootViewController(animated: true)
         navigationController?.popViewController(animated: true)
     }
     
@@ -240,11 +239,4 @@ extension ContactUsViewController: UIImagePickerControllerDelegate, UINavigation
         dismiss(animated: true)
     }
 }
-
-
-
-
-
-
-
 
