@@ -39,6 +39,11 @@ class ContactUsViewController: UIViewController {
         configureNavBarButtons()
     }
     
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+    
     func sendMessage() {
         showMessageSent(success: false)
         for view in self.view.subviews {

@@ -614,8 +614,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "81bddef3-d036-4204-a94e-89c7de43b2b6";
-				PROVISIONING_PROFILE_SPECIFIER = "XC Wildcard AppStore";
+				PROVISIONING_PROFILE = "b465abaa-d505-40cc-be47-ee133ea584ad";
+				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: *";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

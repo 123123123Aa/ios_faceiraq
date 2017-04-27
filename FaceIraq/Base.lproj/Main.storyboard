@@ -1237,10 +1237,11 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="p4N-fa-l6L" firstAttribute="top" secondItem="UmK-To-Tzo" secondAttribute="bottom" constant="-20" id="2H1-gE-9cR"/>
-                            <constraint firstItem="YWq-a0-Pc6" firstAttribute="top" secondItem="UmK-To-Tzo" secondAttribute="bottom" constant="47" id="Ty8-EG-ec2"/>
+                            <constraint firstItem="YWq-a0-Pc6" firstAttribute="top" secondItem="UmK-To-Tzo" secondAttribute="bottom" priority="1" constant="47" id="Ty8-EG-ec2"/>
                             <constraint firstItem="p4N-fa-l6L" firstAttribute="height" secondItem="aIM-xX-YpQ" secondAttribute="height" id="XoE-2W-gKG"/>
                             <constraint firstItem="X1C-2P-klZ" firstAttribute="leading" secondItem="aIM-xX-YpQ" secondAttribute="leading" id="YIu-W9-2eK"/>
                             <constraint firstAttribute="trailing" secondItem="YWq-a0-Pc6" secondAttribute="trailing" constant="16" id="bgE-Xv-SN7"/>
+                            <constraint firstItem="YWq-a0-Pc6" firstAttribute="top" secondItem="X1C-2P-klZ" secondAttribute="bottom" constant="3" id="coN-kB-Smt"/>
                             <constraint firstAttribute="trailingMargin" secondItem="YWq-a0-Pc6" secondAttribute="trailing" id="fvx-SX-IFa"/>
                             <constraint firstItem="p4N-fa-l6L" firstAttribute="leading" secondItem="aIM-xX-YpQ" secondAttribute="leadingMargin" constant="-16" id="mS6-SG-Jrw"/>
                             <constraint firstItem="l5j-hS-TbL" firstAttribute="top" secondItem="YWq-a0-Pc6" secondAttribute="bottom" id="nfq-KY-XP9"/>

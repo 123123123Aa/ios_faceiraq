@@ -84,6 +84,10 @@ class BrowserViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         webView.frame = webViewLayoutTemplate.frame
         webViewLayoutTemplate.addSubview(webView)
+        let webViewHorizontalConst = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView, "webViewLayoutTemplate":webViewLayoutTemplate])
+        let webViewVerticalConst = NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView])
+        NSLayoutConstraint.activate(webViewVerticalConst)
+        NSLayoutConstraint.activate(webViewHorizontalConst)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -98,6 +102,8 @@ class BrowserViewController: UIViewController {
     func updateScreenshot() {
         print("updateScreenshot")
         screen = NSData(data: UIImagePNGRepresentation(webView.snapshot!)!)
+        
+        print("UIDevice.current.model: \(UIDevice.current.model)")
             //NSData(data: UIImagePNGRepresentation((webView.snapshot?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch))!)!)
     }
     

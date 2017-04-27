@@ -62,6 +62,11 @@ class OpenPagesViewController: UIViewController {
         collectionView.layoutIfNeeded()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+    }
+    
     func orderPages() {
         let newOrder = (realm?.objects(OpenPage.self).sorted(byKeyPath: "dateOfLastVisit", ascending: true).toArray(ofType:OpenPage.self))!
         pages = newOrder
