@@ -98,6 +98,7 @@ class MyBookmarksTableViewController: UITableViewController {
             let realm = try! Realm()
             if realm.isInWriteTransaction == false {
                 realm.beginWrite()}
+            
             realm.delete(theBookmark)
             try! realm.commitWrite()
             realm.refresh()
@@ -106,7 +107,6 @@ class MyBookmarksTableViewController: UITableViewController {
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
-            
             return true
         }
         
