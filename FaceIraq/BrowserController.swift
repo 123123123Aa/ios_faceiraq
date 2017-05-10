@@ -421,6 +421,7 @@ class BrowserViewController: UIViewController {
     @IBAction func cancelTypingNewURL(_ sender: Any) {
         print("cancel typing new URL")
         urlInputTextField.resignFirstResponder()
+        urlInputTextField.text = nil
         changeNavigationBarUI()
     }
 }
