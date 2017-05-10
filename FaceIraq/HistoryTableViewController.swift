@@ -17,7 +17,7 @@ import Realm
 class HistoryTableViewController: UITableViewController {
 
     @IBOutlet weak var searchTextField: UITextField!
-    var history: [History] = []
+    var history: [[History]] = [[]]
     let realm = try! Realm()
     var remoteOpenURLDelegate: OpenURLDelegate!
     override func viewDidLoad() {
@@ -33,6 +33,7 @@ class HistoryTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = false
+        tableView.sectionIndexBackgroundColor = .white
     }
     
     
@@ -47,7 +48,20 @@ class HistoryTableViewController: UITableViewController {
     }
     
     func computeHistory() {
-        history = realm.objects(History.self).sorted(byKeyPath: "dateOfLastVisit", ascending: false).toArray(ofType: History.self)
+        let historyArray = realm.objects(History.self).sorted(byKeyPath: "dateOfLastVisit", ascending: false).toArray(ofType: History.self)
+        
+        var date1 = Date()
+        var historySection = 0
+        for object in historyArray {
+            if Calendar.current.compare(date1, to: object.dateOfLastVisit, toGranularity: .day) == .orderedSame {
+                history[historySection].append(object)
+            } else {
+                historySection += 1
+                date1 = object.dateOfLastVisit
+                history.append([object])
+            }
+        }
+        print(history)
     }
     
     func refreshNavBar() {
@@ -77,7 +91,8 @@ class HistoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCell", for: indexPath) as! HistoryTableViwCell
-        let historyObject = history[indexPath.row]
+        
+        let historyObject = history[indexPath.section][indexPath.row]
         
         if let title = historyObject.title { cell.host.text = title as String }
             else { cell.host.text = historyObject.host as String }
@@ -89,9 +104,9 @@ class HistoryTableViewController: UITableViewController {
             print("Convenience callback for swipe buttons!")
             
             let indexToRemove: IndexPath? = {
-                for obj in self.history {
+                for obj in self.history[indexPath.section] {
                     if obj == historyObject {
-                        return IndexPath(row: self.history.index(of: obj)!, section: 0)
+                        return IndexPath(row: self.history[indexPath.section].index(of: obj)!, section: indexPath.section)
                     }
                 }
                 return nil
@@ -130,6 +145,27 @@ class HistoryTableViewController: UITableViewController {
         vc.remoteOpenURL(stringURL: cell.url.text)
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if let date = history[section].first?.dateOfLastVisit {
+            let components = Calendar.current.dateComponents([.day,.month,.year], from: date)
+            let sectionDate = Calendar.current.date(from: components)
+            
+            if Calendar.current.isDateInToday(date) {
+                return "Today"
+            }
+            else if Calendar.current.isDateInYesterday(date){
+                return "Yesterday"
+            }
+            else {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MM/DD/YYYY"
+                let stringFromDate = dateFormatter.string(from: sectionDate!)
+                return stringFromDate
+            }
+        }
+        return nil
+    }
 
 }
 
@@ -150,10 +186,22 @@ extension HistoryTableViewController: UITextFieldDelegate {
         }
         print("relevant textField content")
         let searchedText = self.searchTextField.text!
-        var newHistory: [History] = []
-        for object in history {
-            if object.url.contains(searchedText) {
-                newHistory.append(object)
+        
+        // search for new history objects
+        var date = Date()
+        var historySection = 0
+        var newHistory: [[History]] = [[]]
+        for section in history {
+            for object in section {
+                if object.url.contains(searchedText) {
+                    if Calendar.current.compare(date, to: object.dateOfLastVisit, toGranularity: .day) == .orderedSame {
+                        newHistory[historySection].append(object)
+                    } else {
+                        historySection += 1
+                        date = object.dateOfLastVisit
+                        newHistory.append([object])
+                    }
+                }
             }
         }
         history = newHistory

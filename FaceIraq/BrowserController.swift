@@ -92,6 +92,9 @@ class BrowserViewController: UIViewController {
         let webViewVerticalConst = NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView])
         NSLayoutConstraint.activate(webViewVerticalConst)
         NSLayoutConstraint.activate(webViewHorizontalConst)
+        
+        
+        webView.configuration.userContentController = WKUserContentController()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -453,6 +456,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicator.stopAnimating()
+        print("webView didFinish navigation")
         if webView.url != nil {
             print("webView.url == \(webView.url?.absoluteString)")
             urlInputTextField.placeholder = webView.url?.host
@@ -466,6 +470,8 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         self.pageURL = NSString(string: (webView.url?.absoluteString)!)
         self.pageHost = NSString(string: (webView.url?.host)!)
         })
+        
+        
     }
     
     func webViewDidClose(_ webView: WKWebView) {
@@ -484,6 +490,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
             pageHost = webView.url?.host as NSString?
         }
     }
+    
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         print("WEBVIEW: decide polocy for")
         
@@ -508,9 +515,9 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         
         decisionHandler(.allow)
     }
-    
+ 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        //print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
+        print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
         /*if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
@@ -584,7 +591,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         print("WEBVIEW: runJavaScriptAlertPanelWithMessage")
         let alertController = UIAlertController(title: "Information", message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "ok", style: .default) {_ in
+        let okAction = UIAlertAction(title: "OK", style: .default) {_ in
             completionHandler()
         }
         alertController.addAction(okAction)
@@ -594,7 +601,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
         print("WEBVIEW: runJavaScriptConfirmPanelWithMessage")
         let alertController = UIAlertController(title: "Information", message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Okay", style: .default) { _ in
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
             completionHandler(true)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
@@ -635,9 +642,6 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         print("WEBVIEW: createWebViewWith")
-        
-        
-        
         
         // tapped links are opening in the same controller
         if navigationAction.targetFrame == nil {
