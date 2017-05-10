@@ -34,6 +34,7 @@ class HistoryTableViewController: UITableViewController {
         super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = false
         tableView.sectionIndexBackgroundColor = .white
+        tableView.sectionIndexTrackingBackgroundColor = .white
     }
     
     
@@ -80,12 +81,12 @@ class HistoryTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return history.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return history.count
+        return history[section].count
         
     }
     
