@@ -6,6 +6,9 @@
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
+/*
+    When user changes theme color the new one is written down in user defaults and loaded in loadTheme() method every time that app is starting. Tint color is depend on current theme color. If theme color is beige - tint color is black. Other cases tint color is white. 
+*/
 import UIKit
 
 class ThemeColorTableViewController: UITableViewController {
@@ -50,11 +53,11 @@ class ThemeColorTableViewController: UITableViewController {
     
     func refreshNavBar() {
         let bar = self.navigationController?.navigationBar
-        bar?.barTintColor = Style.currentThemeColor
-        bar?.tintColor = Style.currentTintColor
+        bar?.barTintColor = AppSettings.currentThemeColor
+        bar?.tintColor = AppSettings.currentTintColor
         //bar?.backItem?.backBarButtonItem?.title = nil
-        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
-        bar?.backItem?.backBarButtonItem?.tintColor = Style.currentTintColor
+        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
+        bar?.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
         self.navigationItem.backBarButtonItem?.title = ""
         bar?.setNeedsLayout()
         bar?.layoutIfNeeded()
@@ -103,7 +106,7 @@ class ThemeColorTableViewController: UITableViewController {
         default:
             break
         }
-        if cell.colorPreview.backgroundColor == Style.currentThemeColor {
+        if cell.colorPreview.backgroundColor == AppSettings.currentThemeColor {
             cell.checked.isHidden = false
         } else {
             cell.checked.isHidden = true
@@ -114,7 +117,7 @@ class ThemeColorTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ColorTableViewCell
         print("tableCell selected")
-        Style.setThemeColor(to: cell.color!)
+        AppSettings.setThemeColor(to: cell.color!)
         tableView.reloadData()
         refreshNavBar()
     }

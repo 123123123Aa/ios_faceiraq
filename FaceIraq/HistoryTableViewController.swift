@@ -6,6 +6,9 @@
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
+/*
+    History object is created (or upadated) every time that user is entering new website. 
+*/
 import UIKit
 import RealmSwift
 import MGSwipeTableCell
@@ -49,21 +52,14 @@ class HistoryTableViewController: UITableViewController {
     
     func refreshNavBar() {
         let bar = self.navigationController?.navigationBar
-        bar?.barTintColor = Style.currentThemeColor
-        bar?.tintColor = Style.currentTintColor
-        //bar?.backItem?.backBarButtonItem?.title = nil
-        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
-        //tableView.backgroundColor = Style.currentThemeColor
-        bar?.backItem?.backBarButtonItem?.tintColor = Style.currentTintColor
+        bar?.barTintColor = AppSettings.currentThemeColor
+        bar?.tintColor = AppSettings.currentTintColor
+        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
+        bar?.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
         self.navigationItem.backBarButtonItem?.title = ""
         bar?.setNeedsLayout()
         bar?.layoutIfNeeded()
         bar?.setNeedsDisplay()
-    }
-    
-    func deleteHistoryObject(sender: DeleteButton) {
-        print("delete history object")
-        
     }
 
     // MARK: - Table view data source
@@ -91,6 +87,15 @@ class HistoryTableViewController: UITableViewController {
         let deleteButton = MGSwipeButton(title: "Delete", backgroundColor: .red) {
             (sender: MGSwipeTableCell!) -> Bool in
             print("Convenience callback for swipe buttons!")
+            
+            let indexToRemove: IndexPath? = {
+                for obj in self.history {
+                    if obj == historyObject {
+                        return IndexPath(row: self.history.index(of: obj)!, section: 0)
+                    }
+                }
+                return nil
+            }()
             if self.realm.isInWriteTransaction == false {
                 self.realm.beginWrite()}
             self.realm.delete(historyObject)
@@ -98,8 +103,9 @@ class HistoryTableViewController: UITableViewController {
             self.realm.refresh()
             self.computeHistory()
             
+            
             tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.deleteRows(at: [indexToRemove!], with: .automatic)
             tableView.endUpdates()
             
             return true
@@ -110,7 +116,9 @@ class HistoryTableViewController: UITableViewController {
         
         return cell
     }
-    
+    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        print("did end editing row: \(indexPath?.row)")
+    }
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         //
     }
@@ -151,9 +159,4 @@ extension HistoryTableViewController: UITextFieldDelegate {
         history = newHistory
         self.tableView.reloadData()
     }
-}
-
-
-class DeleteButton: MGSwipeButton {
-    var historyObject: History?
 }

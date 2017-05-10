@@ -6,6 +6,10 @@
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
+/*
+    Bookmark can be created only in BrowserController/MoreViewController.
+*/
+
 import UIKit
 import Realm
 import RealmSwift
@@ -54,10 +58,10 @@ class MyBookmarksTableViewController: UITableViewController {
     func refreshNavBar() {
         let bar = self.navigationController?.navigationBar
         bar?.isHidden = false
-        bar?.barTintColor = Style.currentThemeColor
-        bar?.tintColor = Style.currentTintColor
-        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
-        bar?.backItem?.backBarButtonItem?.tintColor = Style.currentTintColor
+        bar?.barTintColor = AppSettings.currentThemeColor
+        bar?.tintColor = AppSettings.currentTintColor
+        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
+        bar?.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
         self.navigationItem.backBarButtonItem?.title = ""
         bar?.setNeedsLayout()
         bar?.layoutIfNeeded()
@@ -96,6 +100,15 @@ class MyBookmarksTableViewController: UITableViewController {
             (sender: MGSwipeTableCell!) -> Bool in
             print("Convenience callback for swipe buttons!")
             let realm = try! Realm()
+            
+            let indexToRemove: IndexPath? = {
+                for obj in self.bookmarks {
+                    if obj == theBookmark {
+                        return IndexPath(row: self.bookmarks.index(of: obj)!, section: 0)
+                    }
+                }
+                return nil
+            }()
             if realm.isInWriteTransaction == false {
                 realm.beginWrite()}
             
@@ -105,7 +118,7 @@ class MyBookmarksTableViewController: UITableViewController {
             self.computeBookmarks()
             
             tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.deleteRows(at: [indexToRemove!], with: .automatic)
             tableView.endUpdates()
             return true
         }

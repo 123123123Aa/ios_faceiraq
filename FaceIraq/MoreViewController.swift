@@ -28,9 +28,11 @@ class MoreViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        cancelButton.backgroundColor = Style.currentThemeColor
-        cancelButton.setTitleColor(Style.currentTintColor, for: .normal)
-        currentThemeColorOutlet.backgroundColor = Style.currentThemeColor
+        print("moreVC viewWillAppear")
+        cancelButton.backgroundColor = AppSettings.currentThemeColor
+        cancelButton.setTitleColor(AppSettings.currentTintColor, for: .normal)
+        currentThemeColorOutlet.backgroundColor = AppSettings.currentThemeColor
+        notificationsOutlet.isOn = AppSettings.areNotificationsOn
         if openPagesVCIsParent {
             addToBookmarkButtonView.removeFromSuperview()
         }
@@ -71,6 +73,10 @@ class MoreViewController: UIViewController {
         self.dismiss(animated: true, completion: {})
     }
 
+    @IBAction func changeNotificationSettings(_ sender: UISwitch) {
+        print("changeNotificationSettings")
+        AppSettings.setNotifications(isOn: sender.isOn)
+    }
 }
 
 protocol MoreDelegate {

@@ -6,6 +6,16 @@
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
+/*
+    Initial VC of application. 
+    If created when app starts or after opening empty card (OpenPage object without data), VC runs openHomePage() method and load www.faceiraq.net. 
+    If created after triggering OpenPage/History/Bookmark object (in OpenPagesVC, HistoryTableVC or MyBookmarksTableVC) the remoteOpenPage(url:) is executed. After tapping OpenPage object it become assngned to BrowserViewController.pageFormPagesController, so Controller knows that it's already in OpenPages.
+ 
+ 
+    UI:
+    WebView is declared in viewWillAppear() and has frame equal to webViewLayoutTemplate.
+*/
+
 import UIKit
 import WebKit
 import RealmSwift
@@ -96,11 +106,12 @@ class BrowserViewController: UIViewController {
     // MARK: - UI methods
     
     func configureColors() {
-        webNavigationBar.backgroundColor = Style.currentThemeColor
-        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
-        openPagesCount.textColor = Style.currentTintColor
-        cancelOutlet.setTitleColor(Style.currentTintColor, for: .normal)
-        if Style.currentTintColor == .white {
+        // details in Model/Settings and ViewControllers/ThemeColorTableViewController
+        webNavigationBar.backgroundColor = AppSettings.currentThemeColor
+        navigationController?.navigationBar.backgroundColor = AppSettings.currentThemeColor
+        openPagesCount.textColor = AppSettings.currentTintColor
+        cancelOutlet.setTitleColor(AppSettings.currentTintColor, for: .normal)
+        if AppSettings.currentTintColor == .white {
             goBack.setImage(UIImage.init(named: "browserBackArrowWhite"), for: .normal)
             goToMore.setImage(UIImage.init(named: "openPagesMore"), for: .normal)
             goToHomeSite.setImage(UIImage.init(named: "openPagesHome"), for: .normal)
@@ -118,6 +129,7 @@ class BrowserViewController: UIViewController {
     }
     
     func manageBackArrow() {
+        //back arrow is visable only if webView has possibility to go back.      
         if !webView.canGoBack {
             self.textFieldLeftConstraint.constant = 7
             self.goBack.isHidden = true
@@ -128,8 +140,9 @@ class BrowserViewController: UIViewController {
     }
     
     func showBookmarkAdded() {
-        bookmarkAdded.backgroundColor = Style.currentThemeColor
-        bookmarkAdded.textColor = Style.currentTintColor
+        // showed after creating Bookmark object
+        bookmarkAdded.backgroundColor = AppSettings.currentThemeColor
+        bookmarkAdded.textColor = AppSettings.currentTintColor
         bookmarkAdded.dropShadow()
         bookmarkAdded.layer.cornerRadius = 3
         bookmarkAdded.layer.masksToBounds = true
@@ -193,12 +206,10 @@ class BrowserViewController: UIViewController {
         print("updateScreenshot")
         var screenShot: UIImage?  {
             if (UIApplication.shared.keyWindow?.rootViewController) != nil {
-                //let scale = UIScreen.main.scale
                 let bounds = webView.bounds
                 UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale);
                 if let _ = UIGraphicsGetCurrentContext() {
                     webView.drawHierarchy(in: bounds, afterScreenUpdates: true)
-                    //rootViewController.view.drawHierarchy(in: bounds, afterScreenUpdates: true)
                     let screenshot = UIGraphicsGetImageFromCurrentImageContext()
                     UIGraphicsEndImageContext()
                     return screenshot
@@ -206,7 +217,9 @@ class BrowserViewController: UIViewController {
             }
             return nil
         }
-        screen = NSData(data: UIImagePNGRepresentation(screenShot!)!)
+        if let shot = screenShot {
+            screen = NSData(data: UIImagePNGRepresentation(shot)!)
+        }
     }
 
     // MARK: - urlRequest methods
@@ -440,7 +453,8 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicator.stopAnimating()
         if webView.url != nil {
-        urlInputTextField.placeholder = webView.url?.host
+            print("webView.url == \(webView.url?.absoluteString)")
+            urlInputTextField.placeholder = webView.url?.host
         } else {
             urlInputTextField.placeholder = "enter your website adress"
         }
@@ -471,11 +485,17 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         print("WEBVIEW: decide polocy for")
-        //print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
-        if checkInternetConnection() == false {
-            webView.stopLoading()
-            urlInputTextField.placeholder = "no internet connection"
+        
+        // tapped links from FI are opening in new controller
+        if navigationAction.targetFrame == nil && webView.url!.absoluteString == "http://www.faceiraq.net/" {
+            let newBrowserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+            newBrowserVC.remoteOpenURL(stringURL: String(describing: navigationAction.request.url!))
+            self.navigationController?.pushViewController(newBrowserVC, animated: true)
+            decisionHandler(.allow)
+            return
         }
+        
+        
         switch navigationAction.navigationType {
         case .linkActivated:
             if navigationAction.targetFrame == nil {
@@ -490,19 +510,19 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         //print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
-        if checkInternetConnection() == false {
+        /*if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
-        }
+        }*/
         decisionHandler(.allow)
     }
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         //print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
         print("WEBVIEW: did recive challange")
-        if checkInternetConnection() == false {
+        /*if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
-        }
+        }*/
         switch (challenge.protectionSpace.authenticationMethod) {
         case NSURLAuthenticationMethodHTTPBasic:
             let alertController = UIAlertController(title: "Authentication Required", message: webView.url?.host, preferredStyle: .alert)
@@ -540,10 +560,10 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         print("provisional error occured")
         print(error)
         //activityIndicator.stopAnimating()
-        if checkInternetConnection() == false {
+        /*if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
-        }
+        }*/
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -554,10 +574,10 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         print("error occured")
         print(error)
         activityIndicator.stopAnimating()
-        if checkInternetConnection() == false {
+        /*if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
-        }
+        }*/
     }
     
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -606,18 +626,25 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         //print("webView:\(webView) didReceiveServerRedirectForProvisionalNavigation:\(navigation)")
         print("WEBVIEW: did recive server refirect for provisional navigation")
-        if checkInternetConnection() == false {
+        /*if checkInternetConnection() == false {
             webView.stopLoading()
             urlInputTextField.placeholder = "no internet connection"
-        }
+        }*/
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         print("WEBVIEW: createWebViewWith")
+        
+        
+        
+        
+        // tapped links are opening in the same controller
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
             urlInputTextField.placeholder = webView.url?.absoluteString
+            return nil
         }
+        
         return nil
     }
 }

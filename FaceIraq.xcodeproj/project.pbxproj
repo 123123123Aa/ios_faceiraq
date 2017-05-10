@@ -20,7 +20,7 @@
 		312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C51EA0D70D006408B6 /* LaunchScreen.storyboard */; };
 		312661D21EA0D70D006408B6 /* FaceIraqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661D11EA0D70D006408B6 /* FaceIraqTests.swift */; };
 		3162F03C1EA897BC006B0807 /* ThemeColorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */; };
-		3162F03E1EA898BC006B0807 /* ThemeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03D1EA898BC006B0807 /* ThemeColors.swift */; };
+		3162F03E1EA898BC006B0807 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03D1EA898BC006B0807 /* Settings.swift */; };
 		3162F0401EA8A243006B0807 /* ColorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */; };
 		3162F0441EA8D426006B0807 /* services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F0431EA8D426006B0807 /* services.swift */; };
 		319355091EA76B1500CF0F20 /* Realm extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319355081EA76B1500CF0F20 /* Realm extensions.swift */; };
@@ -63,8 +63,9 @@
 		312661CD1EA0D70D006408B6 /* FaceIraqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceIraqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		312661D11EA0D70D006408B6 /* FaceIraqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIraqTests.swift; sourceTree = "<group>"; };
 		312661D31EA0D70D006408B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FaceIraq.entitlements; sourceTree = "<group>"; };
 		3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeColorTableViewController.swift; sourceTree = "<group>"; };
-		3162F03D1EA898BC006B0807 /* ThemeColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
+		3162F03D1EA898BC006B0807 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTableViewCell.swift; sourceTree = "<group>"; };
 		3162F0431EA8D426006B0807 /* services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = services.swift; sourceTree = "<group>"; };
 		319355081EA76B1500CF0F20 /* Realm extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Realm extensions.swift"; sourceTree = "<group>"; };
@@ -137,6 +138,7 @@
 		312661BB1EA0D70D006408B6 /* FaceIraq */ = {
 			isa = PBXGroup;
 			children = (
+				3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */,
 				31027F3D1EA55366009C281F /* extensions */,
 				312661DE1EA0E078006408B6 /* View */,
 				312661DC1EA0E066006408B6 /* ViewController */,
@@ -180,7 +182,7 @@
 			children = (
 				311F77E21EA601D600176130 /* OpenPage.swift */,
 				3193550C1EA785FA00CF0F20 /* history.swift */,
-				3162F03D1EA898BC006B0807 /* ThemeColors.swift */,
+				3162F03D1EA898BC006B0807 /* Settings.swift */,
 				31D166E01EAA318F0059E9AB /* Bookmark.swift */,
 			);
 			name = Model;
@@ -272,6 +274,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = J5AJCLAX66;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					312661CC1EA0D70D006408B6 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -415,7 +422,7 @@
 				31D166DF1EAA2EB80059E9AB /* HistoryTableViwCell.swift in Sources */,
 				31AFB1BA1EA9DE770033C01E /* ContactUsViewController.swift in Sources */,
 				31AFB1B81EA9DE5E0033C01E /* HistoryTableViewController.swift in Sources */,
-				3162F03E1EA898BC006B0807 /* ThemeColors.swift in Sources */,
+				3162F03E1EA898BC006B0807 /* Settings.swift in Sources */,
 				311F77E31EA601D600176130 /* OpenPage.swift in Sources */,
 				312661BD1EA0D70D006408B6 /* AppDelegate.swift in Sources */,
 				31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */,
@@ -558,6 +565,7 @@
 			baseConfigurationReference = 9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_ENTITLEMENTS = FaceIraq/FaceIraq.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -570,8 +578,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "551eb430-dd20-4596-b152-a725ad4eb7ba";
-				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development Provisioning";
+				PROVISIONING_PROFILE = "065571f1-035e-406f-8dee-07c4b2658d9c";
+				PROVISIONING_PROFILE_SPECIFIER = FaceIraqDevelopment;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -582,7 +590,8 @@
 			baseConfigurationReference = 63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_ENTITLEMENTS = FaceIraq/FaceIraq.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -594,8 +603,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "81bddef3-d036-4204-a94e-89c7de43b2b6";
-				PROVISIONING_PROFILE_SPECIFIER = "XC Wildcard AppStore";
+				PROVISIONING_PROFILE = "065571f1-035e-406f-8dee-07c4b2658d9c";
+				PROVISIONING_PROFILE_SPECIFIER = FaceIraqDevelopment;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

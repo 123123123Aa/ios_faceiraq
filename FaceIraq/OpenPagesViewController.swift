@@ -6,6 +6,11 @@
 //  Copyright © 2017 Ready4S. All rights reserved.
 //
 
+/*
+    Controller loads OpenPages objects from Realm database and shows them as cells.
+    When user tapps on cell Controller opens BrowserController and triggers remoteOpenURL(stringURL:) method -> if cell has valid OpenPage object assing to it. In other cases BrowerController.openHomePage() is executed.
+*/
+
 import UIKit
 import Realm
 import RealmSwift
@@ -17,14 +22,13 @@ protocol OpenURLDelegate {
 
 class OpenPagesViewController: UIViewController {
     
-    
     @IBOutlet weak var pagesCounter: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     var realm: Realm?
     var closePageDelegate: OpenPagesRemovalDelegate!
     var collectionLayout: HFCardCollectionViewLayout!
     var remoteOperURLDelegate: OpenURLDelegate!
-    var pages: [OpenPage] = [] {
+    var pages: [OpenPage] =  [] {
         didSet {
             for page in pages {
                 print((page.host as? String) ?? "no page.host")
@@ -43,7 +47,7 @@ class OpenPagesViewController: UIViewController {
         collectionLayout = collectionView.collectionViewLayout as! HFCardCollectionViewLayout
         collectionView.bounces = true
         
-        navigationController?.navigationBar.backgroundColor = Style.currentThemeColor
+        navigationController?.navigationBar.backgroundColor = AppSettings.currentThemeColor
         
     }
     
@@ -103,6 +107,7 @@ class OpenPagesViewController: UIViewController {
     }
     
     @IBAction func goToMore(_ sender: Any) {
+        // opens popUpVC and set .openPagesVCIsParet to true, due to hide not needed buttons.
         print("go to more")
         let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
         moreVC.delegate = self
@@ -182,8 +187,8 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "openPage", for: indexPath) as! OpenPageCollectionViewCell
         
         cell.backgroundColor = .clear
-        cell.view.backgroundColor = Style.currentThemeColor
-        cell.pageUrl.textColor = Style.currentTintColor
+        cell.view.backgroundColor = AppSettings.currentThemeColor
+        cell.pageUrl.textColor = AppSettings.currentTintColor
         cell.view.layer.cornerRadius = 5.0
         cell.view.layer.borderWidth = 1.0
         cell.view.layer.borderColor = UIColor.clear.cgColor
@@ -221,7 +226,7 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         closeButton.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
         closeButton.backgroundColor = .clear
         closeButton.setImage({() -> UIImage in
-                        if Style.currentTintColor != .white { return UIImage(named: "openPagesClose")!
+                        if AppSettings.currentTintColor != .white { return UIImage(named: "openPagesClose")!
                         } else { return UIImage(named: "openPagesCloseWhite")!
                         }}(), for: .normal)
         closeButton.imageEdgeInsets = UIEdgeInsets(top: -3, left: -10, bottom: 5, right: 7)
@@ -254,6 +259,7 @@ extension OpenPagesViewController: MoreDelegate {
     }
     
     func addBookmark() {
+        // empty, because OpenPagesVC doesn't support addBookmark()
         print("addBookmark")
     }
     

@@ -57,8 +57,8 @@ class ContactUsViewController: UIViewController {
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelSendingMessage))
         navigationItem.rightBarButtonItem = sendButton
         navigationItem.leftBarButtonItem = cancelButton
-        navigationItem.rightBarButtonItem?.tintColor = Style.currentTintColor.withAlphaComponent(0.7)
-        navigationItem.leftBarButtonItem?.tintColor = Style.currentTintColor.withAlphaComponent(0.7)
+        navigationItem.rightBarButtonItem?.tintColor = AppSettings.currentTintColor.withAlphaComponent(0.7)
+        navigationItem.leftBarButtonItem?.tintColor = AppSettings.currentTintColor.withAlphaComponent(0.7)
         navigationItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 13)], for: UIControlState.normal)
         navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 13)], for: UIControlState.normal)
     }
@@ -67,8 +67,8 @@ class ContactUsViewController: UIViewController {
         messageTextView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
         messageTextView.layer.borderWidth = 0.5
         messageTextView.layer.cornerRadius = 4
-        messageSentLabel.backgroundColor = Style.currentThemeColor
-        messageSentLabel.textColor = Style.currentTintColor
+        messageSentLabel.backgroundColor = AppSettings.currentThemeColor
+        messageSentLabel.textColor = AppSettings.currentTintColor
         messageSentLabel.dropShadow()
         messageSentLabel.layer.cornerRadius = 3
         messageSentLabel.layer.masksToBounds = true
@@ -139,11 +139,11 @@ class ContactUsViewController: UIViewController {
     
     func refreshNavBar() {
         let bar = (self.navigationController?.navigationBar)!
-        bar.backgroundColor = Style.currentThemeColor
-        bar.barTintColor = Style.currentThemeColor
-        bar.tintColor = Style.currentTintColor
-        bar.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: Style.currentTintColor]
-        bar.backItem?.backBarButtonItem?.tintColor = Style.currentTintColor
+        bar.backgroundColor = AppSettings.currentThemeColor
+        bar.barTintColor = AppSettings.currentThemeColor
+        bar.tintColor = AppSettings.currentTintColor
+        bar.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
+        bar.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
         bar.setNeedsLayout()
         bar.layoutIfNeeded()
         bar.setNeedsDisplay()
