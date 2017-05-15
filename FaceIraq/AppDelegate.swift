@@ -18,8 +18,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         registerForPushNotifications(application: application)
         AppSettings.loadTheme()
-        
         Fabric.with([Crashlytics.self])
+    
+        
+        // check if app was launched from notification
+        if let notification = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [String: AnyObject] {
+            let aps = notification["aps"] as! [String: AnyObject]
+            
+            let initialViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserControll") as! BrowserViewController
+            initialViewController.remoteOpenURL(stringURL: aps["url"]?.stringValue)
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window?.rootViewController = initialViewController
+            self.window?.makeKeyAndVisible()
+        }
         
         return true
     }
@@ -52,7 +63,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        if UserDefaults.standard.bool(forKey: "areNotificationsOn") {
+        print("Did register notificationSettings")
+        //if UserDefaults.standard.bool(forKey: "areNotificationsOn") {
+        if notificationSettings.types != [] && notificationSettings.types != .none {
             application.registerForRemoteNotifications()
         }
     }
@@ -61,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         print("Device Token:", tokenString)
         AppSettings.deviceToken = tokenString
+        AppSettings.faceIraqServerRegister()
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {

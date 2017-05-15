@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 class ContactUsViewController: UIViewController {
 
@@ -45,12 +46,7 @@ class ContactUsViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
     }
     
-    func sendMessage() {
-        showMessageSent(success: false)
-        for view in containerView.subviews {
-            view.resignFirstResponder()
-        }
-    }
+    
     
     func configureNavBarButtons() {
         let sendButton = UIBarButtonItem(title: "Send", style: .done, target: self, action: #selector(sendMessage))
@@ -131,6 +127,15 @@ class ContactUsViewController: UIViewController {
             }
         }
     }
+    
+    func sendMessage() {
+        // TODO: API message upload
+        showMessageSent(success: false)
+        for view in containerView.subviews {
+            view.resignFirstResponder()
+        }
+    }
+
     
     func cancelSendingMessage() {
         self.dismiss(animated: false, completion: nil)
@@ -239,4 +244,18 @@ extension ContactUsViewController: UIImagePickerControllerDelegate, UINavigation
         dismiss(animated: true)
     }
 }
+
+extension ContactUsViewController: MFMailComposeViewControllerDelegate {
+    
+    
+    
+    
+}
+
+
+
+
+
+
+
 
