@@ -24,6 +24,7 @@ class MoreViewController: UIViewController {
         self.view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
         let cancelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cancel(_:)))
         self.view.addGestureRecognizer(cancelGestureRecognizer)
+        setNotificationOutlet()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -36,6 +37,10 @@ class MoreViewController: UIViewController {
         if openPagesVCIsParent {
             addToBookmarkButtonView.removeFromSuperview()
         }
+    }
+    
+    func setNotificationOutlet() {
+        notificationsOutlet.isOn = AppSettings.areNotificationsOn
     }
     
     @IBAction func cancel(_ sender: Any) {

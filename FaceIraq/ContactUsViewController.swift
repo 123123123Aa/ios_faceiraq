@@ -134,8 +134,36 @@ class ContactUsViewController: UIViewController {
         for view in containerView.subviews {
             view.resignFirstResponder()
         }
-    }
+        let email = emailTextField.text ?? ""
+        let title = subjectTextField.text ?? ""
+        let message = messageTextView.text ?? ""
+        let image1 = imageFirst.image
+        let image2 = imageSecond.image
+        let image3 = imageThird.image
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.navigationBar.barTintColor = AppSettings.currentTintColor
+            mail.navigationBar.backgroundColor = AppSettings.currentThemeColor
+            mail.setSubject(title)
+            mail.setToRecipients(["aleksander.wedrychowski@ready4s.pl"])
+            mail.setMessageBody(message, isHTML: true)
+            if image1 != nil {
+                mail.addAttachmentData(UIImagePNGRepresentation(image1!)!, mimeType: "image/png", fileName: "attachment1")
+                if image2 != nil {
+                    mail.addAttachmentData(UIImagePNGRepresentation(image2!)!, mimeType: "image/png", fileName: "attachment2")
+                    if image3 != nil {
+                        mail.addAttachmentData(UIImagePNGRepresentation(image3!)!, mimeType: "image/png", fileName: "attachment3")
+                    }
+                }
+            }
+            
 
+            self.navigationController?.present(mail, animated: true, completion: {})
+            
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
     
     func cancelSendingMessage() {
         self.dismiss(animated: false, completion: nil)
@@ -245,8 +273,15 @@ extension ContactUsViewController: UIImagePickerControllerDelegate, UINavigation
     }
 }
 
+
 extension ContactUsViewController: MFMailComposeViewControllerDelegate {
     
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+        print(result)
+        cancelSendingMessage()
+    }
     
     
     

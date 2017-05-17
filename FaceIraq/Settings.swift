@@ -69,8 +69,7 @@ struct AppSettings {
                     "version":UIDevice.current.systemVersion,
                     "areNotificationsOn":areNotificationsOn ] as [String: Any]
         
-        //if (try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)) != nil {
-            Alamofire.request(URL(string: "http://www.faceiraq.net/app/api.php?action=regUser")!,
+        Alamofire.request(URL(string: "http://www.faceiraq.net/app/api.php?action=regUser")!,
                               method: .post,
                               parameters: dict)
                 .response { response in
@@ -83,32 +82,34 @@ struct AppSettings {
     static func setNotifications(isOn: Bool) {
         print("setNotifications: \(isOn)")
         UserDefaults.standard.set(isOn, forKey: "areNotificationsOn")
+        updateNotificationSettings()
+    }
+    
+    static func updateNotificationSettings() {
+        let notifcationsSettings = UserDefaults.standard.bool(forKey: "areNotificationsOn")
         let isOnInt: Int = {()->Int in
-            if isOn {
+            if notifcationsSettings == true {
                 return 1
             } else {
                 return 0
             }
         }()
-        
         let params: [String:AnyObject] = ["is_active": isOnInt as AnyObject,
                                           "uuid":deviceUUID() as AnyObject]
         Alamofire.request(URL(string: "http://www.faceiraq.net/app/api.php?action=pushSetting")!,
-                                           method: .post,
-                                           parameters: params)
+                          method: .post,
+                          parameters: params)
             .response { response in
                 print(response)
         }
+
         
-        //AppSettings.faceIraqServerRegister()
+        
     }
     
     
     static var areNotificationsOn: Bool = {() -> Bool in
         print("areNotificationsOn")
-        //if UIApplication.shared.isRegisteredForRemoteNotifications != nil {
         return UserDefaults.standard.bool(forKey: "areNotificationsOn")
-        //}
-        //return false
     }()
 }

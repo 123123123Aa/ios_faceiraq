@@ -75,6 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Device Token:", tokenString)
         AppSettings.deviceToken = tokenString
         AppSettings.faceIraqServerRegister()
+        AppSettings.updateNotificationSettings()
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
