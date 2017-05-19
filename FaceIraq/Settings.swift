@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 struct AppSettings {
-    static let faceIraqAdress = "https://www.faceiraq.net"
+    static let faceIraqAdress = "http://www.faceiraq.net"
     static var currentThemeColor = UIColor.AppColors.appBeige
     static var currentTintColor: UIColor {
         if currentThemeColor == UIColor.AppColors.appBeige {return UIColor.black}

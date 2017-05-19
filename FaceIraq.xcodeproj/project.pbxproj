@@ -634,7 +634,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = FaceIraq/FaceIraq.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -646,8 +646,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "065571f1-035e-406f-8dee-07c4b2658d9c";
-				PROVISIONING_PROFILE_SPECIFIER = FaceIraqDevelopment;
+				PROVISIONING_PROFILE = "679051c6-cb40-4e3b-93fe-9a9508a0d66d";
+				PROVISIONING_PROFILE_SPECIFIER = "FaceIraq-AdHoc";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -671,7 +671,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9f0be246-ced6-4ebb-bc57-29aa6a7f23a9";
+				PROVISIONING_PROFILE = "679051c6-cb40-4e3b-93fe-9a9508a0d66d";
 				PROVISIONING_PROFILE_SPECIFIER = "FaceIraq-AdHoc";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -41,8 +41,8 @@ class BrowserViewController: UIViewController {
     
     weak var pageFromPagesController: OpenPage? = nil
     fileprivate let realm = try! Realm()
-    fileprivate weak var webView: WKWebView!
-    fileprivate weak var screen: NSData? = nil
+    fileprivate var webView: WKWebView!
+    fileprivate var screen: NSData? = nil
     fileprivate weak var pageURL: NSString?
     fileprivate weak var pageHost: NSString?
     override func loadView() {
