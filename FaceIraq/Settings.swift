@@ -8,41 +8,35 @@
 
 import UIKit
 import Foundation
-import Alamofire
 
 struct AppSettings {
-    
+    static let faceIraqAdress = "https://www.faceiraq.net"
     static var currentThemeColor = UIColor.AppColors.appBeige
     static var currentTintColor: UIColor {
-        if currentThemeColor == UIColor.AppColors.appBeige {
-            return UIColor.black
-        } else {
-            return UIColor.white
-        }
+        if currentThemeColor == UIColor.AppColors.appBeige {return UIColor.black}
+        else {return UIColor.white}
     }
     
     static func loadTheme() {
-        print("loadTheme")
         if let color = UserDefaults.standard.color(forKey: "themeColor") {
             AppSettings.currentThemeColor = color
         }
-        print("loading theme color")
     }
     
     static func setThemeColor(to color: UIColor) {
-        print("setThemeColor")
         UserDefaults.standard.set(color, forKey: "themeColor")
         currentThemeColor = color
     }
     
     // google e-mail account to AppStore: 
-    // ahmeddjappstore@gmail.com
-    // developersgroupslebanon@gmail.com
+    // ahmeddjappstore@gmail.com - invalid
+    // developersgroupslebanon@gmail.com - invalid
+    // ahmedQaysHammed@gmail.com
     // pass: FACEiraq0405$
-    // data urodzenia : 01.01.1980
+    // data urodzenia : 04/01/1982
     // jak się wabi Twój pierwszy zwierzak : "Pluto"
     // jaka jest twoja ulubiona książka dla dzieci : "Winnie-the-Pooh"
-    // W jakim mieście poznali się Twoi rodzice : "Lebanon"
+    // W jakim mieście poznali się Twoi rodzice : "Rome"
     
     static var deviceToken: String {
         get {
@@ -60,53 +54,11 @@ struct AppSettings {
         return UIDevice.current.identifierForVendor!.uuidString
     }
     
-    static func faceIraqServerRegister() {
-        print("faceIraqServerRegister")
-        let dict = ["regID": deviceToken,
-                    "uuid": deviceUUID(),
-                    "model":UIDevice.current.model,
-                    "platform":UIDevice.current.systemName,
-                    "version":UIDevice.current.systemVersion,
-                    "areNotificationsOn":areNotificationsOn ] as [String: Any]
-        
-        Alamofire.request(URL(string: "http://www.faceiraq.net/app/api.php?action=regUser")!,
-                              method: .post,
-                              parameters: dict)
-                .response { response in
-                    print(response)
-            }
-            
-        //}
-    }
-    
     static func setNotifications(isOn: Bool) {
         print("setNotifications: \(isOn)")
         UserDefaults.standard.set(isOn, forKey: "areNotificationsOn")
-        updateNotificationSettings()
+        Networking.updateNotificationSettings()
     }
-    
-    static func updateNotificationSettings() {
-        let notifcationsSettings = UserDefaults.standard.bool(forKey: "areNotificationsOn")
-        let isOnInt: Int = {()->Int in
-            if notifcationsSettings == true {
-                return 1
-            } else {
-                return 0
-            }
-        }()
-        let params: [String:AnyObject] = ["is_active": isOnInt as AnyObject,
-                                          "uuid":deviceUUID() as AnyObject]
-        Alamofire.request(URL(string: "http://www.faceiraq.net/app/api.php?action=pushSetting")!,
-                          method: .post,
-                          parameters: params)
-            .response { response in
-                print(response)
-        }
-
-        
-        
-    }
-    
     
     static var areNotificationsOn: Bool = {() -> Bool in
         print("areNotificationsOn")

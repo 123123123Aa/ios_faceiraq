@@ -20,18 +20,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppSettings.loadTheme()
         Fabric.with([Crashlytics.self])
     
-        
         // check if app was launched from notification
         if let notification = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [String: AnyObject] {
-            let aps = notification["aps"] as! [String: AnyObject]
-            
+            guard let
+                aps = notification["aps"] as? [String: AnyObject],
+                let title = aps["title"] as? String,
+                let message = aps["message"] as? String,
+                let url = aps["url"] as? String else {
+                    
+                    return true
+            }
+            print(aps)
             let initialViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserControll") as! BrowserViewController
             initialViewController.remoteOpenURL(stringURL: aps["url"]?.stringValue)
             self.window = UIWindow(frame: UIScreen.main.bounds)
             self.window?.rootViewController = initialViewController
             self.window?.makeKeyAndVisible()
         }
-        
         return true
     }
 
@@ -74,8 +79,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         print("Device Token:", tokenString)
         AppSettings.deviceToken = tokenString
-        AppSettings.faceIraqServerRegister()
-        AppSettings.updateNotificationSettings()
+        Networking.faceIraqServerRegister()
+        Networking.updateNotificationSettings()
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -84,8 +89,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // executed when app is started by triggering notfication
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        //let aps = userInfo["aps"] as! [String: AnyObject]
-        //createNewNewsItem(aps)
+        let aps = userInfo as! [String: AnyObject]
+        print(userInfo)
+        print(aps)
     }
 
 }

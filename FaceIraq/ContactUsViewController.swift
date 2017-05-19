@@ -16,7 +16,6 @@ class ContactUsViewController: UIViewController {
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var subjectTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
-    
     @IBOutlet weak var imageFirst: UIImageView!
     @IBOutlet weak var imageSecond: UIImageView!
     @IBOutlet weak var imageThird: UIImageView!
@@ -110,6 +109,7 @@ class ContactUsViewController: UIViewController {
         DispatchQueue.main.async {
         let currentText = self.messageSentLabel.text
         self.messageSentLabel.text = text
+        self.messageSentLabel.sizeToFit()
         self.messageSentLabel.layoutIfNeeded()
         UIView.animate(withDuration: 0.2, animations: {
             self.messageSentLabel.isHidden = false
@@ -129,14 +129,22 @@ class ContactUsViewController: UIViewController {
     }
     
     func sendMessage() {
-        // TODO: API message upload
-        showMessageSent(success: false)
         for view in containerView.subviews {
             view.resignFirstResponder()
         }
-        let email = emailTextField.text ?? ""
         let title = subjectTextField.text ?? ""
-        let message = messageTextView.text ?? ""
+        let email:String = {()->String in
+            if emailTextField.text != nil && emailTextField.text != "" {return "Prefered contact e-mail: \(emailTextField.text!)"}
+            else {return ""}
+        }()
+        let message = {()->String in
+            guard messageTextView.text != "Message" else {return ""}
+            return messageTextView.text
+        }()
+        let messageToSend = {()->String in
+            if email == "" {return message}
+            else {return "\(email) \n  message: \n \(message)"}
+        }
         let image1 = imageFirst.image
         let image2 = imageSecond.image
         let image3 = imageThird.image
@@ -146,8 +154,8 @@ class ContactUsViewController: UIViewController {
             mail.navigationBar.barTintColor = AppSettings.currentTintColor
             mail.navigationBar.backgroundColor = AppSettings.currentThemeColor
             mail.setSubject(title)
-            mail.setToRecipients(["aleksander.wedrychowski@ready4s.pl"])
-            mail.setMessageBody(message, isHTML: true)
+            mail.setToRecipients(["Info@faceiraq.com"])
+            mail.setMessageBody(messageToSend(), isHTML: true)
             if image1 != nil {
                 mail.addAttachmentData(UIImagePNGRepresentation(image1!)!, mimeType: "image/png", fileName: "attachment1")
                 if image2 != nil {
@@ -157,10 +165,7 @@ class ContactUsViewController: UIViewController {
                     }
                 }
             }
-            
-
             self.navigationController?.present(mail, animated: true, completion: {})
-            
         }
         self.dismiss(animated: true, completion: nil)
     }
@@ -276,21 +281,26 @@ extension ContactUsViewController: UIImagePickerControllerDelegate, UINavigation
 
 extension ContactUsViewController: MFMailComposeViewControllerDelegate {
     
-    
+    // triggered when user close MFMailComposeVC
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
-        print(result)
-        cancelSendingMessage()
+        switch result {
+        case .cancelled:
+            showMessage("Sending message aborted")
+            break
+        case .failed:
+            showMessage("Message not send")
+            break
+        case .sent:
+            showMessage("Message sent")
+            break
+        case .saved:
+            showMessage("Draft saved")
+            break
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+2) {finished in
+            self.cancelSendingMessage()
+        }
+        
     }
-    
-    
-    
 }
-
-
-
-
-
-
-
-

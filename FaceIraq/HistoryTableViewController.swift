@@ -102,7 +102,6 @@ class HistoryTableViewController: UITableViewController {
 
         let deleteButton = MGSwipeButton(title: "Delete", backgroundColor: .red) {
             (sender: MGSwipeTableCell!) -> Bool in
-            print("Convenience callback for swipe buttons!")
             
             let indexToRemove: IndexPath? = {
                 for obj in self.history[indexPath.section] {

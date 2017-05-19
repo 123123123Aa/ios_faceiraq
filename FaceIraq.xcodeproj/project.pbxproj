@@ -23,6 +23,7 @@
 		3162F03E1EA898BC006B0807 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03D1EA898BC006B0807 /* Settings.swift */; };
 		3162F0401EA8A243006B0807 /* ColorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */; };
 		3162F0441EA8D426006B0807 /* services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F0431EA8D426006B0807 /* services.swift */; };
+		317FFD0D1ECDF78600ABB4A9 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317FFD0C1ECDF78600ABB4A9 /* Networking.swift */; };
 		319355091EA76B1500CF0F20 /* Realm extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319355081EA76B1500CF0F20 /* Realm extensions.swift */; };
 		3193550D1EA785FA00CF0F20 /* history.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3193550C1EA785FA00CF0F20 /* history.swift */; };
 		319355111EA7890500CF0F20 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319355101EA7890500CF0F20 /* MoreViewController.swift */; };
@@ -68,6 +69,7 @@
 		3162F03D1EA898BC006B0807 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTableViewCell.swift; sourceTree = "<group>"; };
 		3162F0431EA8D426006B0807 /* services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = services.swift; sourceTree = "<group>"; };
+		317FFD0C1ECDF78600ABB4A9 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		319355081EA76B1500CF0F20 /* Realm extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Realm extensions.swift"; sourceTree = "<group>"; };
 		3193550C1EA785FA00CF0F20 /* history.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = history.swift; sourceTree = "<group>"; };
 		319355101EA7890500CF0F20 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
@@ -139,11 +141,11 @@
 			isa = PBXGroup;
 			children = (
 				3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */,
+				317FFD0E1ECDFA1600ABB4A9 /* Common */,
 				31027F3D1EA55366009C281F /* extensions */,
 				312661DE1EA0E078006408B6 /* View */,
 				312661DC1EA0E066006408B6 /* ViewController */,
 				312661DD1EA0E072006408B6 /* Model */,
-				312661BC1EA0D70D006408B6 /* AppDelegate.swift */,
 				312661C31EA0D70D006408B6 /* Assets.xcassets */,
 				312661C81EA0D70D006408B6 /* Info.plist */,
 			);
@@ -162,17 +164,13 @@
 		312661DC1EA0E066006408B6 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				312661BE1EA0D70D006408B6 /* BrowserController.swift */,
-				31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */,
-				31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */,
-				319355101EA7890500CF0F20 /* MoreViewController.swift */,
-				3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */,
-				3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */,
-				31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */,
-				31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */,
-				31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */,
-				31D166DE1EAA2EB80059E9AB /* HistoryTableViwCell.swift */,
-				31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */,
+				317FFD091ECDF01E00ABB4A9 /* Browser */,
+				317FFD0A1ECDF02500ABB4A9 /* OpedPages */,
+				317FFD0B1ECDF04C00ABB4A9 /* MorePopUp */,
+				317FFD081ECDF01600ABB4A9 /* Theme */,
+				317FFD071ECDF00A00ABB4A9 /* ContactUs */,
+				317FFD061ECDF00300ABB4A9 /* Bookmarks */,
+				317FFD051ECDEFF800ABB4A9 /* History */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -182,7 +180,6 @@
 			children = (
 				311F77E21EA601D600176130 /* OpenPage.swift */,
 				3193550C1EA785FA00CF0F20 /* history.swift */,
-				3162F03D1EA898BC006B0807 /* Settings.swift */,
 				31D166E01EAA318F0059E9AB /* Bookmark.swift */,
 			);
 			name = Model;
@@ -195,6 +192,76 @@
 				312661C51EA0D70D006408B6 /* LaunchScreen.storyboard */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		317FFD051ECDEFF800ABB4A9 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */,
+				31D166DE1EAA2EB80059E9AB /* HistoryTableViwCell.swift */,
+			);
+			name = History;
+			sourceTree = "<group>";
+		};
+		317FFD061ECDF00300ABB4A9 /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */,
+				31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */,
+			);
+			name = Bookmarks;
+			sourceTree = "<group>";
+		};
+		317FFD071ECDF00A00ABB4A9 /* ContactUs */ = {
+			isa = PBXGroup;
+			children = (
+				31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */,
+			);
+			name = ContactUs;
+			sourceTree = "<group>";
+		};
+		317FFD081ECDF01600ABB4A9 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */,
+				3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */,
+			);
+			name = Theme;
+			sourceTree = "<group>";
+		};
+		317FFD091ECDF01E00ABB4A9 /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+				312661BE1EA0D70D006408B6 /* BrowserController.swift */,
+			);
+			name = Browser;
+			sourceTree = "<group>";
+		};
+		317FFD0A1ECDF02500ABB4A9 /* OpedPages */ = {
+			isa = PBXGroup;
+			children = (
+				31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */,
+				31027F441EA5F8FA009C281F /* OpenPageCollectionViewCell.swift */,
+			);
+			name = OpedPages;
+			sourceTree = "<group>";
+		};
+		317FFD0B1ECDF04C00ABB4A9 /* MorePopUp */ = {
+			isa = PBXGroup;
+			children = (
+				319355101EA7890500CF0F20 /* MoreViewController.swift */,
+			);
+			name = MorePopUp;
+			sourceTree = "<group>";
+		};
+		317FFD0E1ECDFA1600ABB4A9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				3162F03D1EA898BC006B0807 /* Settings.swift */,
+				312661BC1EA0D70D006408B6 /* AppDelegate.swift */,
+				317FFD0C1ECDF78600ABB4A9 /* Networking.swift */,
+			);
+			name = Common;
 			sourceTree = "<group>";
 		};
 		7F0CE2F2DAD924E400CD7D4B /* Pods */ = {
@@ -420,6 +487,7 @@
 				31D166E31EAA44410059E9AB /* BookmarkTableCell.swift in Sources */,
 				319355111EA7890500CF0F20 /* MoreViewController.swift in Sources */,
 				31D166DF1EAA2EB80059E9AB /* HistoryTableViwCell.swift in Sources */,
+				317FFD0D1ECDF78600ABB4A9 /* Networking.swift in Sources */,
 				31AFB1BA1EA9DE770033C01E /* ContactUsViewController.swift in Sources */,
 				31AFB1B81EA9DE5E0033C01E /* HistoryTableViewController.swift in Sources */,
 				3162F03E1EA898BC006B0807 /* Settings.swift in Sources */,
@@ -576,7 +644,7 @@
 				INFOPLIST_FILE = FaceIraq/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
+				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "065571f1-035e-406f-8dee-07c4b2658d9c";
 				PROVISIONING_PROFILE_SPECIFIER = FaceIraqDevelopment;
@@ -591,7 +659,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = FaceIraq/FaceIraq.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -601,10 +669,10 @@
 				INFOPLIST_FILE = FaceIraq/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraq;
+				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "065571f1-035e-406f-8dee-07c4b2658d9c";
-				PROVISIONING_PROFILE_SPECIFIER = FaceIraqDevelopment;
+				PROVISIONING_PROFILE = "9f0be246-ced6-4ebb-bc57-29aa6a7f23a9";
+				PROVISIONING_PROFILE_SPECIFIER = "FaceIraq-AdHoc";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

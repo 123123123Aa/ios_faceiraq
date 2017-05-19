@@ -38,22 +38,19 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonsTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var openPagesCount: UILabel!
-    var pageFromPagesController: OpenPage? = nil
-    let realm = try! Realm()
     
-    var webView: WKWebView!
-    var screen: NSData? = nil
-    var pageURL: NSString?
-    var pageHost: NSString?
+    weak var pageFromPagesController: OpenPage? = nil
+    fileprivate let realm = try! Realm()
+    fileprivate weak var webView: WKWebView!
+    fileprivate weak var screen: NSData? = nil
+    fileprivate weak var pageURL: NSString?
+    fileprivate weak var pageHost: NSString?
     override func loadView() {
         super.loadView()
-        print("browserVC loadView")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("browserVC viewDidLoad")
-        print("UIDevice.current.systemVersion: \(UIDevice.current.systemVersion)")
         webView = WKWebView()
         webView.navigationDelegate = self
         webView.uiDelegate = self
@@ -71,12 +68,12 @@ class BrowserViewController: UIViewController {
         self.view.layoutSubviews()
         self.view.layoutIfNeeded()
         
-        self.openHomePage()
+        openHomePage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        print("browserVC viewWillAppear")
+        self.navigationController?.isNavigationBarHidden = true
         
         if let page = pageFromPagesController {
             screen = page.screen
@@ -85,20 +82,7 @@ class BrowserViewController: UIViewController {
         }
         configureColors()
         countOpenPages()
-        self.navigationController?.isNavigationBarHidden = true
-        webView.frame = webViewLayoutTemplate.frame
-        webViewLayoutTemplate.addSubview(webView)
-        let webViewHorizontalConst = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView, "webViewLayoutTemplate":webViewLayoutTemplate])
-        let webViewVerticalConst = NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView])
-        NSLayoutConstraint.activate(webViewVerticalConst)
-        NSLayoutConstraint.activate(webViewHorizontalConst)
-        
-        
-        webView.configuration.userContentController = WKUserContentController()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        configureWebViewLayout()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,9 +90,23 @@ class BrowserViewController: UIViewController {
         addToOpenPagesCollection()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("screen orientaion changes")
+    }
+    
     // MARK: - UI methods
     
-    func configureColors() {
+    fileprivate func configureWebViewLayout() {
+        webView.frame = webViewLayoutTemplate.frame
+        webViewLayoutTemplate.addSubview(webView)
+        let webViewHorizontalConst = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView, "webViewLayoutTemplate":webViewLayoutTemplate])
+        let webViewVerticalConst = NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView])
+        NSLayoutConstraint.activate(webViewVerticalConst)
+        NSLayoutConstraint.activate(webViewHorizontalConst)
+        webView.configuration.userContentController = WKUserContentController()
+    }
+    
+    fileprivate func configureColors() {
         // details in Model/Settings and ViewControllers/ThemeColorTableViewController
         webNavigationBar.backgroundColor = AppSettings.currentThemeColor
         navigationController?.navigationBar.backgroundColor = AppSettings.currentThemeColor
@@ -127,11 +125,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("screen orientaion changes")
-    }
-    
-    func manageBackArrow() {
+    fileprivate func manageBackArrow() {
         //back arrow is visable only if webView has possibility to go back.      
         if !webView.canGoBack {
             self.textFieldLeftConstraint.constant = 7
@@ -142,7 +136,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func showBookmarkAdded() {
+    fileprivate func showBookmarkAdded() {
         // showed after creating Bookmark object
         bookmarkAdded.backgroundColor = AppSettings.currentThemeColor
         bookmarkAdded.textColor = AppSettings.currentTintColor
@@ -166,7 +160,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func changeNavigationBarUI() {
+    fileprivate func changeNavigationBarUI() {
         if urlInputTextField.isEditing {
             
             //when urlTextField is editing
@@ -187,7 +181,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func countOpenPages() {
+    fileprivate func countOpenPages() {
         var count = 1
         let pages = realm.objects(OpenPage.self).count
         if pages > 0 {
@@ -205,7 +199,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func updateScreenshot() {
+    fileprivate func updateScreenshot() {
         print("updateScreenshot")
         var screenShot: UIImage?  {
             if (UIApplication.shared.keyWindow?.rootViewController) != nil {
@@ -227,7 +221,7 @@ class BrowserViewController: UIViewController {
 
     // MARK: - urlRequest methods
     
-    func openURL(_ stringURL: String) {
+    fileprivate func openURL(_ stringURL: String) {
         print("openURL")
         var string = stringURL
         if string.hasPrefix("http://") {
@@ -243,8 +237,7 @@ class BrowserViewController: UIViewController {
             if UIApplication.shared.canOpenURL(url) {
                 webView.load(request)
                 return
-        }
-        else {
+        } else {
             print("cannot open URL")
             activityIndicator.stopAnimating()
             webView.stopLoading()
@@ -254,6 +247,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
+    // method designed to delegate opening URLs from another controller (history/bookmark/openPages)
     func remoteOpenURL(stringURL: String?) {
         print("starts remoteURL open")
         checkInternetConnection()
@@ -263,36 +257,34 @@ class BrowserViewController: UIViewController {
                 self.pageHost = self.pageFromPagesController?.host
                 self.pageURL = self.pageFromPagesController?.url
                 self.screen = self.pageFromPagesController?.screen
-                print("1")
-                //self.webView.stopLoading()
                 self.webView.stopLoading()
                 let url = URL(string: stringURL!)!
                 self.urlInputTextField?.placeholder = url.host
-                print("ulr created")
-                let request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData)
+                
+                
                 if UIApplication.shared.canOpenURL(url) {
+                    let request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData)
                     self.webView.load(request)
                     DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
                         self.webView.isHidden = false
                     })
                 } else {
-                    print("cannot open URL")
                     self.urlInputTextField.placeholder = "unable to open URL"
                     self.activityIndicator.stopAnimating()
                     }
             } else {
+                // if provided URL is invalid open homepage
                 self.openHomePage()
             }
         })
     }
     
-    func openHomePage() {
-        print("openHomePage")
+    fileprivate func openHomePage() {
         checkInternetConnection()
         if urlInputTextField.isEditing {
             urlInputTextField.resignFirstResponder()
         }
-        let urlToOpen = URL(string: "http://faceiraq.net")!
+        let urlToOpen = URL(string: AppSettings.faceIraqAdress)!
         let request = URLRequest(url: urlToOpen, cachePolicy: .returnCacheDataElseLoad)
         urlInputTextField.text = nil
         webView.load(request)
@@ -300,19 +292,17 @@ class BrowserViewController: UIViewController {
         webView.isHidden = false
     }
     
-    func checkInternetConnection() -> Bool {
+    fileprivate func checkInternetConnection() -> Bool {
         if isConnectedToNetwork() {
-            print("internet connected")
             return true
         } else {
-            print("no internet connection")
             return false
         }
     }
     
     //MARK: - Database override methods
     
-    func addToOpenPagesCollection() {
+    fileprivate func addToOpenPagesCollection() {
         print("addToOpenPagesCollection")
         updateScreenshot()
         guard webView.url != nil else {
@@ -355,7 +345,7 @@ class BrowserViewController: UIViewController {
             try! realm.commitWrite()}
     }
     
-    func manageHistory() {
+    fileprivate func manageHistory() {
         guard webView.url != nil else {
             print("webView.url is nil. Returning.")
             return
@@ -394,34 +384,34 @@ class BrowserViewController: UIViewController {
     
     
     // MARK: - Actions
-    @IBAction func openUrl(_ sender: UITextField) {
+    @IBAction fileprivate func openUrl(_ sender: UITextField) {
         openURL(urlInputTextField.text!)
     }
     
-    @IBAction func openHomePage(_ sender: Any) {
+    @IBAction fileprivate func openHomePage(_ sender: Any) {
         openHomePage()
     }
     
-    @IBAction func goBack(_ sender: Any) {
+    @IBAction fileprivate func goBack(_ sender: Any) {
         webView.goBack()
         urlInputTextField.resignFirstResponder()
         changeNavigationBarUI()
     }
     
-    @IBAction func goToOpenedSites(_ sender: Any) {
+    @IBAction fileprivate func goToOpenedSites(_ sender: Any) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "OpenPagesViewController") as! OpenPagesViewController
         vc.remoteOperURLDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @IBAction func goToMore(_ sender: Any) {
+    @IBAction fileprivate func goToMore(_ sender: Any) {
         print("go to more")
         let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
         moreVC.delegate = self
         self.present(moreVC, animated: true, completion: {})
     }
     
-    @IBAction func cancelTypingNewURL(_ sender: Any) {
+    @IBAction fileprivate func cancelTypingNewURL(_ sender: Any) {
         print("cancel typing new URL")
         urlInputTextField.resignFirstResponder()
         urlInputTextField.text = nil
@@ -470,8 +460,6 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         self.pageURL = NSString(string: (webView.url?.absoluteString)!)
         self.pageHost = NSString(string: (webView.url?.host)!)
         })
-        
-        
     }
     
     func webViewDidClose(_ webView: WKWebView) {
@@ -495,14 +483,13 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         print("WEBVIEW: decide polocy for")
         
         // tapped links from FI are opening in new controller
-        if navigationAction.targetFrame == nil && webView.url!.absoluteString == "http://www.faceiraq.net/" {
+        if navigationAction.targetFrame == nil && webView.url!.absoluteString == AppSettings.faceIraqAdress {
             let newBrowserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
             newBrowserVC.remoteOpenURL(stringURL: String(describing: navigationAction.request.url!))
             self.navigationController?.pushViewController(newBrowserVC, animated: true)
             decisionHandler(.allow)
             return
         }
-        
         
         switch navigationAction.navigationType {
         case .linkActivated:
@@ -518,19 +505,13 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
  
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
-        /*if checkInternetConnection() == false {
-            webView.stopLoading()
-            urlInputTextField.placeholder = "no internet connection"
-        }*/
+    
         decisionHandler(.allow)
     }
+    
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        //print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
-        print("WEBVIEW: did recive challange")
-        /*if checkInternetConnection() == false {
-            webView.stopLoading()
-            urlInputTextField.placeholder = "no internet connection"
-        }*/
+        print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
+    
         switch (challenge.protectionSpace.authenticationMethod) {
         case NSURLAuthenticationMethodHTTPBasic:
             let alertController = UIAlertController(title: "Authentication Required", message: webView.url?.host, preferredStyle: .alert)
@@ -561,31 +542,19 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
             completionHandler(.rejectProtectionSpace, nil);
         }
     }
+    
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        //print("webView:\(webView) didFailProvisionalNavigation:\(navigation) withError:\(error)")
-        //urlInputTextField.text = nil
-        //urlInputTextField.placeholder = "loading \"
-        print("provisional error occured")
-        print(error)
-        //activityIndicator.stopAnimating()
-        /*if checkInternetConnection() == false {
-            webView.stopLoading()
-            urlInputTextField.placeholder = "no internet connection"
-        }*/
+        print("webView:\(webView) didFailProvisionalNavigation:\(navigation) withError:\(error)")
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        //print("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
+        print("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
         print("WEBVIEW: did fail navigation")
         urlInputTextField.text = nil
         urlInputTextField.placeholder = "loading"
         print("error occured")
         print(error)
         activityIndicator.stopAnimating()
-        /*if checkInternetConnection() == false {
-            webView.stopLoading()
-            urlInputTextField.placeholder = "no internet connection"
-        }*/
     }
     
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -632,12 +601,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        //print("webView:\(webView) didReceiveServerRedirectForProvisionalNavigation:\(navigation)")
-        print("WEBVIEW: did recive server refirect for provisional navigation")
-        /*if checkInternetConnection() == false {
-            webView.stopLoading()
-            urlInputTextField.placeholder = "no internet connection"
-        }*/
+        print("webView:\(webView) didReceiveServerRedirectForProvisionalNavigation:\(navigation)")
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -703,5 +667,6 @@ extension BrowserViewController: MoreDelegate {
 }
 
 extension BrowserViewController: UIScrollViewDelegate, OpenURLDelegate {
+    
 }
 
