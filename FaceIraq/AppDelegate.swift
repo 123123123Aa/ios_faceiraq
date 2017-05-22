@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerForPushNotifications(application: application)
         AppSettings.loadTheme()
         Fabric.with([Crashlytics.self])
-    
+        
         // check if app was launched from notification
         if let notification = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [String: AnyObject] {
             guard let
@@ -31,12 +31,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     return true
             }
             print(aps)
-            let initialViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserControll") as! BrowserViewController
-            initialViewController.remoteOpenURL(stringURL: aps["url"]?.stringValue)
+            let browserVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+            let navController = UINavigationController(rootViewController: browserVC)
+            browserVC.remoteOpenURL(stringURL: aps["url"]?.stringValue)
             self.window = UIWindow(frame: UIScreen.main.bounds)
-            self.window?.rootViewController = initialViewController
+            self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()
+            
+            return true
         }
+        
+        // If in OpenPages is FaceIraq page then open this page insteed of creating new one.
+        if let openedFaceIraqPage = AppSettings.faceIraqAlreadyOpened() {
+            let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+            let navController = UINavigationController(rootViewController: browserVC)
+            browserVC.pageFromPagesController = openedFaceIraqPage
+            browserVC.remoteOpenURL(stringURL: openedFaceIraqPage.url as! String)
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window?.rootViewController = navController
+            self.window?.makeKeyAndVisible()
+
+            
+            return true
+        }
+        
         return true
     }
 

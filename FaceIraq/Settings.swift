@@ -8,13 +8,25 @@
 
 import UIKit
 import Foundation
+import RealmSwift
+import Realm
 
-struct AppSettings {
-    static let faceIraqAdress = "http://www.faceiraq.net"
+class AppSettings {
+    static let faceIraqAdress = "http://www.faceiraq.net/"
     static var currentThemeColor = UIColor.AppColors.appBeige
     static var currentTintColor: UIColor {
         if currentThemeColor == UIColor.AppColors.appBeige {return UIColor.black}
         else {return UIColor.white}
+    }
+    
+    static func faceIraqAlreadyOpened()->OpenPage? {
+        let array = try! Realm().objects(OpenPage.self).toArray(ofType:OpenPage.self)
+        for item in array {
+            if item.url == AppSettings.faceIraqAdress as NSString {
+                return item
+            }
+        }
+        return nil
     }
     
     static func loadTheme() {

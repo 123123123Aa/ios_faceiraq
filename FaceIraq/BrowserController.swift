@@ -38,8 +38,9 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonsTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var openPagesCount: UILabel!
+    @IBOutlet weak var refreshOutler: UIButton!
     
-    weak var pageFromPagesController: OpenPage? = nil
+    var pageFromPagesController: OpenPage? = nil
     fileprivate let realm = try! Realm()
     fileprivate var webView: WKWebView!
     fileprivate var screen: NSData? = nil
@@ -63,7 +64,7 @@ class BrowserViewController: UIViewController {
         manageBackArrow()
         countOpenPages()
         webView.translatesAutoresizingMaskIntoConstraints = false
-        
+        webView.scrollView.delegate = self
         webView.layoutIfNeeded()
         self.view.layoutSubviews()
         self.view.layoutIfNeeded()
@@ -257,7 +258,7 @@ class BrowserViewController: UIViewController {
                 self.pageHost = self.pageFromPagesController?.host
                 self.pageURL = self.pageFromPagesController?.url
                 self.screen = self.pageFromPagesController?.screen
-                self.webView.stopLoading()
+                self.webView?.stopLoading()
                 let url = URL(string: stringURL!)!
                 self.urlInputTextField?.placeholder = url.host
                 
@@ -292,6 +293,13 @@ class BrowserViewController: UIViewController {
         webView.isHidden = false
     }
     
+    
+    @IBAction func refresh(_ sender: UIButton) {
+        self.webView.reload()
+    }
+    
+    
+    
     fileprivate func checkInternetConnection() -> Bool {
         if isConnectedToNetwork() {
             return true
@@ -299,6 +307,8 @@ class BrowserViewController: UIViewController {
             return false
         }
     }
+    
+    
     
     //MARK: - Database override methods
     
@@ -483,11 +493,12 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         print("WEBVIEW: decide polocy for")
         
         // tapped links from FI are opening in new controller
-        if navigationAction.targetFrame == nil && webView.url!.absoluteString == AppSettings.faceIraqAdress {
+        if navigationAction.targetFrame == nil && webView.url!.absoluteString == "http://www.faceiraq.net/" {
             let newBrowserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
-            newBrowserVC.remoteOpenURL(stringURL: String(describing: navigationAction.request.url!))
+            
+            decisionHandler(.cancel)
+            newBrowserVC.remoteOpenURL(stringURL: navigationAction.request.url!.absoluteString)
             self.navigationController?.pushViewController(newBrowserVC, animated: true)
-            decisionHandler(.allow)
             return
         }
         
@@ -667,6 +678,10 @@ extension BrowserViewController: MoreDelegate {
 }
 
 extension BrowserViewController: UIScrollViewDelegate, OpenURLDelegate {
-    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if (scrollView.contentOffset.y < 0) {
+            webView.reload()
+        }
+     }
 }
 
