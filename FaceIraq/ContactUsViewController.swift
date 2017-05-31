@@ -52,8 +52,8 @@ class ContactUsViewController: UIViewController {
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelSendingMessage))
         navigationItem.rightBarButtonItem = sendButton
         navigationItem.leftBarButtonItem = cancelButton
-        navigationItem.rightBarButtonItem?.tintColor = AppSettings.currentTintColor.withAlphaComponent(0.7)
-        navigationItem.leftBarButtonItem?.tintColor = AppSettings.currentTintColor.withAlphaComponent(0.7)
+        navigationItem.rightBarButtonItem?.tintColor = AppSettings.shared.currentTintColor.withAlphaComponent(0.7)
+        navigationItem.leftBarButtonItem?.tintColor = AppSettings.shared.currentTintColor.withAlphaComponent(0.7)
         navigationItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 13)], for: UIControlState.normal)
         navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 13)], for: UIControlState.normal)
     }
@@ -62,8 +62,8 @@ class ContactUsViewController: UIViewController {
         messageTextView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
         messageTextView.layer.borderWidth = 0.5
         messageTextView.layer.cornerRadius = 4
-        messageSentLabel.backgroundColor = AppSettings.currentThemeColor
-        messageSentLabel.textColor = AppSettings.currentTintColor
+        messageSentLabel.backgroundColor = AppSettings.shared.currentThemeColor
+        messageSentLabel.textColor = AppSettings.shared.currentTintColor
         messageSentLabel.dropShadow()
         messageSentLabel.layer.cornerRadius = 3
         messageSentLabel.layer.masksToBounds = true
@@ -151,8 +151,8 @@ class ContactUsViewController: UIViewController {
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
-            mail.navigationBar.barTintColor = AppSettings.currentTintColor
-            mail.navigationBar.backgroundColor = AppSettings.currentThemeColor
+            mail.navigationBar.barTintColor = AppSettings.shared.currentTintColor
+            mail.navigationBar.backgroundColor = AppSettings.shared.currentThemeColor
             mail.setSubject(title)
             mail.setToRecipients(["Info@faceiraq.com"])
             mail.setMessageBody(messageToSend(), isHTML: true)
@@ -177,11 +177,11 @@ class ContactUsViewController: UIViewController {
     
     func refreshNavBar() {
         let bar = (self.navigationController?.navigationBar)!
-        bar.backgroundColor = AppSettings.currentThemeColor
-        bar.barTintColor = AppSettings.currentThemeColor
-        bar.tintColor = AppSettings.currentTintColor
-        bar.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
-        bar.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
+        bar.backgroundColor = AppSettings.shared.currentThemeColor
+        bar.barTintColor = AppSettings.shared.currentThemeColor
+        bar.tintColor = AppSettings.shared.currentTintColor
+        bar.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.shared.currentTintColor]
+        bar.backItem?.backBarButtonItem?.tintColor = AppSettings.shared.currentTintColor
         bar.setNeedsLayout()
         bar.layoutIfNeeded()
         bar.setNeedsDisplay()

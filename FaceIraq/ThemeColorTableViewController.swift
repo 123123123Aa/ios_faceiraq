@@ -52,16 +52,15 @@ class ThemeColorTableViewController: UITableViewController {
     }
     
     func refreshNavBar() {
-        let bar = self.navigationController?.navigationBar
-        bar?.barTintColor = AppSettings.currentThemeColor
-        bar?.tintColor = AppSettings.currentTintColor
-        //bar?.backItem?.backBarButtonItem?.title = nil
-        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
-        bar?.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
+        guard let bar = self.navigationController?.navigationBar else {return}
+        bar.barTintColor = AppSettings.shared.currentThemeColor
+        bar.tintColor = AppSettings.shared.currentTintColor
+        bar.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.shared.currentTintColor]
+        bar.backItem?.backBarButtonItem?.tintColor = AppSettings.shared.currentTintColor
         self.navigationItem.backBarButtonItem?.title = ""
-        bar?.setNeedsLayout()
-        bar?.layoutIfNeeded()
-        bar?.setNeedsDisplay()
+        bar.setNeedsLayout()
+        bar.layoutIfNeeded()
+        bar.setNeedsDisplay()
     }
 
     // MARK: - Table view data source
@@ -106,7 +105,7 @@ class ThemeColorTableViewController: UITableViewController {
         default:
             break
         }
-        if cell.colorPreview.backgroundColor == AppSettings.currentThemeColor {
+        if cell.colorPreview.backgroundColor == AppSettings.shared.currentThemeColor {
             cell.checked.isHidden = false
         } else {
             cell.checked.isHidden = true
@@ -116,8 +115,7 @@ class ThemeColorTableViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ColorTableViewCell
-        print("tableCell selected")
-        AppSettings.setThemeColor(to: cell.color!)
+        AppSettings.shared.setThemeColor(to: cell.color!)
         tableView.reloadData()
         refreshNavBar()
     }

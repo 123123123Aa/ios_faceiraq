@@ -41,7 +41,6 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var refreshOutler: UIButton!
     
     var pageFromPagesController: OpenPage? = nil
-    fileprivate let realm = try! Realm()
     fileprivate var webView: WKWebView!
     fileprivate var screen: NSData? = nil
     fileprivate weak var pageURL: NSString?
@@ -92,7 +91,6 @@ class BrowserViewController: UIViewController {
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("screen orientaion changes")
     }
     
     // MARK: - UI methods
@@ -109,11 +107,11 @@ class BrowserViewController: UIViewController {
     
     fileprivate func configureColors() {
         // details in Model/Settings and ViewControllers/ThemeColorTableViewController
-        webNavigationBar.backgroundColor = AppSettings.currentThemeColor
-        navigationController?.navigationBar.backgroundColor = AppSettings.currentThemeColor
-        openPagesCount.textColor = AppSettings.currentTintColor
-        cancelOutlet.setTitleColor(AppSettings.currentTintColor, for: .normal)
-        if AppSettings.currentTintColor == .white {
+        webNavigationBar.backgroundColor = AppSettings.shared.currentThemeColor
+        navigationController?.navigationBar.backgroundColor = AppSettings.shared.currentThemeColor
+        openPagesCount.textColor = AppSettings.shared.currentTintColor
+        cancelOutlet.setTitleColor(AppSettings.shared.currentTintColor, for: .normal)
+        if AppSettings.shared.currentTintColor == .white {
             goBack.setImage(UIImage.init(named: "browserBackArrowWhite"), for: .normal)
             goToMore.setImage(UIImage.init(named: "openPagesMore"), for: .normal)
             goToHomeSite.setImage(UIImage.init(named: "openPagesHome"), for: .normal)
@@ -139,8 +137,8 @@ class BrowserViewController: UIViewController {
     
     fileprivate func showBookmarkAdded() {
         // showed after creating Bookmark object
-        bookmarkAdded.backgroundColor = AppSettings.currentThemeColor
-        bookmarkAdded.textColor = AppSettings.currentTintColor
+        bookmarkAdded.backgroundColor = AppSettings.shared.currentThemeColor
+        bookmarkAdded.textColor = AppSettings.shared.currentTintColor
         bookmarkAdded.dropShadow()
         bookmarkAdded.layer.cornerRadius = 3
         bookmarkAdded.layer.masksToBounds = true
@@ -184,24 +182,20 @@ class BrowserViewController: UIViewController {
     
     fileprivate func countOpenPages() {
         var count = 1
-        let pages = realm.objects(OpenPage.self).count
+        let pages = Database.shared.objects(OpenPage.self).count
         if pages > 0 {
             count = pages
             if pageFromPagesController != nil {
-                print("pageFromPagesController found")
                 openPagesCount.text = "\(count)"
             } else {
-                print("pageFromPagesController not found: count + 1")
                 openPagesCount.text = "\(count+1)"
             }
         } else {
-            print("no openPages object in database: count = 1")
             openPagesCount.text = "1"
         }
     }
     
     fileprivate func updateScreenshot() {
-        print("updateScreenshot")
         var screenShot: UIImage?  {
             if (UIApplication.shared.keyWindow?.rootViewController) != nil {
                 let bounds = webView.bounds
@@ -223,7 +217,6 @@ class BrowserViewController: UIViewController {
     // MARK: - urlRequest methods
     
     fileprivate func openURL(_ stringURL: String) {
-        print("openURL")
         var string = stringURL
         if string.hasPrefix("http://") {
             string = string.replacingOccurrences(of: "http://", with: "")
@@ -239,7 +232,6 @@ class BrowserViewController: UIViewController {
                 webView.load(request)
                 return
         } else {
-            print("cannot open URL")
             activityIndicator.stopAnimating()
             webView.stopLoading()
             urlInputTextField.placeholder = "please enter valid website adress"
@@ -250,10 +242,7 @@ class BrowserViewController: UIViewController {
     
     // method designed to delegate opening URLs from another controller (history/bookmark/openPages)
     func remoteOpenURL(stringURL: String?) {
-        print("starts remoteURL open")
-        checkInternetConnection()
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
-            print("remoteOpenURL core started")
             if stringURL != nil {
                 self.pageHost = self.pageFromPagesController?.host
                 self.pageURL = self.pageFromPagesController?.url
@@ -281,11 +270,10 @@ class BrowserViewController: UIViewController {
     }
     
     fileprivate func openHomePage() {
-        checkInternetConnection()
         if urlInputTextField.isEditing {
             urlInputTextField.resignFirstResponder()
         }
-        let urlToOpen = URL(string: AppSettings.faceIraqAdress)!
+        let urlToOpen = URL(string: AppSettings.shared.faceIraqAdress)!
         let request = URLRequest(url: urlToOpen, cachePolicy: .returnCacheDataElseLoad)
         urlInputTextField.text = nil
         webView.load(request)
@@ -313,10 +301,8 @@ class BrowserViewController: UIViewController {
     //MARK: - Database override methods
     
     fileprivate func addToOpenPagesCollection() {
-        print("addToOpenPagesCollection")
         updateScreenshot()
         guard webView.url != nil else {
-            print("webView.url is nil. Returning.")
             return
         }
         let url = { () -> NSString? in
@@ -334,62 +320,50 @@ class BrowserViewController: UIViewController {
             }
         }
         
-        if realm.isInWriteTransaction == false {realm.beginWrite()}
-        
-        print("reference page url: \(pageFromPagesController?.url)")
+        if Database.shared.isInWriteTransaction == false {
+            Database.shared.beginWrite()
+        }
         //create or update OpenPage object
         if pageFromPagesController != nil {
             self.pageFromPagesController?.url = url()
             self.pageFromPagesController?.screen = screen
             self.pageFromPagesController?.host = host()
-            print("OpenPage object updated")
         }
             else {
             let openPage = OpenPage(url: url(), host: host(), screen: screen)
-            realm.add(openPage)
-            print("OpenPage object created")
+            Database.shared.add(openPage)
         }
         
-        if realm.isInWriteTransaction {
-            print("Ending realm transaction")
-            try! realm.commitWrite()}
+        if Database.shared.isInWriteTransaction {
+            try! Database.shared.commitWrite()}
     }
     
     fileprivate func manageHistory() {
         guard webView.url != nil else {
-            print("webView.url is nil. Returning.")
             return
         }
         let url = NSString(string: (webView.url?.absoluteString)!)
         let host = NSString(string: (webView.url!.host)!)
         let title = NSString(string: (webView.title!))
-        if realm.isInWriteTransaction == false {realm.beginWrite()}
+        if Database.shared.isInWriteTransaction == false {Database.shared.beginWrite()}
         
         // create history object
         var isInHistory = false
-        print("checking for relevant history objects")
-        for object in realm.objects(History.self) {
+        for object in Database.shared.objects(History.self) {
             if url == object.url {
-                print("history object found")
                 isInHistory = true
                 object.dateOfLastVisit = Date()
-                print("history object updated")
-                try! realm.commitWrite()
+                try! Database.shared.commitWrite()
                 break
             }
         }
         if isInHistory == false {
-            print("6")
             let obj = History(url: url, host: host, title: title)
-            realm.add(obj)
-            print("history object added")
-        } else {
-            print("history object is in history")
+            Database.shared.add(obj)
         }
         
-        if realm.isInWriteTransaction {
-            print("end manage history")
-            try! realm.commitWrite()}
+        if Database.shared.isInWriteTransaction {
+            try! Database.shared.commitWrite()}
     }
     
     
@@ -415,14 +389,12 @@ class BrowserViewController: UIViewController {
     }
     
     @IBAction fileprivate func goToMore(_ sender: Any) {
-        print("go to more")
         let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
         moreVC.delegate = self
         self.present(moreVC, animated: true, completion: {})
     }
     
     @IBAction fileprivate func cancelTypingNewURL(_ sender: Any) {
-        print("cancel typing new URL")
         urlInputTextField.resignFirstResponder()
         urlInputTextField.text = nil
         changeNavigationBarUI()
@@ -456,9 +428,7 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicator.stopAnimating()
-        print("webView didFinish navigation")
         if webView.url != nil {
-            print("webView.url == \(webView.url?.absoluteString)")
             urlInputTextField.placeholder = webView.url?.host
         } else {
             urlInputTextField.placeholder = "enter your website adress"
@@ -472,16 +442,10 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         })
     }
     
-    func webViewDidClose(_ webView: WKWebView) {
-        print("webViewDidClose")
-    }
-    
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        print("webViewWebContentProcessDidTerminate")
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        print("webView did commit")
         if (webView.url) != nil {
             urlInputTextField.placeholder = "loading \((webView.url!.host)!)"
             pageURL = webView.url?.absoluteString as NSString?
@@ -490,7 +454,6 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        print("WEBVIEW: decide polocy for")
         
         // tapped links from FI are opening in new controller
         if navigationAction.targetFrame == nil && webView.url!.absoluteString == "http://www.faceiraq.net/" {
@@ -560,11 +523,8 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         print("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
-        print("WEBVIEW: did fail navigation")
         urlInputTextField.text = nil
         urlInputTextField.placeholder = "loading"
-        print("error occured")
-        print(error)
         activityIndicator.stopAnimating()
     }
     
@@ -579,7 +539,6 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
-        print("WEBVIEW: runJavaScriptConfirmPanelWithMessage")
         let alertController = UIAlertController(title: "Information", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
             completionHandler(true)
@@ -631,47 +590,37 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
 
 extension BrowserViewController: MoreDelegate {
     func newPage() {
-        print("open new page")
         let newBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         self.navigationController?.pushViewController(newBrowser, animated: true)
     }
     
     func goToThemeColor() {
-        print("goToThemeColor")
         let themeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ThemeColorTableViewController") as! ThemeColorTableViewController
         self.navigationController?.pushViewController(themeVC, animated: true)
     }
     
     func goToMyBookmarks() {
-        print("goToMyBookmarks")
         let bookmarkVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyBookmarksTableViewController") as! MyBookmarksTableViewController
         bookmarkVC.remoteOpenURLDelegate = self
         self.navigationController?.pushViewController(bookmarkVC, animated: true)
     }
     
     func addBookmark() {
-        print("addBookmark")
         let url = NSString(string: (webView.url?.absoluteString)!)
         let host = NSString(string: (webView.url!.host)!)
         let title = NSString(string: (webView.title)!)
         let bookmark = Bookmark(url: url, host: host, title: title)
-        if realm.isInWriteTransaction == false {
-            realm.beginWrite()
-        }
-        realm.add(bookmark)
-        try! realm.commitWrite()
+        Database.shared.add(bookmark)
         showBookmarkAdded()
     }
     
     func goToHistory() {
-        print("goToHistory")
         let historyVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HistoryTableViewController") as! HistoryTableViewController
         historyVC.remoteOpenURLDelegate = self
         self.navigationController?.pushViewController(historyVC, animated: true)
     }
     
     func goToContactUs() {
-        print("go to contact us")
         let contactVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
         self.navigationController?.pushViewController(contactVC, animated: true)
     }
@@ -684,4 +633,3 @@ extension BrowserViewController: UIScrollViewDelegate, OpenURLDelegate {
         }
      }
 }
-

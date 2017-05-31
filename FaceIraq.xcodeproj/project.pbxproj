@@ -19,6 +19,7 @@
 		312661C41EA0D70D006408B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 312661C31EA0D70D006408B6 /* Assets.xcassets */; };
 		312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C51EA0D70D006408B6 /* LaunchScreen.storyboard */; };
 		312661D21EA0D70D006408B6 /* FaceIraqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661D11EA0D70D006408B6 /* FaceIraqTests.swift */; };
+		313E08131EDDB1E600D09993 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313E08121EDDB1E600D09993 /* Database.swift */; };
 		3162F03C1EA897BC006B0807 /* ThemeColorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */; };
 		3162F03E1EA898BC006B0807 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03D1EA898BC006B0807 /* Settings.swift */; };
 		3162F0401EA8A243006B0807 /* ColorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */; };
@@ -64,6 +65,7 @@
 		312661CD1EA0D70D006408B6 /* FaceIraqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceIraqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		312661D11EA0D70D006408B6 /* FaceIraqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIraqTests.swift; sourceTree = "<group>"; };
 		312661D31EA0D70D006408B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		313E08121EDDB1E600D09993 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FaceIraq.entitlements; sourceTree = "<group>"; };
 		3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeColorTableViewController.swift; sourceTree = "<group>"; };
 		3162F03D1EA898BC006B0807 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				3162F03D1EA898BC006B0807 /* Settings.swift */,
 				312661BC1EA0D70D006408B6 /* AppDelegate.swift */,
 				317FFD0C1ECDF78600ABB4A9 /* Networking.swift */,
+				313E08121EDDB1E600D09993 /* Database.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				3162F03E1EA898BC006B0807 /* Settings.swift in Sources */,
 				311F77E31EA601D600176130 /* OpenPage.swift in Sources */,
 				312661BD1EA0D70D006408B6 /* AppDelegate.swift in Sources */,
+				313E08131EDDB1E600D09993 /* Database.swift in Sources */,
 				31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */,
 				319355091EA76B1500CF0F20 /* Realm extensions.swift in Sources */,
 				31027F451EA5F8FA009C281F /* OpenPageCollectionViewCell.swift in Sources */,
@@ -634,7 +638,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = FaceIraq/FaceIraq.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -646,8 +650,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "679051c6-cb40-4e3b-93fe-9a9508a0d66d";
-				PROVISIONING_PROFILE_SPECIFIER = "FaceIraq-AdHoc";
+				PROVISIONING_PROFILE = "229901b2-bf85-4bae-ba23-a3b4c2f31611";
+				PROVISIONING_PROFILE_SPECIFIER = FaceIraqDevelopment;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -671,7 +675,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "679051c6-cb40-4e3b-93fe-9a9508a0d66d";
+				PROVISIONING_PROFILE = "bfcae67f-e054-45b7-978b-f6a542eb69f9";
 				PROVISIONING_PROFILE_SPECIFIER = "FaceIraq-AdHoc";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

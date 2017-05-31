@@ -15,12 +15,12 @@ class Networking {
     
     static func faceIraqServerRegister() {
         print("faceIraqServerRegister")
-        let dict = ["regID": AppSettings.deviceToken,
-                    "uuid": AppSettings.deviceUUID(),
+        let dict = ["regID": AppSettings.shared.deviceToken,
+                    "uuid": AppSettings.shared.deviceUUID,
                     "model":UIDevice.current.model,
                     "platform":UIDevice.current.systemName,
                     "version":UIDevice.current.systemVersion,
-                    "areNotificationsOn":AppSettings.areNotificationsOn ] as [String: Any]
+                    "areNotificationsOn":AppSettings.shared.areNotificationsOn ] as [String: Any]
         
         Alamofire.request(URL(string: "http://www.faceiraq.net/app/api.php?action=regUser")!,
                           method: .post,
@@ -39,8 +39,8 @@ class Networking {
                 return 0
             }
         }()
-        let params: [String:AnyObject] = ["is_active": isOnInt as AnyObject,
-                                          "uuid":AppSettings.deviceUUID() as AnyObject] as [String: AnyObject]
+        let params = ["is_active": isOnInt,
+                      "uuid": AppSettings.shared.deviceUUID] as [String: Any]
         Alamofire.request(URL(string: "http://www.faceiraq.net/app/api.php?action=pushSetting")!,
                           method: .post,
                           parameters: params)

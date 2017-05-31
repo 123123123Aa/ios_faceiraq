@@ -12,17 +12,14 @@
 import UIKit
 import RealmSwift
 import MGSwipeTableCell
-import Realm
 
 class HistoryTableViewController: UITableViewController {
 
     @IBOutlet weak var searchTextField: UITextField!
     var history: [[History]] = [[]]
-    let realm = try! Realm()
     var remoteOpenURLDelegate: OpenURLDelegate!
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("historyTVC loaded")
         computeHistory()
         refreshNavBar()
         searchTextField.delegate = self
@@ -49,7 +46,7 @@ class HistoryTableViewController: UITableViewController {
     }
     
     func computeHistory() {
-        let historyArray = realm.objects(History.self).sorted(byKeyPath: "dateOfLastVisit", ascending: false).toArray(ofType: History.self)
+        let historyArray = Database.shared.objects(History.self).sorted(byKeyPath: "dateOfLastVisit", ascending: false).toArray(ofType: History.self)
         
         var date1 = Date()
         var historySection = 0
@@ -66,15 +63,16 @@ class HistoryTableViewController: UITableViewController {
     }
     
     func refreshNavBar() {
-        let bar = self.navigationController?.navigationBar
-        bar?.barTintColor = AppSettings.currentThemeColor
-        bar?.tintColor = AppSettings.currentTintColor
-        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
-        bar?.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
+        if let bar = self.navigationController?.navigationBar {
+        bar.barTintColor = AppSettings.shared.currentThemeColor
+        bar.tintColor = AppSettings.shared.currentTintColor
+        bar.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.shared.currentTintColor]
+        bar.backItem?.backBarButtonItem?.tintColor = AppSettings.shared.currentTintColor
         self.navigationItem.backBarButtonItem?.title = ""
-        bar?.setNeedsLayout()
-        bar?.layoutIfNeeded()
-        bar?.setNeedsDisplay()
+        bar.setNeedsLayout()
+        bar.layoutIfNeeded()
+        bar.setNeedsDisplay()
+        }
     }
 
     // MARK: - Table view data source
@@ -111,13 +109,12 @@ class HistoryTableViewController: UITableViewController {
                 }
                 return nil
             }()
-            if self.realm.isInWriteTransaction == false {
-                self.realm.beginWrite()}
-            self.realm.delete(historyObject)
-            try! self.realm.commitWrite()
-            self.realm.refresh()
+            if Database.shared.isInWriteTransaction == false {
+                Database.shared.beginWrite()}
+            Database.shared.delete(historyObject)
+            try! Database.shared.commitWrite()
+            Database.shared.refresh()
             self.computeHistory()
-            
             
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexToRemove!], with: .automatic)
@@ -131,16 +128,9 @@ class HistoryTableViewController: UITableViewController {
         
         return cell
     }
-    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        print("did end editing row: \(indexPath?.row)")
-    }
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        //
-    }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! HistoryTableViwCell
-        print("didSelect row")
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
         vc.remoteOpenURL(stringURL: cell.url.text)
         navigationController?.pushViewController(vc, animated: true)
@@ -172,19 +162,15 @@ class HistoryTableViewController: UITableViewController {
 extension HistoryTableViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("text field should return")
         textField.endEditing(true)
         return true
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("textFieldDidEndEditin")
         computeHistory()
         tableView.reloadData()
         guard textField.text != nil && textField.text != "" && textField.text != " " else {
-            print("no relevant textField content")
             return
         }
-        print("relevant textField content")
         let searchedText = self.searchTextField.text!
         
         // search for new history objects

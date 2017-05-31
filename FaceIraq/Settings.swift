@@ -12,30 +12,39 @@ import RealmSwift
 import Realm
 
 class AppSettings {
-    static let faceIraqAdress = "http://www.faceiraq.net/"
-    static var currentThemeColor = UIColor.AppColors.appBeige
-    static var currentTintColor: UIColor {
+    let faceIraqAdress = "http://www.faceiraq.net/"
+    let deviceUUID = UIDevice.current.identifierForVendor!.uuidString
+    var areNotificationsOn = UserDefaults.standard.bool(forKey: "areNotificationsOn")
+    var currentThemeColor = UIColor.AppColors.appBeige
+    var currentTintColor: UIColor {
         if currentThemeColor == UIColor.AppColors.appBeige {return UIColor.black}
         else {return UIColor.white}
     }
     
-    static func faceIraqAlreadyOpened()->OpenPage? {
-        let array = try! Realm().objects(OpenPage.self).toArray(ofType:OpenPage.self)
+    class var shared: AppSettings {
+        struct Singleton {
+            static let instance = AppSettings()
+        }
+        return Singleton.instance
+    }
+    
+    func faceIraqAlreadyOpened()->OpenPage? {
+        let array = Database.shared.objects(OpenPage.self).toArray(ofType:OpenPage.self)
         for item in array {
-            if item.url == AppSettings.faceIraqAdress as NSString {
+            if item.url == self.faceIraqAdress as NSString {
                 return item
             }
         }
         return nil
     }
     
-    static func loadTheme() {
+    func loadTheme() {
         if let color = UserDefaults.standard.color(forKey: "themeColor") {
-            AppSettings.currentThemeColor = color
+            self.currentThemeColor = color
         }
     }
     
-    static func setThemeColor(to color: UIColor) {
+    func setThemeColor(to color: UIColor) {
         UserDefaults.standard.set(color, forKey: "themeColor")
         currentThemeColor = color
     }
@@ -50,7 +59,7 @@ class AppSettings {
     // jaka jest twoja ulubiona książka dla dzieci : "Winnie-the-Pooh"
     // W jakim mieście poznali się Twoi rodzice : "Rome"
     
-    static var deviceToken: String {
+    var deviceToken: String {
         get {
             if let token = UserDefaults.standard.string(forKey: "token") {
                 return token
@@ -62,18 +71,8 @@ class AppSettings {
         }
     }
     
-    static let deviceUUID = {()->String in
-        return UIDevice.current.identifierForVendor!.uuidString
-    }
-    
-    static func setNotifications(isOn: Bool) {
-        print("setNotifications: \(isOn)")
+    func setNotifications(isOn: Bool) {
         UserDefaults.standard.set(isOn, forKey: "areNotificationsOn")
         Networking.updateNotificationSettings()
     }
-    
-    static var areNotificationsOn: Bool = {() -> Bool in
-        print("areNotificationsOn")
-        return UserDefaults.standard.bool(forKey: "areNotificationsOn")
-    }()
 }

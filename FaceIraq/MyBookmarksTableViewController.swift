@@ -22,8 +22,6 @@ class MyBookmarksTableViewController: UITableViewController {
     var bookmarks: [Bookmark] = []
     var filterString: String?
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("bookmarksVC loaded")
@@ -50,37 +48,33 @@ class MyBookmarksTableViewController: UITableViewController {
     }
     
     func computeBookmarks() {
-        let realm = try! Realm()
         guard filterString == nil || filterString == "" else { return }
-        bookmarks = realm.objects(Bookmark.self).toArray(ofType: Bookmark.self)
+        bookmarks = Database.shared.objects(Bookmark.self).toArray(ofType: Bookmark.self)
     }
     
     func refreshNavBar() {
-        let bar = self.navigationController?.navigationBar
-        bar?.isHidden = false
-        bar?.barTintColor = AppSettings.currentThemeColor
-        bar?.tintColor = AppSettings.currentTintColor
-        bar?.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.currentTintColor]
-        bar?.backItem?.backBarButtonItem?.tintColor = AppSettings.currentTintColor
-        self.navigationItem.backBarButtonItem?.title = ""
-        bar?.setNeedsLayout()
-        bar?.layoutIfNeeded()
-        bar?.setNeedsDisplay()
+        if let bar = self.navigationController?.navigationBar {
+            bar.isHidden = false
+            bar.barTintColor = AppSettings.shared.currentThemeColor
+            bar.tintColor = AppSettings.shared.currentTintColor
+            bar.titleTextAttributes = [ NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),  NSForegroundColorAttributeName: AppSettings.shared.currentTintColor]
+            bar.backItem?.backBarButtonItem?.tintColor = AppSettings.shared.currentTintColor
+            self.navigationItem.backBarButtonItem?.title = ""
+            bar.setNeedsLayout()
+            bar.layoutIfNeeded()
+            bar.setNeedsDisplay()
+        }
     }
-    
-    
-    
-    
     
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        //TODO: – #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        //TODO: –#warning Incomplete implementation, return the number of rows
         return bookmarks.count
     }
 
@@ -98,9 +92,6 @@ class MyBookmarksTableViewController: UITableViewController {
         
         let deleteButton = MGSwipeButton(title: "Delete", backgroundColor: .red) {
             (sender: MGSwipeTableCell!) -> Bool in
-            print("Convenience callback for swipe buttons!")
-            let realm = try! Realm()
-            
             let indexToRemove: IndexPath? = {
                 for obj in self.bookmarks {
                     if obj == theBookmark {
@@ -109,12 +100,12 @@ class MyBookmarksTableViewController: UITableViewController {
                 }
                 return nil
             }()
-            if realm.isInWriteTransaction == false {
-                realm.beginWrite()}
+            if Database.shared.isInWriteTransaction == false {
+                Database.shared.beginWrite()}
             
-            realm.delete(theBookmark)
-            try! realm.commitWrite()
-            realm.refresh()
+            Database.shared.delete(theBookmark)
+            try! Database.shared.commitWrite()
+            Database.shared.refresh()
             self.computeBookmarks()
             
             tableView.beginUpdates()
@@ -142,21 +133,15 @@ class MyBookmarksTableViewController: UITableViewController {
 extension MyBookmarksTableViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("text field should return")
         textField.endEditing(true)
         return true
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("textFieldDidEndEditin")
-    
         computeBookmarks()
         tableView.reloadData()
-        print(textField.text)
         guard textField.text != nil && textField.text != "" && textField.text != " " else {
-            print("no relevant textField content")
             return
         }
-        print("relevant textField content")
         let searchedText = self.searchTextField.text!
         var newBookmars: [Bookmark] = []
         for object in bookmarks {

@@ -9,6 +9,7 @@
 import RealmSwift
 
 class OpenPage: Object {
+    
     dynamic var dateOfLastVisit: Date!
     dynamic var url: NSString?
     dynamic var screen: NSData?

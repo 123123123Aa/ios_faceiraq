@@ -24,22 +24,13 @@ class OpenPagesViewController: UIViewController {
     
     @IBOutlet weak var pagesCounter: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    var realm: Realm?
     var closePageDelegate: OpenPagesRemovalDelegate!
     var collectionLayout: HFCardCollectionViewLayout!
     var remoteOperURLDelegate: OpenURLDelegate!
-    var pages: [OpenPage] =  [] {
-        didSet {
-            for page in pages {
-                print((page.host as? String) ?? "no page.host")
-                print(page.url as? String ?? "no page.url")
-            }
-        }
-    }
+    var pages: [OpenPage] =  []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Open Pages VC loaded")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isUserInteractionEnabled = true
@@ -47,15 +38,13 @@ class OpenPagesViewController: UIViewController {
         collectionLayout = collectionView.collectionViewLayout as! HFCardCollectionViewLayout
         collectionView.bounces = true
         
-        navigationController?.navigationBar.backgroundColor = AppSettings.currentThemeColor
+        navigationController?.navigationBar.backgroundColor = AppSettings.shared.currentThemeColor
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("OpenPagesVC will appear")
         super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = true
-        realm = try! Realm()
         orderPages()
         countPages()
         collectionView.reloadData()
@@ -68,9 +57,8 @@ class OpenPagesViewController: UIViewController {
     }
     
     func orderPages() {
-        let newOrder = (realm?.objects(OpenPage.self).sorted(byKeyPath: "dateOfLastVisit", ascending: true).toArray(ofType:OpenPage.self))!
+        let newOrder = (Database.shared.objects(OpenPage.self).sorted(byKeyPath: "dateOfLastVisit", ascending: true).toArray(ofType:OpenPage.self))
         pages = newOrder
-        print("pages object = \(pages.count)")
     }
     
     func countPages() {
@@ -79,10 +67,7 @@ class OpenPagesViewController: UIViewController {
     
     @IBAction func addNewPage(_ sender: Any) {
         let newPage = OpenPage(url: nil, host: nil, screen: nil)
-        if self.realm?.isInWriteTransaction == false {
-            self.realm?.beginWrite()}
-        self.realm?.add(newPage)
-        try! self.realm?.commitWrite()
+        Database.shared.save(newPage)
         self.orderPages()
         self.countPages()
         
@@ -116,7 +101,6 @@ class OpenPagesViewController: UIViewController {
     }
     
     func goToCurrentPage() {
-        print("openPages.goToCurrentPage")
         self.navigationController?.popToRootViewController(animated: true)
     }
     
@@ -125,7 +109,6 @@ class OpenPagesViewController: UIViewController {
             collectionView.reloadData()
             collectionView.reloadInputViews()
             collectionView.collectionViewLayout.finalizeCollectionViewUpdates()
-            print("closePage return")
             return
         }
         var indexPathRow: Int?
@@ -135,11 +118,7 @@ class OpenPagesViewController: UIViewController {
             }
         }
         
-        if realm?.isInWriteTransaction == false {
-            realm?.beginWrite()}
-        realm?.delete(selector.page)
-        try! realm?.commitWrite()
-        realm?.refresh()
+        Database.shared.remove(selector.page)
         
         orderPages()
         countPages()
@@ -187,8 +166,8 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "openPage", for: indexPath) as! OpenPageCollectionViewCell
         
         cell.backgroundColor = .clear
-        cell.view.backgroundColor = AppSettings.currentThemeColor
-        cell.pageUrl.textColor = AppSettings.currentTintColor
+        cell.view.backgroundColor = AppSettings.shared.currentThemeColor
+        cell.pageUrl.textColor = AppSettings.shared.currentTintColor
         cell.view.layer.cornerRadius = 5.0
         cell.view.layer.borderWidth = 1.0
         cell.view.layer.borderColor = UIColor.clear.cgColor
@@ -222,11 +201,11 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.pageUrl.text = "New Page"
         }
         
-        let closeButton = CloseButton(page: page)
+        let closeButton = CloseButton(passing: page)
         closeButton.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
         closeButton.backgroundColor = .clear
         closeButton.setImage({() -> UIImage in
-                        if AppSettings.currentTintColor != .white { return UIImage(named: "openPagesClose")!
+                        if AppSettings.shared.currentTintColor != .white { return UIImage(named: "openPagesClose")!
                         } else { return UIImage(named: "openPagesCloseWhite")!
                         }}(), for: .normal)
         closeButton.imageEdgeInsets = UIEdgeInsets(top: -3, left: -10, bottom: 5, right: 7)
@@ -260,17 +239,14 @@ extension OpenPagesViewController: MoreDelegate {
     
     func addBookmark() {
         // empty, because OpenPagesVC doesn't support addBookmark()
-        print("addBookmark")
     }
     
     func goToHistory() {
-        print("goToHistory")
         let historyVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HistoryTableViewController") as! HistoryTableViewController
         self.navigationController?.pushViewController(historyVC, animated: true)
     }
     
     func goToContactUs() {
-        print("go to contact us")
         let contactVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
         self.navigationController?.pushViewController(contactVC, animated: true)
     }
@@ -278,7 +254,7 @@ extension OpenPagesViewController: MoreDelegate {
 
 class CloseButton: UIButton {
     var page: OpenPage!
-   required init(page: OpenPage) {
+   required init(passing page: OpenPage) {
         self.page = page
         super.init(frame: .zero)
     }
@@ -287,6 +263,3 @@ class CloseButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
-

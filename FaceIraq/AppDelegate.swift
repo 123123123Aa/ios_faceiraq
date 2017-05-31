@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         registerForPushNotifications(application: application)
-        AppSettings.loadTheme()
+        AppSettings.shared.loadTheme()
         Fabric.with([Crashlytics.self])
         
         // check if app was launched from notification
@@ -27,10 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let title = aps["title"] as? String,
                 let message = aps["message"] as? String,
                 let url = aps["url"] as? String else {
-                    
                     return true
             }
-            print(aps)
+            let _ = ["title"    : title,
+                     "message"  : message,
+                     "url"      : url]
+            
             let browserVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
             let navController = UINavigationController(rootViewController: browserVC)
             browserVC.remoteOpenURL(stringURL: aps["url"]?.stringValue)
@@ -42,16 +44,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // If in OpenPages is FaceIraq page then open this page insteed of creating new one.
-        if let openedFaceIraqPage = AppSettings.faceIraqAlreadyOpened() {
+        if let openedFaceIraqPage = AppSettings.shared.faceIraqAlreadyOpened() {
             let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
             let navController = UINavigationController(rootViewController: browserVC)
             browserVC.pageFromPagesController = openedFaceIraqPage
-            browserVC.remoteOpenURL(stringURL: openedFaceIraqPage.url as! String)
+            browserVC.remoteOpenURL(stringURL: openedFaceIraqPage.url as? String)
             self.window = UIWindow(frame: UIScreen.main.bounds)
             self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()
 
-            
             return true
         }
         
@@ -86,8 +87,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        print("Did register notificationSettings")
-        //if UserDefaults.standard.bool(forKey: "areNotificationsOn") {
         if notificationSettings.types != [] && notificationSettings.types != .none {
             application.registerForRemoteNotifications()
         }
@@ -95,14 +94,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-        print("Device Token:", tokenString)
-        AppSettings.deviceToken = tokenString
+        AppSettings.shared.deviceToken = tokenString
         Networking.faceIraqServerRegister()
         Networking.updateNotificationSettings()
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("Push Notification register error: \(error)")
     }
 
     // executed when app is started by triggering notfication
