@@ -19,7 +19,7 @@ class ContactUsViewController: UIViewController {
     @IBOutlet weak var imageFirst: UIImageView!
     @IBOutlet weak var imageSecond: UIImageView!
     @IBOutlet weak var imageThird: UIImageView!
-    
+    @IBOutlet weak var addPhotoButton: UIButton!
     
     let picker = UIImagePickerController()
     override func viewDidLoad() {
@@ -27,7 +27,7 @@ class ContactUsViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = false
         configureUI()
         refreshNavBar()
-        
+        addPhotoButton.isHidden = true
         
         picker.delegate = self
         messageTextView.delegate = self
@@ -129,50 +129,46 @@ class ContactUsViewController: UIViewController {
     }
     
     func sendMessage() {
-        for view in containerView.subviews {
-            view.resignFirstResponder()
-        }
-        let title = subjectTextField.text ?? ""
-        let email:String = {()->String in
-            if emailTextField.text != nil && emailTextField.text != "" {return "Prefered contact e-mail: \(emailTextField.text!)"}
-            else {return ""}
-        }()
-        let message = {()->String in
-            guard messageTextView.text != "Message" else {return ""}
-            return messageTextView.text
-        }()
-        let messageToSend = {()->String in
-            if email == "" {return message}
-            else {return "\(email) \n  message: \n \(message)"}
-        }
+        containerView.subviews.map({($0 as UIView).resignFirstResponder()})
+        
+        guard isValidEmail(emailTextField.text) else {
+            print("invalid email")
+            return }
+        guard let text = messageTextView.text,
+            let title = subjectTextField.text else {
+            print("not all texfields are filled")
+            return }
+        let email = emailTextField.text
         let image1 = imageFirst.image
         let image2 = imageSecond.image
         let image3 = imageThird.image
-        if MFMailComposeViewController.canSendMail() {
-            let mail = MFMailComposeViewController()
-            mail.mailComposeDelegate = self
-            mail.navigationBar.barTintColor = AppSettings.shared.currentTintColor
-            mail.navigationBar.backgroundColor = AppSettings.shared.currentThemeColor
-            mail.setSubject(title)
-            mail.setToRecipients(["Info@faceiraq.com"])
-            mail.setMessageBody(messageToSend(), isHTML: true)
-            if image1 != nil {
-                mail.addAttachmentData(UIImagePNGRepresentation(image1!)!, mimeType: "image/png", fileName: "attachment1")
-                if image2 != nil {
-                    mail.addAttachmentData(UIImagePNGRepresentation(image2!)!, mimeType: "image/png", fileName: "attachment2")
-                    if image3 != nil {
-                        mail.addAttachmentData(UIImagePNGRepresentation(image3!)!, mimeType: "image/png", fileName: "attachment3")
-                    }
-                }
+        
+        let message = Message.init(title, text, email, [image1, image2, image3])
+        
+        Networking.sendMessage(message) { success in
+            switch success {
+            case true:
+                self.showSimpleAlert(message: "Message sent")
+            case false:
+                self.showSimpleAlert(message: "Message was not sent")
             }
-            self.navigationController?.present(mail, animated: true, completion: {})
         }
-        self.dismiss(animated: true, completion: nil)
     }
     
     func cancelSendingMessage() {
         self.dismiss(animated: false, completion: nil)
         navigationController?.popViewController(animated: true)
+    }
+    
+    func isValidEmail(_ testStr:String?) -> Bool {
+        if let text = testStr {
+            guard text != "" else { return true }
+            let emailRegEx = "^(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?(?:(?:(?:[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+(?:\\.[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+)*)|(?:\"(?:(?:(?:(?: )*(?:(?:[!#-Z^-~]|\\[|\\])|(?:\\\\(?:\\t|[ -~]))))+(?: )*)|(?: )+)\"))(?:@)(?:(?:(?:[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)(?:\\.[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)*)|(?:\\[(?:(?:(?:(?:(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))\\.){3}(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))))|(?:(?:(?: )*[!-Z^-~])*(?: )*)|(?:[Vv][0-9A-Fa-f]+\\.[-A-Za-z0-9._~!$&'()*+,;=:]+))\\])))(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?$"
+            let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+            let result = emailTest.evaluate(with: text)
+            return result
+        }
+        return false
     }
     
     func refreshNavBar() {
@@ -208,9 +204,9 @@ extension ContactUsViewController: UITextFieldDelegate {
         if textField.text == "" {
             switch textField {
             case emailTextField:
-                textField.text = "Email"
+                textField.placeholder = "Email"
             case subjectTextField:
-                textField.text = "Subject"
+                textField.placeholder = "Subject"
             default:
                 break
             }

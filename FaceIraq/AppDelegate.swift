@@ -9,6 +9,10 @@
 import UIKit
 import Fabric
 import Crashlytics
+//import UserNotifications
+//import Firebase
+//import FirebaseMessaging
+//import FirebaseInstanceID
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,31 +24,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppSettings.shared.loadTheme()
         Fabric.with([Crashlytics.self])
         
-        // check if app was launched from notification
-        if let notification = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [String: AnyObject] {
-            guard let
-                aps = notification["aps"] as? [String: AnyObject],
-                let title = aps["title"] as? String,
-                let message = aps["message"] as? String,
-                let url = aps["url"] as? String else {
-                    return true
-            }
-            let _ = ["title"    : title,
-                     "message"  : message,
-                     "url"      : url]
-            
-            let browserVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
-            let navController = UINavigationController(rootViewController: browserVC)
-            browserVC.remoteOpenURL(stringURL: aps["url"]?.stringValue)
-            self.window = UIWindow(frame: UIScreen.main.bounds)
-            self.window?.rootViewController = navController
-            self.window?.makeKeyAndVisible()
-            
-            return true
+        // unable due to lack of google-info.pils file witch is reqired
+        // Code that lets notifications to be recieved.
+        /*if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+            // For iOS 10 data message (sent via FCM
+            FIRMessaging.messaging().remoteMessageDelegate = self
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
         }
         
+        application.registerForRemoteNotifications()
+        
+        FIRApp.configure()
+        */
+        
         // If in OpenPages is FaceIraq page then open this page insteed of creating new one.
-        if let openedFaceIraqPage = AppSettings.shared.faceIraqAlreadyOpened() {
+        /*if let openedFaceIraqPage = AppSettings.shared.faceIraqAlreadyOpened() {
             let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
             let navController = UINavigationController(rootViewController: browserVC)
             browserVC.pageFromPagesController = openedFaceIraqPage
@@ -54,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.makeKeyAndVisible()
 
             return true
-        }
+        }*/
         
         return true
     }
@@ -86,11 +89,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerUserNotificationSettings(notificationSettings)
     }
     
-    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        if notificationSettings.types != [] && notificationSettings.types != .none {
-            application.registerForRemoteNotifications()
-        }
-    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
@@ -101,13 +99,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
     }
-
-    // executed when app is started by triggering notfication
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+    
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         let aps = userInfo as! [String: AnyObject]
         print(userInfo)
         print(aps)
     }
-
 }
-
+/*
+extension AppDelegate: UNUserNotificationCenterDelegate, FIRMessagingDelegate {
+    
+    func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+        print(remoteMessage.appData)
+    }
+    
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        //TODO: –  feature to implement
+    }
+    
+}
+*/

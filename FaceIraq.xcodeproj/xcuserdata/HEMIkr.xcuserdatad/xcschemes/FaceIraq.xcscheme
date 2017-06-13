@@ -38,6 +38,16 @@
                ReferencedContainer = "container:FaceIraq.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "31F7213B1EE04ADD00D4F5E4"
+               BuildableName = "FaceIraqUnitTests.xctest"
+               BlueprintName = "FaceIraqUnitTests"
+               ReferencedContainer = "container:FaceIraq.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

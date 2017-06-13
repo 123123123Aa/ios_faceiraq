@@ -93,7 +93,6 @@ class OpenPagesViewController: UIViewController {
     
     @IBAction func goToMore(_ sender: Any) {
         // opens popUpVC and set .openPagesVCIsParet to true, due to hide not needed buttons.
-        print("go to more")
         let moreVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MoreViewController") as! MoreViewController
         moreVC.delegate = self
         moreVC.openPagesVCIsParent = true

@@ -18,7 +18,7 @@
 		312661C21EA0D70D006408B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C01EA0D70D006408B6 /* Main.storyboard */; };
 		312661C41EA0D70D006408B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 312661C31EA0D70D006408B6 /* Assets.xcassets */; };
 		312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C51EA0D70D006408B6 /* LaunchScreen.storyboard */; };
-		312661D21EA0D70D006408B6 /* FaceIraqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312661D11EA0D70D006408B6 /* FaceIraqTests.swift */; };
+		312922251EF0222800820651 /* UIViewControllerExntensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312922241EF0222800820651 /* UIViewControllerExntensions.swift */; };
 		313E08131EDDB1E600D09993 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313E08121EDDB1E600D09993 /* Database.swift */; };
 		3162F03C1EA897BC006B0807 /* ThemeColorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */; };
 		3162F03E1EA898BC006B0807 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03D1EA898BC006B0807 /* Settings.swift */; };
@@ -35,11 +35,13 @@
 		31D166E11EAA318F0059E9AB /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166E01EAA318F0059E9AB /* Bookmark.swift */; };
 		31D166E31EAA44410059E9AB /* BookmarkTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */; };
 		31D166E51EAA541F0059E9AB /* FavIcon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31D166E41EAA541F0059E9AB /* FavIcon.framework */; };
+		31F721371EDF170A00D4F5E4 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F721361EDF170A00D4F5E4 /* Message.swift */; };
+		31F7214D1EE1961A00D4F5E4 /* FaceIraqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F7214C1EE1961A00D4F5E4 /* FaceIraqTests.swift */; };
 		83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		312661CE1EA0D70D006408B6 /* PBXContainerItemProxy */ = {
+		31F7214F1EE1961A00D4F5E4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 312661B11EA0D70D006408B6 /* Project object */;
 			proxyType = 1;
@@ -62,9 +64,7 @@
 		312661C31EA0D70D006408B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		312661C61EA0D70D006408B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		312661C81EA0D70D006408B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		312661CD1EA0D70D006408B6 /* FaceIraqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceIraqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		312661D11EA0D70D006408B6 /* FaceIraqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIraqTests.swift; sourceTree = "<group>"; };
-		312661D31EA0D70D006408B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		312922241EF0222800820651 /* UIViewControllerExntensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExntensions.swift; sourceTree = "<group>"; };
 		313E08121EDDB1E600D09993 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FaceIraq.entitlements; sourceTree = "<group>"; };
 		3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeColorTableViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +82,10 @@
 		31D166E01EAA318F0059E9AB /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableCell.swift; sourceTree = "<group>"; };
 		31D166E41EAA541F0059E9AB /* FavIcon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FavIcon.framework; path = Carthage/Build/iOS/FavIcon.framework; sourceTree = "<group>"; };
+		31F721361EDF170A00D4F5E4 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		31F7214A1EE1961A00D4F5E4 /* FaceIraqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceIraqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		31F7214C1EE1961A00D4F5E4 /* FaceIraqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIraqTests.swift; sourceTree = "<group>"; };
+		31F7214E1EE1961A00D4F5E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceIraq.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.release.xcconfig"; sourceTree = "<group>"; };
 		9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,7 +103,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		312661CA1EA0D70D006408B6 /* Frameworks */ = {
+		31F721471EE1961A00D4F5E4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,6 +119,7 @@
 				31027F3E1EA5538C009C281F /* UIKit extensions.swift */,
 				319355081EA76B1500CF0F20 /* Realm extensions.swift */,
 				3162F0431EA8D426006B0807 /* services.swift */,
+				312922241EF0222800820651 /* UIViewControllerExntensions.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -123,7 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				312661BB1EA0D70D006408B6 /* FaceIraq */,
-				312661D01EA0D70D006408B6 /* FaceIraqTests */,
+				31F7214B1EE1961A00D4F5E4 /* FaceIraqTests */,
 				312661BA1EA0D70D006408B6 /* Products */,
 				7F0CE2F2DAD924E400CD7D4B /* Pods */,
 				9AC1850A0AC3179276CE63FA /* Frameworks */,
@@ -134,7 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				312661B91EA0D70D006408B6 /* FaceIraq.app */,
-				312661CD1EA0D70D006408B6 /* FaceIraqTests.xctest */,
+				31F7214A1EE1961A00D4F5E4 /* FaceIraqTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -144,7 +149,6 @@
 			children = (
 				3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */,
 				317FFD0E1ECDFA1600ABB4A9 /* Common */,
-				31027F3D1EA55366009C281F /* extensions */,
 				312661DE1EA0E078006408B6 /* View */,
 				312661DC1EA0E066006408B6 /* ViewController */,
 				312661DD1EA0E072006408B6 /* Model */,
@@ -152,15 +156,6 @@
 				312661C81EA0D70D006408B6 /* Info.plist */,
 			);
 			path = FaceIraq;
-			sourceTree = "<group>";
-		};
-		312661D01EA0D70D006408B6 /* FaceIraqTests */ = {
-			isa = PBXGroup;
-			children = (
-				312661D11EA0D70D006408B6 /* FaceIraqTests.swift */,
-				312661D31EA0D70D006408B6 /* Info.plist */,
-			);
-			path = FaceIraqTests;
 			sourceTree = "<group>";
 		};
 		312661DC1EA0E066006408B6 /* ViewController */ = {
@@ -183,6 +178,7 @@
 				311F77E21EA601D600176130 /* OpenPage.swift */,
 				3193550C1EA785FA00CF0F20 /* history.swift */,
 				31D166E01EAA318F0059E9AB /* Bookmark.swift */,
+				31F721361EDF170A00D4F5E4 /* Message.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -259,12 +255,22 @@
 		317FFD0E1ECDFA1600ABB4A9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				31027F3D1EA55366009C281F /* extensions */,
 				3162F03D1EA898BC006B0807 /* Settings.swift */,
 				312661BC1EA0D70D006408B6 /* AppDelegate.swift */,
 				317FFD0C1ECDF78600ABB4A9 /* Networking.swift */,
 				313E08121EDDB1E600D09993 /* Database.swift */,
 			);
 			name = Common;
+			sourceTree = "<group>";
+		};
+		31F7214B1EE1961A00D4F5E4 /* FaceIraqTests */ = {
+			isa = PBXGroup;
+			children = (
+				31F7214C1EE1961A00D4F5E4 /* FaceIraqTests.swift */,
+				31F7214E1EE1961A00D4F5E4 /* Info.plist */,
+			);
+			path = FaceIraqTests;
 			sourceTree = "<group>";
 		};
 		7F0CE2F2DAD924E400CD7D4B /* Pods */ = {
@@ -312,22 +318,22 @@
 			productReference = 312661B91EA0D70D006408B6 /* FaceIraq.app */;
 			productType = "com.apple.product-type.application";
 		};
-		312661CC1EA0D70D006408B6 /* FaceIraqTests */ = {
+		31F721491EE1961A00D4F5E4 /* FaceIraqTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 312661D91EA0D70D006408B6 /* Build configuration list for PBXNativeTarget "FaceIraqTests" */;
+			buildConfigurationList = 31F721511EE1961A00D4F5E4 /* Build configuration list for PBXNativeTarget "FaceIraqTests" */;
 			buildPhases = (
-				312661C91EA0D70D006408B6 /* Sources */,
-				312661CA1EA0D70D006408B6 /* Frameworks */,
-				312661CB1EA0D70D006408B6 /* Resources */,
+				31F721461EE1961A00D4F5E4 /* Sources */,
+				31F721471EE1961A00D4F5E4 /* Frameworks */,
+				31F721481EE1961A00D4F5E4 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				312661CF1EA0D70D006408B6 /* PBXTargetDependency */,
+				31F721501EE1961A00D4F5E4 /* PBXTargetDependency */,
 			);
 			name = FaceIraqTests;
 			productName = FaceIraqTests;
-			productReference = 312661CD1EA0D70D006408B6 /* FaceIraqTests.xctest */;
+			productReference = 31F7214A1EE1961A00D4F5E4 /* FaceIraqTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -350,9 +356,9 @@
 							};
 						};
 					};
-					312661CC1EA0D70D006408B6 = {
+					31F721491EE1961A00D4F5E4 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = CG26HZ2K77;
+						DevelopmentTeam = J5AJCLAX66;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 312661B81EA0D70D006408B6;
 					};
@@ -372,7 +378,7 @@
 			projectRoot = "";
 			targets = (
 				312661B81EA0D70D006408B6 /* FaceIraq */,
-				312661CC1EA0D70D006408B6 /* FaceIraqTests */,
+				31F721491EE1961A00D4F5E4 /* FaceIraqTests */,
 			);
 		};
 /* End PBXProject section */
@@ -388,7 +394,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		312661CB1EA0D70D006408B6 /* Resources */ = {
+		31F721481EE1961A00D4F5E4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -488,6 +494,7 @@
 				3162F0401EA8A243006B0807 /* ColorTableViewCell.swift in Sources */,
 				3162F03C1EA897BC006B0807 /* ThemeColorTableViewController.swift in Sources */,
 				31D166E31EAA44410059E9AB /* BookmarkTableCell.swift in Sources */,
+				312922251EF0222800820651 /* UIViewControllerExntensions.swift in Sources */,
 				319355111EA7890500CF0F20 /* MoreViewController.swift in Sources */,
 				31D166DF1EAA2EB80059E9AB /* HistoryTableViwCell.swift in Sources */,
 				317FFD0D1ECDF78600ABB4A9 /* Networking.swift in Sources */,
@@ -496,6 +503,7 @@
 				3162F03E1EA898BC006B0807 /* Settings.swift in Sources */,
 				311F77E31EA601D600176130 /* OpenPage.swift in Sources */,
 				312661BD1EA0D70D006408B6 /* AppDelegate.swift in Sources */,
+				31F721371EDF170A00D4F5E4 /* Message.swift in Sources */,
 				313E08131EDDB1E600D09993 /* Database.swift in Sources */,
 				31027F3F1EA5538C009C281F /* UIKit extensions.swift in Sources */,
 				319355091EA76B1500CF0F20 /* Realm extensions.swift in Sources */,
@@ -503,21 +511,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		312661C91EA0D70D006408B6 /* Sources */ = {
+		31F721461EE1961A00D4F5E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				312661D21EA0D70D006408B6 /* FaceIraqTests.swift in Sources */,
+				31F7214D1EE1961A00D4F5E4 /* FaceIraqTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		312661CF1EA0D70D006408B6 /* PBXTargetDependency */ = {
+		31F721501EE1961A00D4F5E4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 312661B81EA0D70D006408B6 /* FaceIraq */;
-			targetProxy = 312661CE1EA0D70D006408B6 /* PBXContainerItemProxy */;
+			targetProxy = 31F7214F1EE1961A00D4F5E4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -682,30 +690,30 @@
 			};
 			name = Release;
 		};
-		312661DA1EA0D70D006408B6 /* Debug */ = {
+		31F721521EE1961A00D4F5E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = CG26HZ2K77;
+				DEVELOPMENT_TEAM = J5AJCLAX66;
 				INFOPLIST_FILE = FaceIraqTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraqTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraqTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FaceIraq.app/FaceIraq";
 			};
 			name = Debug;
 		};
-		312661DB1EA0D70D006408B6 /* Release */ = {
+		31F721531EE1961A00D4F5E4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = CG26HZ2K77;
+				DEVELOPMENT_TEAM = J5AJCLAX66;
 				INFOPLIST_FILE = FaceIraqTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Ready4S.FaceIraqTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraqTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FaceIraq.app/FaceIraq";
@@ -733,11 +741,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		312661D91EA0D70D006408B6 /* Build configuration list for PBXNativeTarget "FaceIraqTests" */ = {
+		31F721511EE1961A00D4F5E4 /* Build configuration list for PBXNativeTarget "FaceIraqTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				312661DA1EA0D70D006408B6 /* Debug */,
-				312661DB1EA0D70D006408B6 /* Release */,
+				31F721521EE1961A00D4F5E4 /* Debug */,
+				31F721531EE1961A00D4F5E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

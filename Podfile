@@ -8,4 +8,6 @@ pod 'MGSwipeTableCell'
 pod 'Alamofire', '~> 4.4'
 pod 'AlamofireImage', '~> 3.1'
 pod 'SwiftyJSON'
+pod 'Firebase/Core'
+pod 'Firebase/Messaging'
 end

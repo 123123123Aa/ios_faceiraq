@@ -1111,6 +1111,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <connections>
+                        <outlet property="addPhotoButton" destination="1Uk-gT-LaG" id="2u0-dV-e8T"/>
                         <outlet property="containerView" destination="AIi-vN-0zq" id="eSq-ho-lHZ"/>
                         <outlet property="emailTextField" destination="M5M-Td-L3t" id="qnh-oz-2xE"/>
                         <outlet property="imageFirst" destination="BQN-Wl-9n5" id="U84-pZ-gQN"/>
