@@ -9,10 +9,10 @@
 import UIKit
 import Fabric
 import Crashlytics
-//import UserNotifications
-//import Firebase
-//import FirebaseMessaging
-//import FirebaseInstanceID
+import UserNotifications
+import Firebase
+import FirebaseMessaging
+import FirebaseInstanceID
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,9 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppSettings.shared.loadTheme()
         Fabric.with([Crashlytics.self])
         
-        // unable due to lack of google-info.pils file witch is reqired
-        // Code that lets notifications to be recieved.
-        /*if #available(iOS 10.0, *) {
+        if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -42,12 +40,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         application.registerForRemoteNotifications()
-        
         FIRApp.configure()
-        */
         
         // If in OpenPages is FaceIraq page then open this page insteed of creating new one.
-        /*if let openedFaceIraqPage = AppSettings.shared.faceIraqAlreadyOpened() {
+        if let openedFaceIraqPage = AppSettings.shared.faceIraqAlreadyOpened() {
             let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
             let navController = UINavigationController(rootViewController: browserVC)
             browserVC.pageFromPagesController = openedFaceIraqPage
@@ -57,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.makeKeyAndVisible()
 
             return true
-        }*/
+        }
         
         return true
     }
@@ -89,12 +85,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerUserNotificationSettings(notificationSettings)
     }
     
-    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         AppSettings.shared.deviceToken = tokenString
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: .sandbox)
         Networking.faceIraqServerRegister()
         Networking.updateNotificationSettings()
+        connectToFCM()
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -106,8 +103,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(userInfo)
         print(aps)
     }
+    
+    func connectToFCM() {
+        FIRMessaging.messaging().connect { error in
+            if error != nil {
+                print("Unable to connect with FCM: \(error)")
+            } else {
+                print("Coneccted to FCM.")
+            }
+        }
+    }
 }
-/*
+
 extension AppDelegate: UNUserNotificationCenterDelegate, FIRMessagingDelegate {
     
     func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
@@ -118,6 +125,4 @@ extension AppDelegate: UNUserNotificationCenterDelegate, FIRMessagingDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         //TODO: –  feature to implement
     }
-    
 }
-*/

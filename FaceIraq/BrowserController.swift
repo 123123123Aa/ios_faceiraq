@@ -610,7 +610,7 @@ extension BrowserViewController: MoreDelegate {
         let host = NSString(string: (webView.url!.host)!)
         let title = NSString(string: (webView.title)!)
         let bookmark = Bookmark(url: url, host: host, title: title)
-        Database.shared.add(bookmark)
+        Database.shared.save(bookmark)
         showBookmarkAdded()
     }
     

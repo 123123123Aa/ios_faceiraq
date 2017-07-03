@@ -51,7 +51,6 @@ extension Realm {
         self.delete(object)
         try! self.commitWrite()
         self.refresh()
-
     }
     
     func remove(_ object: History) {

@@ -147,12 +147,12 @@
 		312661BB1EA0D70D006408B6 /* FaceIraq */ = {
 			isa = PBXGroup;
 			children = (
-				3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */,
 				317FFD0E1ECDFA1600ABB4A9 /* Common */,
 				312661DE1EA0E078006408B6 /* View */,
 				312661DC1EA0E066006408B6 /* ViewController */,
 				312661DD1EA0E072006408B6 /* Model */,
 				312661C31EA0D70D006408B6 /* Assets.xcassets */,
+				3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */,
 				312661C81EA0D70D006408B6 /* Info.plist */,
 			);
 			path = FaceIraq;
@@ -683,7 +683,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.developersgroups.FaceIraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bfcae67f-e054-45b7-978b-f6a542eb69f9";
+				PROVISIONING_PROFILE = "1d6485cc-a9de-4b09-acc5-8d08cbe9d386";
 				PROVISIONING_PROFILE_SPECIFIER = "FaceIraq-AdHoc";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -33,14 +33,14 @@ class MoreViewController: UIViewController {
         cancelButton.backgroundColor = AppSettings.shared.currentThemeColor
         cancelButton.setTitleColor(AppSettings.shared.currentTintColor, for: .normal)
         currentThemeColorOutlet.backgroundColor = AppSettings.shared.currentThemeColor
-        notificationsOutlet.isOn = AppSettings.shared.areNotificationsOn
+        notificationsOutlet.isOn = AppSettings.shared.areNotificationsOn()
         if openPagesVCIsParent {
             addToBookmarkButtonView.removeFromSuperview()
         }
     }
     
     func setNotificationOutlet() {
-        notificationsOutlet.isOn = AppSettings.shared.areNotificationsOn
+        notificationsOutlet.isOn = AppSettings.shared.areNotificationsOn()
     }
     
     @IBAction func cancel(_ sender: Any) {

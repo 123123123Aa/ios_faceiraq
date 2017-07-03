@@ -95,7 +95,7 @@ class MyBookmarksTableViewController: UITableViewController {
             let indexToRemove: IndexPath? = {
                 for obj in self.bookmarks {
                     if obj == theBookmark {
-                        return IndexPath(row: self.bookmarks.index(of: obj)!, section: 0)
+                        return IndexPath(row: self.bookmarks.index(of: obj)!, section: 0) 
                     }
                 }
                 return nil

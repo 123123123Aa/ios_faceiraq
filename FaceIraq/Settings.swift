@@ -14,7 +14,6 @@ import Realm
 class AppSettings {
     let faceIraqAdress = "http://www.faceiraq.net/"
     let deviceUUID = UIDevice.current.identifierForVendor!.uuidString
-    var areNotificationsOn = UserDefaults.standard.bool(forKey: "areNotificationsOn")
     var currentThemeColor = UIColor.AppColors.appBeige
     var currentTintColor: UIColor {
         if currentThemeColor == UIColor.AppColors.appBeige {return UIColor.black}
@@ -74,5 +73,9 @@ class AppSettings {
     func setNotifications(isOn: Bool) {
         UserDefaults.standard.set(isOn, forKey: "areNotificationsOn")
         Networking.updateNotificationSettings()
+    }
+    
+    func areNotificationsOn()->Bool {
+        return UserDefaults.standard.bool(forKey: "areNotificationsOn")
     }
 }
