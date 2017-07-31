@@ -1,15 +1,8 @@
-//
-//  ThemeColors.swift
-//  FaceIraq
-//
-//  Created by Aleksander Wędrychowski on 20/04/2017.
-//  Copyright © 2017 Ready4S. All rights reserved.
-//
-
 import UIKit
 import Foundation
 import RealmSwift
 import Realm
+import UserNotifications
 
 class AppSettings {
     let faceIraqAdress = "http://www.faceiraq.net/"
@@ -26,6 +19,8 @@ class AppSettings {
         }
         return Singleton.instance
     }
+    
+    var notificationPage: NotificationPage?
     
     func faceIraqAlreadyOpened()->OpenPage? {
         let array = Database.shared.objects(OpenPage.self).toArray(ofType:OpenPage.self)
@@ -76,6 +71,11 @@ class AppSettings {
     }
     
     func areNotificationsOn()->Bool {
-        return UserDefaults.standard.bool(forKey: "areNotificationsOn")
+        let notificationSettings = UIApplication.shared.currentUserNotificationSettings?.types
+        if notificationSettings?.rawValue == 0 {
+            return false
+        } else {
+            return UserDefaults.standard.bool(forKey: "areNotificationsOn")
+        }
     }
 }

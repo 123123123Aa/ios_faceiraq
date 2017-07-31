@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "312661CC1EA0D70D006408B6"
+               BlueprintIdentifier = "31F721491EE1961A00D4F5E4"
                BuildableName = "FaceIraqTests.xctest"
                BlueprintName = "FaceIraqTests"
                ReferencedContainer = "container:FaceIraq.xcodeproj">
@@ -81,6 +81,12 @@
             ReferencedContainer = "container:FaceIraq.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-FIRAnalyticsDebugEnabled"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

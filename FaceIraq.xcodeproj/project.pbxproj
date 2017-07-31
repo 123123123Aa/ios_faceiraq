@@ -20,6 +20,7 @@
 		312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312661C51EA0D70D006408B6 /* LaunchScreen.storyboard */; };
 		312922251EF0222800820651 /* UIViewControllerExntensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312922241EF0222800820651 /* UIViewControllerExntensions.swift */; };
 		313E08131EDDB1E600D09993 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313E08121EDDB1E600D09993 /* Database.swift */; };
+		313ECC751F0A7FA90072A54B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 313ECC741F0A7FA90072A54B /* GoogleService-Info.plist */; };
 		3162F03C1EA897BC006B0807 /* ThemeColorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */; };
 		3162F03E1EA898BC006B0807 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03D1EA898BC006B0807 /* Settings.swift */; };
 		3162F0401EA8A243006B0807 /* ColorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3162F03F1EA8A243006B0807 /* ColorTableViewCell.swift */; };
@@ -34,7 +35,6 @@
 		31D166DF1EAA2EB80059E9AB /* HistoryTableViwCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166DE1EAA2EB80059E9AB /* HistoryTableViwCell.swift */; };
 		31D166E11EAA318F0059E9AB /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166E01EAA318F0059E9AB /* Bookmark.swift */; };
 		31D166E31EAA44410059E9AB /* BookmarkTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */; };
-		31D166E51EAA541F0059E9AB /* FavIcon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31D166E41EAA541F0059E9AB /* FavIcon.framework */; };
 		31F721371EDF170A00D4F5E4 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F721361EDF170A00D4F5E4 /* Message.swift */; };
 		31F7214D1EE1961A00D4F5E4 /* FaceIraqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F7214C1EE1961A00D4F5E4 /* FaceIraqTests.swift */; };
 		83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */; };
@@ -66,6 +66,7 @@
 		312661C81EA0D70D006408B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		312922241EF0222800820651 /* UIViewControllerExntensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExntensions.swift; sourceTree = "<group>"; };
 		313E08121EDDB1E600D09993 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		313ECC741F0A7FA90072A54B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FaceIraq.entitlements; sourceTree = "<group>"; };
 		3162F03B1EA897BC006B0807 /* ThemeColorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeColorTableViewController.swift; sourceTree = "<group>"; };
 		3162F03D1EA898BC006B0807 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -81,7 +82,6 @@
 		31D166DE1EAA2EB80059E9AB /* HistoryTableViwCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViwCell.swift; sourceTree = "<group>"; };
 		31D166E01EAA318F0059E9AB /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableCell.swift; sourceTree = "<group>"; };
-		31D166E41EAA541F0059E9AB /* FavIcon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FavIcon.framework; path = Carthage/Build/iOS/FavIcon.framework; sourceTree = "<group>"; };
 		31F721361EDF170A00D4F5E4 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		31F7214A1EE1961A00D4F5E4 /* FaceIraqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceIraqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		31F7214C1EE1961A00D4F5E4 /* FaceIraqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIraqTests.swift; sourceTree = "<group>"; };
@@ -97,7 +97,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */,
-				31D166E51EAA541F0059E9AB /* FavIcon.framework in Frameworks */,
 				31008DBD1EAE08EA0086F416 /* Crashlytics.framework in Frameworks */,
 				31008DBC1EAE08EA0086F416 /* Fabric.framework in Frameworks */,
 			);
@@ -152,6 +151,7 @@
 				312661DC1EA0E066006408B6 /* ViewController */,
 				312661DD1EA0E072006408B6 /* Model */,
 				312661C31EA0D70D006408B6 /* Assets.xcassets */,
+				313ECC741F0A7FA90072A54B /* GoogleService-Info.plist */,
 				3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */,
 				312661C81EA0D70D006408B6 /* Info.plist */,
 			);
@@ -287,7 +287,6 @@
 			children = (
 				31008DBA1EAE08EA0086F416 /* Fabric.framework */,
 				31008DBB1EAE08EA0086F416 /* Crashlytics.framework */,
-				31D166E41EAA541F0059E9AB /* FavIcon.framework */,
 				5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */,
 			);
 			name = Frameworks;
@@ -306,7 +305,6 @@
 				312661B71EA0D70D006408B6 /* Resources */,
 				C7F7674DFC3412932E057E7D /* [CP] Embed Pods Frameworks */,
 				526415C01DA752AE5A4D0EE6 /* [CP] Copy Pods Resources */,
-				31D166E71EAA574B0059E9AB /* Run Script */,
 				31008DB91EAE05350086F416 /* ShellScript */,
 			);
 			buildRules = (
@@ -389,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */,
+				313ECC751F0A7FA90072A54B /* GoogleService-Info.plist in Resources */,
 				312661C41EA0D70D006408B6 /* Assets.xcassets in Resources */,
 				312661C21EA0D70D006408B6 /* Main.storyboard in Resources */,
 			);
@@ -417,28 +416,12 @@
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run f1f3b6b456a17e56a74481b46abb9dac9d7a2b38 eea661bbda17305ef3d79e78a8fde700a0a936521417ecae9bfadc23239f78d8";
 		};
-		31D166E71EAA574B0059E9AB /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/FavIcon.framework",
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
 		526415C01DA752AE5A4D0EE6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/FavIcon",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -460,7 +443,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		C7F7674DFC3412932E057E7D /* [CP] Embed Pods Frameworks */ = {

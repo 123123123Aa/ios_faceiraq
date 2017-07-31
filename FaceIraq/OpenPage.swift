@@ -24,3 +24,11 @@ class OpenPage: Object {
         
     }
 }
+
+struct NotificationPage {
+    let url: URL
+    
+    init(stringURL: String) {
+        self.url = URL(string: stringURL)!
+    }
+}

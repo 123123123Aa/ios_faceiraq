@@ -74,7 +74,7 @@ class ContactUsViewController: UIViewController {
     
     func showMessageSent(success: Bool) {
         if success {
-            messageSentLabel.text = "Message sent successfuly"
+            messageSentLabel.text = "Message sent"
             UIView.animate(withDuration: 0.2, animations: {
                 self.messageSentLabel.isHidden = false
                 self.messageSentLabel.alpha = 1.0
@@ -89,7 +89,7 @@ class ContactUsViewController: UIViewController {
             }
         }
         else {
-            messageSentLabel.text = "Error occured - try later"
+            messageSentLabel.text = "Messege not sent"
             UIView.animate(withDuration: 0.2, animations: {
                 self.messageSentLabel.isHidden = false
                 self.messageSentLabel.alpha = 1.0
@@ -149,6 +149,11 @@ class ContactUsViewController: UIViewController {
             switch success {
             case true:
                 self.showSimpleAlert(message: "Message sent")
+                self.emailTextField.text = nil
+                self.subjectTextField.text = nil
+                self.messageTextView.text = "Message"
+                self.messageTextView.textAlignment = .center
+                self.messageTextView.textColor = UIColor.init(red: 179/255, green: 179/255, blue: 179/255, alpha: 1)
             case false:
                 self.showSimpleAlert(message: "Message was not sent")
             }

@@ -40,8 +40,9 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var openPagesCount: UILabel!
     @IBOutlet weak var refreshOutler: UIButton!
     
+    var pageFromNotification: NotificationPage? = nil
     var pageFromPagesController: OpenPage? = nil
-    fileprivate var webView: WKWebView!
+    var webView: WKWebView?
     fileprivate var screen: NSData? = nil
     fileprivate weak var pageURL: NSString?
     fileprivate weak var pageHost: NSString?
@@ -52,37 +53,48 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         webView = WKWebView()
-        webView.navigationDelegate = self
-        webView.uiDelegate = self
+        webView?.navigationDelegate = self
+        webView?.uiDelegate = self
         urlInputTextField.delegate = self
-        webView.allowsBackForwardNavigationGestures = true
-        webView.scrollView.delegate = self
-        webView.scrollView.showsHorizontalScrollIndicator = true
-        webView.scrollView.showsVerticalScrollIndicator = true
+        webView?.allowsBackForwardNavigationGestures = true
+        webView?.scrollView.delegate = self
+        webView?.scrollView.showsHorizontalScrollIndicator = true
+        webView?.scrollView.showsVerticalScrollIndicator = true
         
         manageBackArrow()
         countOpenPages()
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.scrollView.delegate = self
-        webView.layoutIfNeeded()
+        webView?.translatesAutoresizingMaskIntoConstraints = false
+        webView?.scrollView.delegate = self
+        webView?.layoutIfNeeded()
+        configureWebViewLayout()
         self.view.layoutSubviews()
         self.view.layoutIfNeeded()
         
+        
         openHomePage()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
         
-        if let page = pageFromPagesController {
+        configureColors()
+        countOpenPages()
+        view.layoutSubviews()
+        
+        if AppSettings.shared.notificationPage != nil {
+            pageFromNotification = AppSettings.shared.notificationPage
+            openFromPushNotification()
+        } else if let page = pageFromPagesController {
             screen = page.screen
             pageURL = page.url
             pageHost = page.host
         }
-        configureColors()
-        countOpenPages()
-        configureWebViewLayout()
+        
+        
+        
+        //configureWebViewLayout()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -95,14 +107,26 @@ class BrowserViewController: UIViewController {
     
     // MARK: - UI methods
     
-    fileprivate func configureWebViewLayout() {
-        webView.frame = webViewLayoutTemplate.frame
-        webViewLayoutTemplate.addSubview(webView)
+    func configureWebViewLayout() {
+        if webView == nil {
+            webView = WKWebView()
+            webView?.navigationDelegate = self
+            webView?.uiDelegate = self
+            webView?.allowsBackForwardNavigationGestures = true
+            webView?.scrollView.delegate = self
+            webView?.scrollView.showsHorizontalScrollIndicator = true
+            webView?.scrollView.showsVerticalScrollIndicator = true
+            webView?.translatesAutoresizingMaskIntoConstraints = false
+            webView?.scrollView.delegate = self
+            webView?.layoutIfNeeded()
+        }
+        webView?.frame = webViewLayoutTemplate.frame
+        webViewLayoutTemplate.addSubview(webView!)
         let webViewHorizontalConst = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView, "webViewLayoutTemplate":webViewLayoutTemplate])
         let webViewVerticalConst = NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[webView]-0-|", options: [], metrics: [:], views: ["webView":webView])
         NSLayoutConstraint.activate(webViewVerticalConst)
         NSLayoutConstraint.activate(webViewHorizontalConst)
-        webView.configuration.userContentController = WKUserContentController()
+        webView?.configuration.userContentController = WKUserContentController()
     }
     
     fileprivate func configureColors() {
@@ -126,6 +150,7 @@ class BrowserViewController: UIViewController {
     
     fileprivate func manageBackArrow() {
         //back arrow is visable only if webView has possibility to go back.      
+        guard let webView = webView else { return }
         if !webView.canGoBack {
             self.textFieldLeftConstraint.constant = 7
             self.goBack.isHidden = true
@@ -198,10 +223,10 @@ class BrowserViewController: UIViewController {
     fileprivate func updateScreenshot() {
         var screenShot: UIImage?  {
             if (UIApplication.shared.keyWindow?.rootViewController) != nil {
-                let bounds = webView.bounds
-                UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale);
+                let bounds = webView?.bounds
+                UIGraphicsBeginImageContextWithOptions((bounds?.size)!, false, UIScreen.main.scale);
                 if let _ = UIGraphicsGetCurrentContext() {
-                    webView.drawHierarchy(in: bounds, afterScreenUpdates: true)
+                    webView?.drawHierarchy(in: bounds!, afterScreenUpdates: true)
                     let screenshot = UIGraphicsGetImageFromCurrentImageContext()
                     UIGraphicsEndImageContext()
                     return screenshot
@@ -229,11 +254,11 @@ class BrowserViewController: UIViewController {
             urlInputTextField.text = nil
             urlInputTextField.placeholder = url.host
             if UIApplication.shared.canOpenURL(url) {
-                webView.load(request)
+                webView?.load(request)
                 return
         } else {
             activityIndicator.stopAnimating()
-            webView.stopLoading()
+            webView?.stopLoading()
             urlInputTextField.placeholder = "please enter valid website adress"
             return
         }
@@ -251,22 +276,52 @@ class BrowserViewController: UIViewController {
                 let url = URL(string: stringURL!)!
                 self.urlInputTextField?.placeholder = url.host
                 
+                //self.openHomePage()
                 
                 if UIApplication.shared.canOpenURL(url) {
-                    let request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData)
-                    self.webView.load(request)
-                    DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
-                        self.webView.isHidden = false
+                    var request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.returnCacheDataElseLoad)
+                    request.timeoutInterval = 120
+                    self.webView?.load(request)
+                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
+                        self.webView?.isHidden = false
                     })
                 } else {
                     self.urlInputTextField.placeholder = "unable to open URL"
                     self.activityIndicator.stopAnimating()
                     }
+                
             } else {
                 // if provided URL is invalid open homepage
                 self.openHomePage()
             }
         })
+    }
+    
+    func openFromPushNotification() {
+        guard
+            let url = pageFromNotification?.url,
+            UIApplication.shared.canOpenURL(url),
+            let _ = self.webView
+        else {
+            self.openHomePage()
+            return
+        }
+        self.webView?.isHidden = false
+        self.webView?.stopLoading()
+        self.urlInputTextField?.placeholder = url.host
+        
+            
+        if UIApplication.shared.canOpenURL(url) {
+            var request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData)
+            self.webView?.load(request)
+            self.webView?.isHidden = false
+            self.pageFromNotification = nil
+            AppSettings.shared.notificationPage = nil
+        } else {
+            self.urlInputTextField.placeholder = "unable to open URL"
+            self.activityIndicator.stopAnimating()
+            openHomePage()
+        }
     }
     
     fileprivate func openHomePage() {
@@ -276,14 +331,14 @@ class BrowserViewController: UIViewController {
         let urlToOpen = URL(string: AppSettings.shared.faceIraqAdress)!
         let request = URLRequest(url: urlToOpen, cachePolicy: .returnCacheDataElseLoad)
         urlInputTextField.text = nil
-        webView.load(request)
+        webView?.load(request)
         urlInputTextField.placeholder = "www.faceiraq.net"
-        webView.isHidden = false
+        webView?.isHidden = false
     }
     
     
     @IBAction func refresh(_ sender: UIButton) {
-        self.webView.reload()
+        self.webView?.reload()
     }
     
     
@@ -302,18 +357,18 @@ class BrowserViewController: UIViewController {
     
     fileprivate func addToOpenPagesCollection() {
         updateScreenshot()
-        guard webView.url != nil else {
+        guard webView?.url != nil else {
             return
         }
         let url = { () -> NSString? in
-            if let url = String((self.webView.url?.absoluteString)!) {
+            if let url = String((self.webView?.url?.absoluteString)!) {
                 return url as NSString
             } else {
                 return self.pageHost
             }
         }
         let host = { () -> NSString? in
-            if let host = String((self.webView.url?.host)!) {
+            if let host = String((self.webView?.url?.host)!) {
                 return host as NSString
             } else {
                 return self.pageHost
@@ -339,12 +394,12 @@ class BrowserViewController: UIViewController {
     }
     
     fileprivate func manageHistory() {
-        guard webView.url != nil else {
+        guard webView?.url != nil else {
             return
         }
-        let url = NSString(string: (webView.url?.absoluteString)!)
-        let host = NSString(string: (webView.url!.host)!)
-        let title = NSString(string: (webView.title!))
+        let url = NSString(string: (webView?.url?.absoluteString)!)
+        let host = NSString(string: (webView?.url!.host)!)
+        let title = NSString(string: (webView?.title)!)
         if Database.shared.isInWriteTransaction == false {Database.shared.beginWrite()}
         
         // create history object
@@ -377,7 +432,7 @@ class BrowserViewController: UIViewController {
     }
     
     @IBAction fileprivate func goBack(_ sender: Any) {
-        webView.goBack()
+        webView?.goBack()
         urlInputTextField.resignFirstResponder()
         changeNavigationBarUI()
     }
@@ -433,16 +488,17 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         } else {
             urlInputTextField.placeholder = "enter your website adress"
         }
-        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+        //DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
         self.manageBackArrow()
         self.updateScreenshot()
         self.manageHistory()
         self.pageURL = NSString(string: (webView.url?.absoluteString)!)
         self.pageHost = NSString(string: (webView.url?.host)!)
-        })
+        //})
     }
     
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        print()
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
@@ -606,9 +662,9 @@ extension BrowserViewController: MoreDelegate {
     }
     
     func addBookmark() {
-        let url = NSString(string: (webView.url?.absoluteString)!)
-        let host = NSString(string: (webView.url!.host)!)
-        let title = NSString(string: (webView.title)!)
+        let url = NSString(string: (webView?.url?.absoluteString)!)
+        let host = NSString(string: (webView?.url!.host)!)
+        let title = NSString(string: (webView?.title)!)
         let bookmark = Bookmark(url: url, host: host, title: title)
         Database.shared.save(bookmark)
         showBookmarkAdded()
@@ -629,7 +685,7 @@ extension BrowserViewController: MoreDelegate {
 extension BrowserViewController: UIScrollViewDelegate, OpenURLDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if (scrollView.contentOffset.y < 0) {
-            webView.reload()
+            webView?.reload()
         }
      }
 }
