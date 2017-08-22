@@ -31,6 +31,7 @@
 		31AFB1B61EA9DE490033C01E /* MyBookmarksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */; };
 		31AFB1B81EA9DE5E0033C01E /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */; };
 		31AFB1BA1EA9DE770033C01E /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */; };
+		31CB150F1F4CB58E009D2FA2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 31CB150E1F4CB58E009D2FA2 /* GoogleService-Info.plist */; };
 		31D166DF1EAA2EB80059E9AB /* HistoryTableViwCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166DE1EAA2EB80059E9AB /* HistoryTableViwCell.swift */; };
 		31D166E11EAA318F0059E9AB /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166E01EAA318F0059E9AB /* Bookmark.swift */; };
 		31D166E31EAA44410059E9AB /* BookmarkTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */; };
@@ -77,6 +78,7 @@
 		31AFB1B51EA9DE490033C01E /* MyBookmarksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBookmarksTableViewController.swift; sourceTree = "<group>"; };
 		31AFB1B71EA9DE5E0033C01E /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
 		31AFB1B91EA9DE770033C01E /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
+		31CB150E1F4CB58E009D2FA2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		31D166DE1EAA2EB80059E9AB /* HistoryTableViwCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViwCell.swift; sourceTree = "<group>"; };
 		31D166E01EAA318F0059E9AB /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableCell.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				312661DC1EA0E066006408B6 /* ViewController */,
 				312661DD1EA0E072006408B6 /* Model */,
 				312661C31EA0D70D006408B6 /* Assets.xcassets */,
+				31CB150E1F4CB58E009D2FA2 /* GoogleService-Info.plist */,
 				3142495C1EBAFA1100F231C9 /* FaceIraq.entitlements */,
 				312661C81EA0D70D006408B6 /* Info.plist */,
 			);
@@ -384,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				312661C71EA0D70D006408B6 /* LaunchScreen.storyboard in Resources */,
+				31CB150F1F4CB58E009D2FA2 /* GoogleService-Info.plist in Resources */,
 				312661C41EA0D70D006408B6 /* Assets.xcassets in Resources */,
 				312661C21EA0D70D006408B6 /* Main.storyboard in Resources */,
 			);
