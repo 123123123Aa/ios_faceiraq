@@ -42,16 +42,7 @@ class AppSettings {
         UserDefaults.standard.set(color, forKey: "themeColor")
         currentThemeColor = color
     }
-    
-    // google e-mail account to AppStore: 
-    // ahmeddjappstore@gmail.com - invalid
-    // developersgroupslebanon@gmail.com - invalid
-    // ahmedQaysHammed@gmail.com
-    // pass: FACEiraq0405$
-    // data urodzenia : 04/01/1982
-    // jak się wabi Twój pierwszy zwierzak : "Pluto"
-    // jaka jest twoja ulubiona książka dla dzieci : "Winnie-the-Pooh"
-    // W jakim mieście poznali się Twoi rodzice : "Rome"
+
     
     var deviceToken: String {
         get {
