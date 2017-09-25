@@ -142,19 +142,29 @@ class HistoryTableViewController: UITableViewController {
             let sectionDate = Calendar.current.date(from: components)
             
             if Calendar.current.isDateInToday(date) {
-                return "Today"
+                return "  Today"
             }
             else if Calendar.current.isDateInYesterday(date){
-                return "Yesterday"
+                return "  Yesterday"
             }
             else {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MM/DD/YYYY"
                 let stringFromDate = dateFormatter.string(from: sectionDate!)
-                return stringFromDate
+                return "  " + stringFromDate
             }
         }
         return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 0.3))
+        view.backgroundColor = self.tableView.separatorColor
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.3
     }
 
 }

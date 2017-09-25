@@ -40,6 +40,7 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var openPagesCount: UILabel!
     @IBOutlet weak var refreshOutler: UIButton!
     
+    var floatingButton: UIButton!
     var pageFromNotification: NotificationPage? = nil
     var pageFromPagesController: OpenPage? = nil
     var webView: WKWebView?
@@ -52,14 +53,7 @@ class BrowserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        webView = WKWebView()
-        webView?.navigationDelegate = self
-        webView?.uiDelegate = self
-        urlInputTextField.delegate = self
-        webView?.allowsBackForwardNavigationGestures = true
-        webView?.scrollView.delegate = self
-        webView?.scrollView.showsHorizontalScrollIndicator = true
-        webView?.scrollView.showsVerticalScrollIndicator = true
+        setupWebView()
         
         manageBackArrow()
         countOpenPages()
@@ -70,6 +64,7 @@ class BrowserViewController: UIViewController {
         self.view.layoutSubviews()
         self.view.layoutIfNeeded()
         
+        addFloatingNotesButton()
         
         openHomePage()
         
@@ -79,6 +74,7 @@ class BrowserViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
         
+        setupWebView()
         configureColors()
         countOpenPages()
         view.layoutSubviews()
@@ -92,9 +88,7 @@ class BrowserViewController: UIViewController {
             pageHost = page.host
         }
         
-        
-        
-        //configureWebViewLayout()
+        configureWebViewLayout()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -148,6 +142,18 @@ class BrowserViewController: UIViewController {
         }
     }
     
+    private func setupWebView() {
+        guard webView == nil else { return }
+        webView = WKWebView()
+        webView?.navigationDelegate = self
+        webView?.uiDelegate = self
+        urlInputTextField.delegate = self
+        webView?.allowsBackForwardNavigationGestures = true
+        webView?.scrollView.delegate = self
+        webView?.scrollView.showsHorizontalScrollIndicator = true
+        webView?.scrollView.showsVerticalScrollIndicator = true
+    }
+    
     fileprivate func manageBackArrow() {
         //back arrow is visable only if webView has possibility to go back.      
         guard let webView = webView else { return }
@@ -158,6 +164,28 @@ class BrowserViewController: UIViewController {
             self.textFieldLeftConstraint.constant = 35
             self.goBack.isHidden = false
         }
+    }
+    
+    fileprivate func addFloatingNotesButton() {
+        floatingButton = UIButton()
+        let buttonConstant: CGFloat = 40.0
+        floatingButton.frame.size = CGSize(width: buttonConstant, height: buttonConstant)
+        floatingButton.frame.origin = CGPoint(x: view.frame.maxX - buttonConstant * 1.5, y: view.frame.maxY - buttonConstant * 1.5)
+        
+        floatingButton.backgroundColor = UIColor(red: 236/255, green: 96/255, blue: 25/255, alpha: 1)
+        floatingButton.layer.cornerRadius = buttonConstant/2
+        
+        floatingButton.layer.shadowColor = UIColor.black.cgColor
+        floatingButton.layer.shadowOffset = CGSize(width: 2.0, height: 4.0)
+        floatingButton.layer.shadowOpacity = 0.3
+        floatingButton.layer.masksToBounds = false
+        floatingButton.setBackgroundImage(UIImage(named: "note"), for: UIControlState())
+        floatingButton.setBackgroundImage(UIImage(named: "note"), for: .highlighted)
+        floatingButton.addTarget(self, action: #selector(pressFloatingButton), for: .touchUpInside)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(moveFloatingButton(_:)))
+        floatingButton.addGestureRecognizer(longPress)
+        view.addSubview(floatingButton)
     }
     
     fileprivate func showBookmarkAdded() {
@@ -289,7 +317,6 @@ class BrowserViewController: UIViewController {
                     self.urlInputTextField.placeholder = "unable to open URL"
                     self.activityIndicator.stopAnimating()
                     }
-                
             } else {
                 // if provided URL is invalid open homepage
                 self.openHomePage()
@@ -422,7 +449,50 @@ class BrowserViewController: UIViewController {
     }
     
     
+    private func createNote() {
+        let stringURL = webView?.url?.host
+        let addNoteVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNoteViewController") as! AddNoteViewController
+        addNoteVC.urlString = stringURL
+        self.navigationController?.pushViewController(addNoteVC, animated: true)
+    
+    }
+    
+    @objc private func moveFloatingButton(_ gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            UIView.animate(withDuration: 0.1, animations: {
+                self.floatingButton.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+                self.floatingButton.layer.masksToBounds = true
+            })
+        case .changed:
+            let point = gesture.location(in: view)
+            floatingButton.center = point
+        case .ended:
+            UIView.animate(withDuration: 0.1, animations: {
+                self.floatingButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.floatingButton.layer.masksToBounds = false
+            })
+        default: break
+        }
+    }
+    
+    
     // MARK: - Actions
+    @objc private func pressFloatingButton() {
+        print("floating button triggered")
+        UIView.animate(withDuration: 0.1, animations: {
+            self.floatingButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            self.floatingButton.layer.masksToBounds = true
+        }) { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.floatingButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.floatingButton.layer.masksToBounds = false
+            }) { finished in
+                self.createNote()
+            }
+        }
+    }
+    
     @IBAction fileprivate func openUrl(_ sender: UITextField) {
         openURL(urlInputTextField.text!)
     }
@@ -448,6 +518,7 @@ class BrowserViewController: UIViewController {
         moreVC.delegate = self
         self.present(moreVC, animated: true, completion: {})
     }
+
     
     @IBAction fileprivate func cancelTypingNewURL(_ sender: Any) {
         urlInputTextField.resignFirstResponder()
@@ -679,6 +750,11 @@ extension BrowserViewController: MoreDelegate {
     func goToContactUs() {
         let contactVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
         self.navigationController?.pushViewController(contactVC, animated: true)
+    }
+    
+    func goToNotes() {
+        let notesVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NotesViewController")
+        self.navigationController?.pushViewController(notesVC, animated: true)
     }
 }
 

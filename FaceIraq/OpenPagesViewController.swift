@@ -249,6 +249,11 @@ extension OpenPagesViewController: MoreDelegate {
         let contactVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
         self.navigationController?.pushViewController(contactVC, animated: true)
     }
+    
+    func goToNotes() {
+        let notesVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NotesViewController")
+        self.navigationController?.pushViewController(notesVC, animated: true)
+    }
 }
 
 class CloseButton: UIButton {

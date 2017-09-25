@@ -16,8 +16,12 @@ class MoreViewController: UIViewController {
     @IBOutlet weak var notificationButtonView: UIView!
     @IBOutlet weak var addToBookmarkButtonView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var buttonHeightConstraint: NSLayoutConstraint!
+    
+    
     var delegate: MoreDelegate!
     var openPagesVCIsParent: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         optionsStackView.spacing = 0.5
@@ -25,6 +29,11 @@ class MoreViewController: UIViewController {
         let cancelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cancel(_:)))
         self.view.addGestureRecognizer(cancelGestureRecognizer)
         setNotificationOutlet()
+        
+        if view.frame.height < 600 {
+            buttonHeightConstraint.constant = 38
+            view.layoutIfNeeded()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +81,13 @@ class MoreViewController: UIViewController {
         delegate.addBookmark()
     }
     
+    @IBAction func notes(_ sender: Any) {
+        self.dismiss(animated: true)
+        delegate.goToNotes()
+        
+    }
+    
+    
     @IBAction func newPage(_ sender: Any) {
         delegate.newPage()
         self.dismiss(animated: true, completion: {})
@@ -83,11 +99,12 @@ class MoreViewController: UIViewController {
 }
 
 protocol MoreDelegate {
-    func newPage();
-    func goToThemeColor();
-    func goToMyBookmarks();
-    func addBookmark();
-    func goToHistory();
+    func newPage()
+    func goToThemeColor()
+    func goToMyBookmarks()
+    func addBookmark()
+    func goToHistory()
     func goToContactUs()
+    func goToNotes()
 }
 

@@ -128,6 +128,16 @@ class MyBookmarksTableViewController: UITableViewController {
         vc.remoteOpenURL(stringURL: cell.theBookmark!.url as String)
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 0.3))
+        view.backgroundColor = self.tableView.separatorColor
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.3
+    }
 }
 
 extension MyBookmarksTableViewController: UITextFieldDelegate {

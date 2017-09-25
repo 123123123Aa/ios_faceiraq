@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 extension UIColor {
     
@@ -106,4 +107,16 @@ extension UserDefaults {
             return NSKeyedUnarchiver.unarchiveObject(with: data) as? UIColor
         }
     
+}
+
+
+
+extension Date {
+    
+    var textDate: String? {
+        //let calendar = Calendar.current
+        let dateFormatter = DateFormatter()
+        let timestamp = DateFormatter.localizedString(from: self, dateStyle: .long, timeStyle: .short)
+        return timestamp
+    }
 }

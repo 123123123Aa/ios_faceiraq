@@ -54,8 +54,8 @@ class ContactUsViewController: UIViewController {
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem?.tintColor = AppSettings.shared.currentTintColor.withAlphaComponent(0.7)
         navigationItem.leftBarButtonItem?.tintColor = AppSettings.shared.currentTintColor.withAlphaComponent(0.7)
-        navigationItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 13)], for: UIControlState.normal)
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 13)], for: UIControlState.normal)
+        navigationItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 15)], for: UIControlState.normal)
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 15)], for: UIControlState.normal)
     }
     
     func configureUI() {

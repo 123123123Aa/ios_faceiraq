@@ -69,4 +69,10 @@ extension Realm {
         self.refresh()
     }
     
+    func save(_ object: Note) {
+        if self.isInWriteTransaction == false {
+            self.beginWrite()}
+        self.add(object)
+        try! self.commitWrite()
+    }
 }
