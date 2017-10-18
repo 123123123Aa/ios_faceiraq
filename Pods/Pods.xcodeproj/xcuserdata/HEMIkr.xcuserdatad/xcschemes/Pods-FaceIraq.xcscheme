@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5FEED130D18C9CDD6CDC2FE64C562719"
+               BlueprintIdentifier = "A273EB29E6549B151B7332E2725BED13"
                BuildableName = "Pods_FaceIraq.framework"
                BlueprintName = "Pods-FaceIraq"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,6 +26,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -36,6 +37,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -45,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5FEED130D18C9CDD6CDC2FE64C562719"
+            BlueprintIdentifier = "A273EB29E6549B151B7332E2725BED13"
             BuildableName = "Pods_FaceIraq.framework"
             BlueprintName = "Pods-FaceIraq"
             ReferencedContainer = "container:Pods.xcodeproj">

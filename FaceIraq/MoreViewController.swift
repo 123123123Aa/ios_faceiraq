@@ -8,6 +8,11 @@
 
 import UIKit
 
+
+/**
+ History, Bookmark and Add To Bookmark items are set to hidden in storyboard.
+ */
+
 class MoreViewController: UIViewController {
 
     @IBOutlet weak var optionsStackView: UIStackView!
@@ -34,6 +39,7 @@ class MoreViewController: UIViewController {
             buttonHeightConstraint.constant = 38
             view.layoutIfNeeded()
         }
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {

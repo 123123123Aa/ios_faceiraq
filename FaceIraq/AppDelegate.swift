@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application.registerForRemoteNotifications()
         }
         
-        Messaging.messaging().remoteMessageDelegate = self
+        Messaging.messaging().delegate = self
         registerForPushNotifications(application: application)
         FirebaseApp.configure()
         connectToFCM()
@@ -64,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
             let navController = UINavigationController(rootViewController: browserVC)
             browserVC.pageFromPagesController = openedFaceIraqPage
-            browserVC.remoteOpenURL(stringURL: openedFaceIraqPage.url as? String)
+            browserVC.remoteOpenURL(stringURL: openedFaceIraqPage.url as String?)
             self.window = UIWindow(frame: UIScreen.main.bounds)
             self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()

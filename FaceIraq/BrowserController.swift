@@ -26,19 +26,17 @@ class BrowserViewController: UIViewController {
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var bookmarkAdded: UILabel!
     @IBOutlet weak var goBack: UIButton!
-    @IBOutlet weak var urlInputTextField: UITextField!
     @IBOutlet weak var webNavigationBar: UIView!
     @IBOutlet weak var webViewLayoutTemplate: UIView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var textFieldLeftConstraint: NSLayoutConstraint!
     @IBOutlet weak var goToOpenedSites: UIButton!
     @IBOutlet weak var goToMore: UIButton!
     @IBOutlet weak var goToHomeSite: UIButton!
     @IBOutlet weak var cancelOutlet: UIButton!
-    @IBOutlet weak var textFieldRightConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonsTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var openPagesCount: UILabel!
-    @IBOutlet weak var refreshOutler: UIButton!
+    @IBOutlet weak var timeAndDateLabel: UILabel!
+    
+    
     
     var floatingButton: UIButton!
     var pageFromNotification: NotificationPage? = nil
@@ -88,6 +86,7 @@ class BrowserViewController: UIViewController {
             pageHost = page.host
         }
         
+        manageTimeAndDate()
         configureWebViewLayout()
     }
 
@@ -147,7 +146,6 @@ class BrowserViewController: UIViewController {
         webView = WKWebView()
         webView?.navigationDelegate = self
         webView?.uiDelegate = self
-        urlInputTextField.delegate = self
         webView?.allowsBackForwardNavigationGestures = true
         webView?.scrollView.delegate = self
         webView?.scrollView.showsHorizontalScrollIndicator = true
@@ -157,12 +155,10 @@ class BrowserViewController: UIViewController {
     fileprivate func manageBackArrow() {
         //back arrow is visable only if webView has possibility to go back.      
         guard let webView = webView else { return }
-        if !webView.canGoBack {
-            self.textFieldLeftConstraint.constant = 7
-            self.goBack.isHidden = true
-        } else {
-            self.textFieldLeftConstraint.constant = 35
+        if webView.canGoBack || webView.url?.absoluteString.contains("faceiraq") == false {
             self.goBack.isHidden = false
+        } else {
+            self.goBack.isHidden = true
         }
     }
     
@@ -213,11 +209,11 @@ class BrowserViewController: UIViewController {
     }
     
     fileprivate func changeNavigationBarUI() {
+        /*
         if urlInputTextField.isEditing {
             
             //when urlTextField is editing
             buttonsView.animateFade(.out, withDuration: 0.05, withDelay: 0, minAlpha: 0.0, completion:  {finished in
-                self.textFieldRightConstraint.constant = 65
                 self.urlInputTextField.layoutIfNeeded()
             })
             cancelOutlet.animateFade(.into, withDuration: 0.05, withDelay: 0.05,minAlpha: 0.0, completion: nil)
@@ -231,6 +227,7 @@ class BrowserViewController: UIViewController {
             })
             buttonsView.animateFade(.into, withDuration: 0.05, withDelay: 0.05,minAlpha: 0.0, completion: nil)
         }
+         */
     }
     
     fileprivate func countOpenPages() {
@@ -279,15 +276,11 @@ class BrowserViewController: UIViewController {
         }
         if let url = URL(string: "http://\(string)") {
             let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-            urlInputTextField.text = nil
-            urlInputTextField.placeholder = url.host
             if UIApplication.shared.canOpenURL(url) {
                 webView?.load(request)
                 return
         } else {
-            activityIndicator.stopAnimating()
             webView?.stopLoading()
-            urlInputTextField.placeholder = "please enter valid website adress"
             return
         }
         }
@@ -302,7 +295,6 @@ class BrowserViewController: UIViewController {
                 self.screen = self.pageFromPagesController?.screen
                 self.webView?.stopLoading()
                 let url = URL(string: stringURL!)!
-                self.urlInputTextField?.placeholder = url.host
                 
                 //self.openHomePage()
                 
@@ -314,8 +306,6 @@ class BrowserViewController: UIViewController {
                         self.webView?.isHidden = false
                     })
                 } else {
-                    self.urlInputTextField.placeholder = "unable to open URL"
-                    self.activityIndicator.stopAnimating()
                     }
             } else {
                 // if provided URL is invalid open homepage
@@ -335,7 +325,6 @@ class BrowserViewController: UIViewController {
         }
         self.webView?.isHidden = false
         self.webView?.stopLoading()
-        self.urlInputTextField?.placeholder = url.host
         
             
         if UIApplication.shared.canOpenURL(url) {
@@ -345,21 +334,14 @@ class BrowserViewController: UIViewController {
             self.pageFromNotification = nil
             AppSettings.shared.notificationPage = nil
         } else {
-            self.urlInputTextField.placeholder = "unable to open URL"
-            self.activityIndicator.stopAnimating()
             openHomePage()
         }
     }
     
     fileprivate func openHomePage() {
-        if urlInputTextField.isEditing {
-            urlInputTextField.resignFirstResponder()
-        }
         let urlToOpen = URL(string: AppSettings.shared.faceIraqAdress)!
         let request = URLRequest(url: urlToOpen, cachePolicy: .returnCacheDataElseLoad)
-        urlInputTextField.text = nil
         webView?.load(request)
-        urlInputTextField.placeholder = "www.faceiraq.net"
         webView?.isHidden = false
     }
     
@@ -378,7 +360,17 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    
+    private func manageTimeAndDate() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        formatter.locale = Locale(identifier: "ar_IQ")
+        let date = formatter.string(from: Date())
+        timeAndDateLabel.text = date
+        
+        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now()+10, execute: {
+            self.manageTimeAndDate()
+        })
+    }
     
     //MARK: - Database override methods
     
@@ -494,7 +486,6 @@ class BrowserViewController: UIViewController {
     }
     
     @IBAction fileprivate func openUrl(_ sender: UITextField) {
-        openURL(urlInputTextField.text!)
     }
     
     @IBAction fileprivate func openHomePage(_ sender: Any) {
@@ -502,8 +493,11 @@ class BrowserViewController: UIViewController {
     }
     
     @IBAction fileprivate func goBack(_ sender: Any) {
-        webView?.goBack()
-        urlInputTextField.resignFirstResponder()
+        if webView?.canGoBack == true {
+            webView?.goBack()
+        } else {
+            openHomePage()
+        }
         changeNavigationBarUI()
     }
     
@@ -521,8 +515,6 @@ class BrowserViewController: UIViewController {
 
     
     @IBAction fileprivate func cancelTypingNewURL(_ sender: Any) {
-        urlInputTextField.resignFirstResponder()
-        urlInputTextField.text = nil
         changeNavigationBarUI()
     }
 }
@@ -549,23 +541,15 @@ extension BrowserViewController: UITextFieldDelegate {
 
 extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        activityIndicator.startAnimating()
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        activityIndicator.stopAnimating()
-        if webView.url != nil {
-            urlInputTextField.placeholder = webView.url?.host
-        } else {
-            urlInputTextField.placeholder = "enter your website adress"
-        }
-        //DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
-        self.manageBackArrow()
+        
         self.updateScreenshot()
         self.manageHistory()
         self.pageURL = NSString(string: (webView.url?.absoluteString)!)
         self.pageHost = NSString(string: (webView.url?.host)!)
-        //})
+        self.manageBackArrow()
     }
     
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
@@ -574,7 +558,6 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         if (webView.url) != nil {
-            urlInputTextField.placeholder = "loading \((webView.url!.host)!)"
             pageURL = webView.url?.absoluteString as NSString?
             pageHost = webView.url?.host as NSString?
         }
@@ -650,9 +633,6 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         print("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
-        urlInputTextField.text = nil
-        urlInputTextField.placeholder = "loading"
-        activityIndicator.stopAnimating()
     }
     
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -707,7 +687,6 @@ extension BrowserViewController: WKNavigationDelegate, WKUIDelegate {
         // tapped links are opening in the same controller
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
-            urlInputTextField.placeholder = webView.url?.absoluteString
             return nil
         }
         
