@@ -22,8 +22,8 @@ class OpenPageCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        print("awake from nib") 
         view.dropShadow()
+        
     
     }
 }

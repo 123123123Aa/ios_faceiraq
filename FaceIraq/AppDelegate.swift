@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         AppSettings.shared.loadTheme()
-        Fabric.with([Crashlytics.self])
+        //Fabric.with([Crashlytics.self])
         
         
         

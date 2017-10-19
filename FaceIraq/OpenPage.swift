@@ -7,6 +7,7 @@
 //
 
 import RealmSwift
+import Foundation
 
 class OpenPage: Object {
     
@@ -14,14 +15,14 @@ class OpenPage: Object {
     dynamic var url: NSString?
     dynamic var screen: NSData?
     dynamic var host: NSString?
-    
+    dynamic var id: NSString!
     convenience init(url: NSString?, host: NSString?, screen: NSData?) {
         self.init()
         self.dateOfLastVisit = Date()
         self.url = url
         self.host = host
         self.screen = screen
-        
+        self.id = String(UUID().uuidString.prefix(10)) as NSString
     }
 }
 

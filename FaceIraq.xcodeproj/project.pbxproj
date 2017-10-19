@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2562797B9A1A5067990F5DC5 /* Pods_FaceIraq.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB44D1839BF2AFAF8EE139E /* Pods_FaceIraq.framework */; };
 		31008DBC1EAE08EA0086F416 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31008DBA1EAE08EA0086F416 /* Fabric.framework */; };
 		31008DBD1EAE08EA0086F416 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31008DBB1EAE08EA0086F416 /* Crashlytics.framework */; };
 		31027F3C1EA5454C009C281F /* OpenPagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */; };
@@ -42,7 +43,6 @@
 		31D166E31EAA44410059E9AB /* BookmarkTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D166E21EAA44410059E9AB /* BookmarkTableCell.swift */; };
 		31F721371EDF170A00D4F5E4 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F721361EDF170A00D4F5E4 /* Message.swift */; };
 		31F7214D1EE1961A00D4F5E4 /* FaceIraqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F7214C1EE1961A00D4F5E4 /* FaceIraqTests.swift */; };
-		83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08DF03DCA882E84BCCA70D50 /* Pods-FaceIraq.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.release.xcconfig"; sourceTree = "<group>"; };
 		31008DBA1EAE08EA0086F416 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		31008DBB1EAE08EA0086F416 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		31027F3B1EA5454C009C281F /* OpenPagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPagesViewController.swift; sourceTree = "<group>"; };
@@ -96,9 +97,8 @@
 		31F7214A1EE1961A00D4F5E4 /* FaceIraqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceIraqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		31F7214C1EE1961A00D4F5E4 /* FaceIraqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIraqTests.swift; sourceTree = "<group>"; };
 		31F7214E1EE1961A00D4F5E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceIraq.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.release.xcconfig"; sourceTree = "<group>"; };
-		9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.debug.xcconfig"; sourceTree = "<group>"; };
+		3FB44D1839BF2AFAF8EE139E /* Pods_FaceIraq.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceIraq.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F10EA5DC5ED9EA514C0C7758 /* Pods-FaceIraq.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceIraq.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,9 +106,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83134FF556308974F1A303D3 /* Pods_FaceIraq.framework in Frameworks */,
 				31008DBD1EAE08EA0086F416 /* Crashlytics.framework in Frameworks */,
 				31008DBC1EAE08EA0086F416 /* Fabric.framework in Frameworks */,
+				2562797B9A1A5067990F5DC5 /* Pods_FaceIraq.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,8 +139,8 @@
 				312661BB1EA0D70D006408B6 /* FaceIraq */,
 				31F7214B1EE1961A00D4F5E4 /* FaceIraqTests */,
 				312661BA1EA0D70D006408B6 /* Products */,
-				7F0CE2F2DAD924E400CD7D4B /* Pods */,
 				9AC1850A0AC3179276CE63FA /* Frameworks */,
+				DCFB75B3AB1A9285218E5D76 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -296,23 +296,23 @@
 			path = FaceIraqTests;
 			sourceTree = "<group>";
 		};
-		7F0CE2F2DAD924E400CD7D4B /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */,
-				63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		9AC1850A0AC3179276CE63FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				31008DBA1EAE08EA0086F416 /* Fabric.framework */,
 				31008DBB1EAE08EA0086F416 /* Crashlytics.framework */,
-				5F70E48705B31A122E4A6B67 /* Pods_FaceIraq.framework */,
+				3FB44D1839BF2AFAF8EE139E /* Pods_FaceIraq.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DCFB75B3AB1A9285218E5D76 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F10EA5DC5ED9EA514C0C7758 /* Pods-FaceIraq.debug.xcconfig */,
+				08DF03DCA882E84BCCA70D50 /* Pods-FaceIraq.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -322,13 +322,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 312661D61EA0D70D006408B6 /* Build configuration list for PBXNativeTarget "FaceIraq" */;
 			buildPhases = (
-				74CF801A840303944F6B96C3 /* [CP] Check Pods Manifest.lock */,
+				EA268825A2E9CE3E41835D9C /* [CP] Check Pods Manifest.lock */,
 				312661B51EA0D70D006408B6 /* Sources */,
 				312661B61EA0D70D006408B6 /* Frameworks */,
 				312661B71EA0D70D006408B6 /* Resources */,
-				C7F7674DFC3412932E057E7D /* [CP] Embed Pods Frameworks */,
-				526415C01DA752AE5A4D0EE6 /* [CP] Copy Pods Resources */,
-				31008DB91EAE05350086F416 /* ShellScript */,
+				22A3394CFBB98838E754276D /* [CP] Embed Pods Frameworks */,
+				3C23C8910861FB40958E9154 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -369,11 +368,11 @@
 				TargetAttributes = {
 					312661B81EA0D70D006408B6 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = S6XUGUUB23;
+						DevelopmentTeam = J5AJCLAX66;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -426,53 +425,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		31008DB91EAE05350086F416 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run f1f3b6b456a17e56a74481b46abb9dac9d7a2b38 eea661bbda17305ef3d79e78a8fde700a0a936521417ecae9bfadc23239f78d8";
-		};
-		526415C01DA752AE5A4D0EE6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		74CF801A840303944F6B96C3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FaceIraq-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C7F7674DFC3412932E057E7D /* [CP] Embed Pods Frameworks */ = {
+		22A3394CFBB98838E754276D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -504,6 +457,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3C23C8910861FB40958E9154 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceIraq/Pods-FaceIraq-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA268825A2E9CE3E41835D9C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FaceIraq-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -675,12 +661,11 @@
 		};
 		312661D71EA0D70D006408B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E285C84A5CC835EEF2F2069 /* Pods-FaceIraq.debug.xcconfig */;
+			baseConfigurationReference = F10EA5DC5ED9EA514C0C7758 /* Pods-FaceIraq.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
-				CODE_SIGN_ENTITLEMENTS = FaceIraq/FaceIraq.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = S6XUGUUB23;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = J5AJCLAX66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -691,8 +676,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.developergroups.faceiraq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e2c6f2e9-ba4e-4df5-a62c-a6f995191133";
-				PROVISIONING_PROFILE_SPECIFIER = "Faceiraq Distribution";
+				PROVISIONING_PROFILE = "53984a52-e918-4924-9214-1fa0fe5d0b47";
+				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development Provisioning";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -700,10 +685,9 @@
 		};
 		312661D81EA0D70D006408B6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 63843EF1B2C61C8BF6FF8690 /* Pods-FaceIraq.release.xcconfig */;
+			baseConfigurationReference = 08DF03DCA882E84BCCA70D50 /* Pods-FaceIraq.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
-				CODE_SIGN_ENTITLEMENTS = FaceIraq/FaceIraq.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = S6XUGUUB23;
 				FRAMEWORK_SEARCH_PATHS = (

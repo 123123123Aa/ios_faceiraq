@@ -66,19 +66,15 @@ class OpenPagesViewController: UIViewController {
     }
     
     @IBAction func addNewPage(_ sender: Any) {
-        let newPage = OpenPage(url: nil, host: nil, screen: nil)
+        let newPage = OpenPage(url: "http://faceiraq.net", host: nil, screen: nil)
         Database.shared.save(newPage)
         self.orderPages()
         self.countPages()
         
-        var desiredIndexPath: IndexPath?
-        for page in pages {
-            if page == newPage {
-                desiredIndexPath =  IndexPath(item: pages.index(of: newPage)!, section: 0)
-            }
-        }
-        collectionView.insertItems(at: [desiredIndexPath!])
-        collectionView.scrollToItem(at: desiredIndexPath!, at: .bottom, animated: true)
+        let desiredIndexPath = IndexPath(item: pages.index(of: newPage) ?? collectionView.numberOfItems(inSection: 0), section: 0)
+        collectionView.insertItems(at: [desiredIndexPath])
+        collectionView.scrollToItem(at: desiredIndexPath, at: .bottom, animated: true)
+        collectionView.reloadData()
     }
     
     @IBAction func goToHomePage(_ sender: Any) {
@@ -112,18 +108,21 @@ class OpenPagesViewController: UIViewController {
         }
         var indexPathRow: Int?
         for page in pages {
-            if page == selector.page {
+            if page.id == selector.page.id {
                 indexPathRow = pages.index(of: page)
             }
         }
+        if indexPathRow == nil {
+            if let emptyPage = pages.filter({$0.url == nil}).first {
+                indexPathRow = pages.index(of: emptyPage)
+            }
+        }
         
+        print(pages.count)
         Database.shared.remove(selector.page)
-        
         orderPages()
         countPages()
-        print(pages.count)
-        
-        collectionView.deleteItems(at: [IndexPath.init(row: indexPathRow!, section: 0)])
+        collectionView.deleteItems(at: [IndexPath.init(row: indexPathRow ?? 0, section: 0)])
         collectionView.reloadData()
     }
 }
@@ -139,31 +138,27 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("item selected")
         
         let cell = collectionView.cellForItem(at: indexPath) as! OpenPageCollectionViewCell
-        print("cell created")
-        if let page = cell.page {
-            print("page object present")
-            
-            // if page.host is empty that means object is New Page and we need to open it in new BrowserVC.openHomePage way.
-            let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
-            
+        
+        guard let page = cell.page else { return }
+        
+        let browserVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrowserController") as! BrowserViewController
+        browserVC.pageFromPagesController = page
+        if pages.contains(page) {
             if page.host != nil {
-                print("url present")
-                print(page.url! as String)
                 browserVC.remoteOpenURL(stringURL: page.url! as String)
+            } else {
+                browserVC.remoteOpenURL(stringURL: "http://faceiraq.net")
             }
-            browserVC.pageFromPagesController = page
-            print("push new browserVC")
-            
-            self.navigationController?.pushViewController(browserVC, animated: true)
+        } else {
+            browserVC.remoteOpenURL(stringURL: "http://faceiraq.net")
         }
+        self.navigationController?.pushViewController(browserVC, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "openPage", for: indexPath) as! OpenPageCollectionViewCell
-        
         cell.backgroundColor = .clear
         cell.view.backgroundColor = AppSettings.shared.currentThemeColor
         cell.pageUrl.textColor = AppSettings.shared.currentTintColor
@@ -179,25 +174,20 @@ extension OpenPagesViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.layer.masksToBounds = false
         cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.view.layer.cornerRadius).cgPath
         
+        
+        cell.pageScreen?.image = nil
+        cell.pageUrl.text = "www.faceiraq.net"
+        
         // configure page properties
         let page = pages[indexPath.item]
         cell.page = page
-        if page.screen != nil {
-            print(page.host as! String)
-            print(page.url as! String)
-            if let image = UIImage(data: (page.screen as! Data)) {
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.1, animations: {
-                        cell.pageScreen?.image = image
-                    })
-                }
+        if page.screen != nil, page.url != nil, cell.pageScreen?.image == nil {
+            if let image = UIImage(data: (page.screen! as Data)) {
+                cell.pageScreen?.image = image
                 cell.pageUrl.text = page.host as String?
             }
         } else {
-            // setup for newly created OpenPage object
-            // host is nil
             cell.pageScreen?.isHidden = true
-            cell.pageUrl.text = "New Page"
         }
         
         let closeButton = CloseButton(passing: page)

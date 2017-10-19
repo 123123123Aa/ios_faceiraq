@@ -89,6 +89,11 @@ class BrowserViewController: UIViewController {
         manageTimeAndDate()
         configureWebViewLayout()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.viewControllers = [self]
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
